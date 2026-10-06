@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Compiler Pipeline Visualizer</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', system-ui, sans-serif;
+    background: #1e1e2e;
+    color: #e4e4e7;
+    margin: 0;
+    padding: 24px;
+  }
+  h1 { font-size: 1.4rem; margin-bottom: 4px; }
+  p.subtitle { color: #9ca3af; margin-top: 0; margin-bottom: 20px; }
+
+  textarea {
+    width: 100%;
+    max-width: 700px;
+    height: 120px;
+    background: #27273f;
+    color: #e4e4e7;
+    border: 1px solid #3f3f5f;
+    border-radius: 6px;
+    padding: 10px;
+    font-family: 'Consolas', monospace;
+    font-size: 14px;
+  }
+
+  button {
+    margin-top: 10px;
+    background: #6366f1;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  button:hover { background: #4f46e5; }
+
+  .section {
+    margin-top: 28px;
+    max-width: 900px;
+  }
+  .section h2 {
+    font-size: 1rem;
+    color: #a5b4fc;
+    border-bottom: 1px solid #3f3f5f;
+    padding-bottom: 6px;
+  }
+
+  .line-block {
+    background: #27273f;
+    border-radius: 6px;
+    padding: 14px;
+    margin-bottom: 14px;
+    border-left: 3px solid #6366f1;
+  }
+  .line-block.has-error { border-left-color: #ef4444; }
+
+  .line-source {
+    font-family: 'Consolas', monospace;
+    color: #facc15;
+    margin-bottom: 8px;
+  }
+
+  table {
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+  td, th {
+    border: 1px solid #3f3f5f;
+    padding: 4px 8px;
+    text-align: left;
+  }
+  th { color: #a5b4fc; }
+
+  .error-text { color: #ef4444; font-size: 13px; }
+
+  ul.tree, ul.tree ul {
+    list-style: none;
+    margin: 0;
+    padding-left: 18px;
+    border-left: 1px dashed #4b4b6b;
+  }
+  ul.tree { padding-left: 0; border-left: none; }
+  ul.tree li { margin: 2px 0; font-family: 'Consolas', monospace; font-size: 13px; }
+  .node-type { color: #6ee7b7; }
+  .node-value { color: #fbbf24; }
+
+  .semantic-errors {
+    background: #3f1d1d;
+    border: 1px solid #ef4444;
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: #fca5a5;
+    font-size: 14px;
+  }
+  .semantic-ok {
+    background: #1d3f26;
+    border: 1px solid #22c55e;
+    border-radius: 6px;
+    padding: 10px 14px;
+    color: #86efac;
+    font-size: 14px;
+  }
+
+  .declared-vars span {
+    display: inline-block;
+    background: #312e81;
+    color: #c7d2fe;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-right: 6px;
+    font-family: 'Consolas', monospace;
+    font-size: 13px;
+  }
+</style>
+</head>
+<body>
+
+  <h1>Compiler Pipeline Visualizer</h1>
+  <p class="subtitle">Enter a small program below (one statement per line). Example: <code>x = 5</code> then <code>y = x + 2</code></p>
+
+  <textarea id="sourceInput">x = 5
+y = x + 2
+z = y * 3</textarea>
+  <br>
+  <button onclick="compile()">Compile</button>
+
+  <div class="section" id="linesSection" style="display:none;">
+    <h2>Tokens + AST per line</h2>
+    <div id="linesOutput"></div>
+  </div>
+
+  <div class="section" id="semanticSection" style="display:none;">
+    <h2>Semantic Analysis</h2>
+    <div id="semanticOutput"></div>
+  </div>
+
+<script>
+async function compile() {
+  const source = document.getElementById('sourceInput').value;
+
+  const res = await fetch('/compile', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ source })
+  });
+  const data = await res.json();
+
+  renderLines(data.lines);
+  renderSemantic(data.semantic_errors, data.declared_vars);
+}
+
+function renderLines(lines) {
+  const container = document.getElementById('linesOutput');
+  container.innerHTML = '';
+
+  lines.forEach(entry => {
+    const block = document.createElement('div');
+    block.className = 'line-block' + (entry.error ? ' has-error' : '');
+
+    let html = `<div class="line-source">Line ${entry.line}: ${escapeHtml(entry.source)}</div>`;
+
+    if (entry.error) {
+      html += `<div class="error-text">⚠ ${escapeHtml(entry.error)}</div>`;
+    } else {
+      html += '<strong>Tokens:</strong><table><tr><th>Type</th><th>Value</th></tr>';
+      entry.tokens.forEach(t => {
+        html += `<tr><td>${t.type}</td><td>${t.value === null ? '' : t.value}</td></tr>`;
+      });
+      html += '</table>';
+
+      html += '<strong>AST:</strong><ul class="tree">' + renderTreeNode(entry.ast) + '</ul>';
+    }
+
+    block.innerHTML = html;
+    container.appendChild(block);
+  });
+
+  document.getElementById('linesSection').style.display = 'block';
+}
+
+function renderTreeNode(node) {
+  if (node.type === 'Number') {
+    return `<li><span class="node-type">Number</span>(<span class="node-value">${node.value}</span>)</li>`;
+  }
+  if (node.type === 'Identifier') {
+    return `<li><span class="node-type">Identifier</span>(<span class="node-value">${escapeHtml(node.name)}</span>)</li>`;
+  }
+  if (node.type === 'BinOp') {
+    return `<li><span class="node-type">BinOp</span>(<span class="node-value">${escapeHtml(node.op)}</span>)
+      <ul class="tree">${renderTreeNode(node.left)}${renderTreeNode(node.right)}</ul></li>`;
+  }
+  if (node.type === 'Assign') {
+    return `<li><span class="node-type">Assign</span>(<span class="node-value">${escapeHtml(node.name)}</span>)
+      <ul class="tree">${renderTreeNode(node.value)}</ul></li>`;
+  }
+  return '';
+}
+
+function renderSemantic(errors, declaredVars) {
+  const container = document.getElementById('semanticOutput');
+  let html = '';
+
+  if (errors.length === 0) {
+    html += '<div class="semantic-ok">✓ No semantic errors — every variable was assigned before use.</div>';
+  } else {
+    html += '<div class="semantic-errors"><strong>Semantic errors found:</strong><ul>';
+    errors.forEach(e => {
+      html += `<li>Line ${e.line}: ${escapeHtml(e.message)}</li>`;
+    });
+    html += '</ul></div>';
+  }
+
+  html += '<div class="declared-vars" style="margin-top:10px;"><strong>Declared variables:</strong><br>';
+  if (declaredVars.length === 0) {
+    html += '<em>none</em>';
+  } else {
+    declaredVars.forEach(v => { html += `<span>${escapeHtml(v)}</span>`; });
+  }
+  html += '</div>';
+
+  container.innerHTML = html;
+  document.getElementById('semanticSection').style.display = 'block';
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+</script>
+
+</body>
+</html>
