@@ -2,238 +2,1076 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Compiler Pipeline Visualizer</title>
 <style>
+  :root {
+    --bg-base: #0d0714;
+    --bg-surface: #180d26;
+    --bg-card: #231438;
+    --border-color: #3b2259;
+    --border-highlight: #5b348a;
+    --text-primary: #f5f3ff;
+    --text-muted: #b4a7cb;
+    --text-accent: #c084fc;
+    --accent: #8b5cf6;
+    --accent-hover: #7c3aed;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --purple: #c084fc;
+    --cyan: #38bdf8;
+  }
+
   * { box-sizing: border-box; }
   body {
-    font-family: 'Segoe UI', system-ui, sans-serif;
-    background: #1e1e2e;
-    color: #e4e4e7;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg-base);
+    color: var(--text-primary);
     margin: 0;
     padding: 24px;
+    line-height: 1.5;
   }
-  h1 { font-size: 1.4rem; margin-bottom: 4px; }
-  p.subtitle { color: #9ca3af; margin-top: 0; margin-bottom: 20px; }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .header-titles h1 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0 0 4px 0;
+    letter-spacing: -0.02em;
+    background: linear-gradient(135deg, #d8b4fe 0%, #c084fc 50%, #a855f7 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .header-titles p {
+    color: var(--text-muted);
+    margin: 0;
+    font-size: 0.9rem;
+  }
+
+  .badges {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .badge {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 9999px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .badge-success { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid rgba(16, 185, 129, 0.4); }
+  .badge-info { background: rgba(139, 92, 246, 0.2); color: #d8b4fe; border: 1px solid rgba(139, 92, 246, 0.4); }
+
+  /* Mode Switcher */
+  .mode-switch-bar {
+    display: flex;
+    gap: 8px;
+    background: var(--bg-surface);
+    padding: 4px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+    width: fit-content;
+  }
+  .mode-btn {
+    background: transparent;
+    color: var(--text-muted);
+    border: none;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .mode-btn.active {
+    background: var(--accent);
+    color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  }
+
+  /* Control Panel */
+  .controls-card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 24px;
+  }
+
+  .toolbar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .toolbar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .toolbar-group label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  select, input[type="text"] {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.88rem;
+    outline: none;
+  }
+  select:focus, input:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+
+  .editor-container {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
 
   textarea {
     width: 100%;
-    max-width: 700px;
-    height: 120px;
-    background: #27273f;
-    color: #e4e4e7;
-    border: 1px solid #3f3f5f;
-    border-radius: 6px;
-    padding: 10px;
-    font-family: 'Consolas', monospace;
+    height: 150px;
+    background: #09040e;
+    color: #f3e8ff;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 14px;
+    font-family: 'Consolas', 'Fira Code', 'Courier New', monospace;
     font-size: 14px;
+    line-height: 1.5;
+    resize: vertical;
+    outline: none;
   }
 
-  button {
-    margin-top: 10px;
-    background: #6366f1;
+  .action-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 12px;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
     color: white;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 24px;
     border-radius: 6px;
-    font-size: 14px;
+    font-weight: 600;
+    font-size: 0.95rem;
     cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.15s ease;
   }
-  button:hover { background: #4f46e5; }
+  .btn-primary:hover { background: var(--accent-hover); }
 
-  .section {
-    margin-top: 28px;
-    max-width: 900px;
+  .diff-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
   }
-  .section h2 {
-    font-size: 1rem;
-    color: #a5b4fc;
-    border-bottom: 1px solid #3f3f5f;
-    padding-bottom: 6px;
-  }
-
-  .line-block {
-    background: #27273f;
-    border-radius: 6px;
-    padding: 14px;
-    margin-bottom: 14px;
-    border-left: 3px solid #6366f1;
-  }
-  .line-block.has-error { border-left-color: #ef4444; }
-
-  .line-source {
-    font-family: 'Consolas', monospace;
-    color: #facc15;
-    margin-bottom: 8px;
+  @media (max-width: 800px) {
+    .diff-grid { grid-template-columns: 1fr; }
   }
 
-  table {
+  /* Pipeline Stage Navigator */
+  .pipeline-steps {
+    display: flex;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    overflow-x: auto;
+    margin-bottom: 24px;
+  }
+  .step-tab {
+    flex: 1;
+    min-width: 130px;
+    padding: 14px 10px;
+    text-align: center;
+    cursor: pointer;
+    border-right: 1px solid var(--border-color);
+    transition: background 0.15s;
+    user-select: none;
+  }
+  .step-tab:last-child { border-right: none; }
+  .step-tab:hover { background: rgba(255,255,255,0.03); }
+  .step-tab.active {
+    background: rgba(139, 92, 246, 0.16);
+    border-bottom: 3px solid var(--accent);
+  }
+  .step-num {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 50%;
+    background: var(--border-color);
+    font-size: 0.75rem;
+    font-weight: 700;
+    margin-right: 6px;
+  }
+  .step-tab.active .step-num { background: var(--accent); color: white; }
+  .step-label { font-size: 0.88rem; font-weight: 600; }
+
+  /* Output Sections */
+  .stage-panel {
+    display: none;
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    animation: fadeIn 0.2s ease;
+  }
+  .stage-panel.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+    margin-bottom: 18px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .panel-header h2 {
+    font-size: 1.15rem;
+    margin: 0;
+    color: var(--text-accent);
+  }
+  .panel-header p {
+    margin: 4px 0 0 0;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  /* Table Styles */
+  table.data-table {
+    width: 100%;
     border-collapse: collapse;
-    font-size: 13px;
-    margin-bottom: 8px;
+    font-size: 0.85rem;
+    background: #0d0617;
+    border-radius: 6px;
+    overflow: hidden;
   }
-  td, th {
-    border: 1px solid #3f3f5f;
-    padding: 4px 8px;
+  table.data-table th, table.data-table td {
+    padding: 9px 12px;
+    border: 1px solid var(--border-color);
     text-align: left;
   }
-  th { color: #a5b4fc; }
+  table.data-table th {
+    background: var(--bg-card);
+    color: var(--text-muted);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  table.data-table tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+  }
 
-  .error-text { color: #ef4444; font-size: 13px; }
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-family: monospace;
+    font-weight: 600;
+  }
+  .pill-type { background: #312e81; color: #a5b4fc; }
+  .pill-num { background: #064e3b; color: #6ee7b7; }
+  .pill-ident { background: #78350f; color: #fcd34d; }
+  .pill-op { background: #4c1d95; color: #c4b5fd; }
+  .pill-prep { background: #831843; color: #f472b6; }
 
+  /* Tree View */
   ul.tree, ul.tree ul {
     list-style: none;
     margin: 0;
-    padding-left: 18px;
-    border-left: 1px dashed #4b4b6b;
+    padding-left: 24px;
+    position: relative;
   }
-  ul.tree { padding-left: 0; border-left: none; }
-  ul.tree li { margin: 2px 0; font-family: 'Consolas', monospace; font-size: 13px; }
-  .node-type { color: #6ee7b7; }
-  .node-value { color: #fbbf24; }
-
-  .semantic-errors {
-    background: #3f1d1d;
-    border: 1px solid #ef4444;
-    border-radius: 6px;
-    padding: 10px 14px;
-    color: #fca5a5;
-    font-size: 14px;
+  ul.tree { padding-left: 0; }
+  ul.tree ul::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 12px;
+    bottom: 0;
+    border-left: 1px dashed var(--border-highlight);
   }
-  .semantic-ok {
-    background: #1d3f26;
-    border: 1px solid #22c55e;
-    border-radius: 6px;
-    padding: 10px 14px;
-    color: #86efac;
-    font-size: 14px;
-  }
-
-  .declared-vars span {
-    display: inline-block;
-    background: #312e81;
-    color: #c7d2fe;
-    padding: 2px 8px;
-    border-radius: 4px;
-    margin-right: 6px;
+  ul.tree li {
+    margin: 6px 0;
     font-family: 'Consolas', monospace;
-    font-size: 13px;
+    font-size: 0.88rem;
+    position: relative;
   }
+  .node-box {
+    display: inline-block;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    padding: 4px 10px;
+    border-radius: 6px;
+  }
+  .node-tag { color: #c084fc; font-weight: 600; }
+  .node-val { color: #facc15; }
+  .node-sub { color: #94a3b8; font-size: 0.8rem; }
+
+  /* Semantic Alerts */
+  .alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .alert-success { background: rgba(16, 185, 129, 0.15); border: 1px solid rgba(16, 185, 129, 0.4); color: #6ee7b7; }
+  .alert-danger { background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.4); color: #fca5a5; }
+
+  /* Code Boxes */
+  pre.code-view {
+    background: #09040e;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'Consolas', monospace;
+    font-size: 0.88rem;
+    color: #f3e8ff;
+    overflow-x: auto;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  /* Explainer Cards */
+  .explainer-card {
+    background: var(--bg-card);
+    border-left: 4px solid var(--accent);
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .explainer-card h3 {
+    margin: 0 0 6px 0;
+    font-size: 1rem;
+    color: var(--text-accent);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .explainer-card ul {
+    margin: 8px 0;
+    padding-left: 20px;
+  }
+  .explainer-card li {
+    margin: 4px 0;
+    color: #cbd5e1;
+    font-size: 0.88rem;
+  }
+  .explainer-takeaway {
+    margin-top: 8px;
+    font-size: 0.82rem;
+    color: #94a3b8;
+    background: rgba(0,0,0,0.2);
+    padding: 6px 10px;
+    border-radius: 4px;
+    font-style: italic;
+  }
+
+  /* Diff Viewer Styles */
+  .diff-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Consolas', monospace;
+    font-size: 0.82rem;
+    background: #09040e;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .diff-table th {
+    background: var(--bg-card);
+    padding: 8px 12px;
+    text-align: left;
+    border: 1px solid var(--border-color);
+  }
+  .diff-table td {
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    vertical-align: top;
+    white-space: pre-wrap;
+  }
+  .diff-row-added td:nth-child(2) { background: rgba(16, 185, 129, 0.15); color: #6ee7b7; }
+  .diff-row-removed td:nth-child(1) { background: rgba(239, 68, 68, 0.15); color: #fca5a5; }
+  .diff-row-modified td { background: rgba(245, 158, 11, 0.15); color: #fcd34d; }
 </style>
 </head>
 <body>
 
-  <h1>Compiler Pipeline Visualizer</h1>
-  <p class="subtitle">Enter a small program below (one statement per line). Example: <code>x = 5</code> then <code>y = x + 2</code></p>
+  <!-- Header -->
+  <header>
+    <div class="header-titles">
+      <h1>Compiler Pipeline Visualizer</h1>
+      <p>Interactive End-to-End Compiler Transformation Engine (Source &rarr; Tokens &rarr; AST &rarr; Types &rarr; IR &rarr; Assembly)</p>
+    </div>
+    <div class="badges">
+      <span class="badge badge-info">Hand-Written Parser &bull; C &bull; Toy &bull; Python</span>
+    </div>
+  </header>
 
-  <textarea id="sourceInput">x = 5
-y = x + 2
-z = y * 3</textarea>
-  <br>
-  <button onclick="compile()">Compile</button>
-
-  <div class="section" id="linesSection" style="display:none;">
-    <h2>Tokens + AST per line</h2>
-    <div id="linesOutput"></div>
+  <!-- View Mode Switcher -->
+  <div class="mode-switch-bar">
+    <button class="mode-btn active" id="btnModePipeline" onclick="switchMainMode('pipeline')">Pipeline Inspector</button>
+    <button class="mode-btn" id="btnModeDiff" onclick="switchMainMode('diff')">Stage Diff Mode</button>
   </div>
 
-  <div class="section" id="semanticSection" style="display:none;">
-    <h2>Semantic Analysis</h2>
-    <div id="semanticOutput"></div>
+  <!-- ================= PIPELINE VIEW ================= -->
+  <div id="viewPipeline">
+    <div class="controls-card">
+      <div class="toolbar">
+        <div class="toolbar-group">
+          <label>Language Option</label>
+          <select id="langSelect" onchange="onLanguageChange()">
+            <option value="c" selected>C Language (Subset: #include, main, types, printf)</option>
+            <option value="toy">Toy Mini-Lang (x = 5, y = x + 2)</option>
+            <option value="python">Python Subset (Assignments & Expressions)</option>
+          </select>
+        </div>
+
+        <div class="toolbar-group">
+          <label>Preset Program Example</label>
+          <select id="presetSelect" onchange="loadSelectedPreset()">
+            <option value="c_complete">C Complete: #include &lt;stdio.h&gt; &amp; main() with Math</option>
+            <option value="c_precedence">C Precedence: 2 + 3 * 4 vs (2 + 3) * 4</option>
+            <option value="c_semantic_error">C Semantic: Undeclared Variable Error</option>
+            <option value="c_conditional">C Control Flow: if / else Branching</option>
+            <option value="toy_pipeline">Toy Language: Multi-line Variable Assignment</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="editor-container">
+        <textarea id="sourceEditor" spellcheck="false">#include <stdio.h>
+
+int main() {
+    int total = 3 + 4 * 2;
+    printf("Result = %d\n", total);
+    return 0;
+}</textarea>
+      </div>
+
+      <div class="action-bar">
+        <button class="btn-primary" onclick="runCompile()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+          Run Full Compiler Pipeline
+        </button>
+        <span id="compileStatus" style="font-size:0.85rem; color: var(--text-muted);">Ready to compile</span>
+      </div>
+    </div>
+
+    <!-- Pipeline Stage Navigator Tabs -->
+    <div class="pipeline-steps">
+      <div class="step-tab active" onclick="showStageTab('tokens')"><span class="step-num">1</span><span class="step-label">Tokens</span></div>
+      <div class="step-tab" onclick="showStageTab('ast')"><span class="step-num">2</span><span class="step-label">AST</span></div>
+      <div class="step-tab" onclick="showStageTab('semantic')"><span class="step-num">3</span><span class="step-label">Semantic</span></div>
+      <div class="step-tab" onclick="showStageTab('ir')"><span class="step-num">4</span><span class="step-label">IR (TAC)</span></div>
+      <div class="step-tab" onclick="showStageTab('asm')"><span class="step-num">5</span><span class="step-label">Assembly</span></div>
+      <div class="step-tab" onclick="showStageTab('explain')"><span class="step-num">&starf;</span><span class="step-label">Explainer</span></div>
+    </div>
+
+    <!-- Error Banner (if any) -->
+    <div id="errorBanner" style="display:none;" class="alert alert-danger"></div>
+
+    <!-- Stage 1: Tokens -->
+    <div class="stage-panel active" id="stageTokens">
+      <div class="panel-header">
+        <div>
+          <h2>Stage 1: Lexical Analysis (Scanner)</h2>
+          <p>Breaks raw character stream into classified token units (Keywords, Identifiers, Numbers, Preprocessor directives).</p>
+        </div>
+        <span class="pill pill-op" id="tokenCountPill">0 Tokens</span>
+      </div>
+      <div id="tokenSummaryPills" style="margin-bottom:14px; display:flex; gap:8px; flex-wrap:wrap;"></div>
+      <table class="data-table" id="tokensTable">
+        <thead>
+          <tr>
+            <th style="width: 60px;">Index</th>
+            <th style="width: 140px;">Token Type</th>
+            <th>Lexeme / Value</th>
+            <th style="width: 90px;">Line : Col</th>
+          </tr>
+        </thead>
+        <tbody id="tokensTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Stage 2: AST -->
+    <div class="stage-panel" id="stageAst">
+      <div class="panel-header">
+        <div>
+          <h2>Stage 2: Syntax Analysis (Parser)</h2>
+          <p>Hand-written recursive-descent parser builds an Abstract Syntax Tree enforcing precedence rules.</p>
+        </div>
+      </div>
+      <div style="background:#09040e; padding:18px; border-radius:8px; border:1px solid var(--border-color); overflow-x:auto;">
+        <ul class="tree" id="astTreeView"></ul>
+      </div>
+    </div>
+
+    <!-- Stage 3: Semantic Analysis -->
+    <div class="stage-panel" id="stageSemantic">
+      <div class="panel-header">
+        <div>
+          <h2>Stage 3: Semantic Analysis &amp; Symbol Table</h2>
+          <p>Validates scope boundaries, declaration-before-use, and type tracking.</p>
+        </div>
+      </div>
+      <div id="semanticStatusBox"></div>
+      <h3 style="font-size:0.95rem; margin:16px 0 8px 0; color:var(--text-accent);">Symbol Table</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Symbol Name</th>
+            <th>Type</th>
+            <th>Scope</th>
+            <th>Declared Line</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="symbolTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Stage 4: IR (Three-Address Code) -->
+    <div class="stage-panel" id="stageIr">
+      <div class="panel-header">
+        <div>
+          <h2>Stage 4: Intermediate Representation (Three-Address Code &amp; Quadruples)</h2>
+          <p>Linearizes expressions into three-address instructions: (Operator, Arg1, Arg2, Result).</p>
+        </div>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr; gap:16px; margin-bottom:16px;">
+        <div>
+          <h3 style="font-size:0.9rem; margin-top:0; color:var(--text-accent);">Three-Address Code (TAC) Stream</h3>
+          <pre class="code-view" id="tacCodeView"></pre>
+        </div>
+        <div>
+          <h3 style="font-size:0.9rem; margin-top:0; color:var(--text-accent);">Compiler Temporaries Allocated</h3>
+          <div id="irTemporariesPills" style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:12px;"></div>
+          <p style="font-size:0.82rem; color:var(--text-muted);">Each temporary register stores an intermediate sub-expression value, flattening recursive tree evaluation into sequential execution.</p>
+        </div>
+      </div>
+      <h3 style="font-size:0.95rem; margin:16px 0 8px 0; color:var(--text-accent);">Formal Quadruples Table</h3>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width: 50px;">#</th>
+            <th style="width: 90px;">Operator</th>
+            <th>Argument 1</th>
+            <th>Argument 2</th>
+            <th style="width: 90px;">Result</th>
+            <th>Pedagogical Annotation</th>
+          </tr>
+        </thead>
+        <tbody id="quadruplesTableBody"></tbody>
+      </table>
+    </div>
+
+    <!-- Stage 5: Target Assembly Code -->
+    <div class="stage-panel" id="stageAsm">
+      <div class="panel-header">
+        <div>
+          <h2>Stage 5: Target Code Generation (Machine Assembly)</h2>
+          <p>Maps Three-Address Code to target instructions, managing stack frames and register allocation.</p>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="mode-btn active" id="btnAsmEdu" onclick="switchAsmView('educational')">Educational Pseudo-Assembly</button>
+          <button class="mode-btn" id="btnAsmX86" onclick="switchAsmView('x86_64')">x86-64 Gas Assembly</button>
+        </div>
+      </div>
+      <pre class="code-view" id="asmCodeView"></pre>
+    </div>
+
+    <!-- Stage 6: Guided Explainer -->
+    <div class="stage-panel" id="stageExplain">
+      <div class="panel-header">
+        <div>
+          <h2>Guided Compiler Explainer &amp; Narrative</h2>
+          <p>Plain-English educational walkthrough connecting theory to the exact input program.</p>
+        </div>
+      </div>
+      <div id="explainerCardsContainer"></div>
+    </div>
+  </div>
+
+  <!-- ================= DIFF MODE VIEW ================= -->
+  <div id="viewDiff" style="display:none;">
+    <div class="controls-card">
+      <div class="toolbar">
+        <div class="toolbar-group">
+          <label>Diff Stage Target</label>
+          <select id="diffStageSelect" onchange="runDiff()">
+            <option value="ir" selected>Three-Address Code (IR TAC)</option>
+            <option value="ast">Abstract Syntax Tree (AST)</option>
+            <option value="tokens">Token Stream</option>
+            <option value="assembly_edu">Educational Assembly</option>
+            <option value="assembly_x86">x86-64 Assembly</option>
+            <option value="source">Source Lines</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="diff-grid">
+        <div class="editor-container">
+          <label style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:600;">Program Version A</label>
+          <textarea id="diffSourceA" spellcheck="false">#include <stdio.h>
+int main() {
+    int total = 3 + 4;
+    return 0;
+}</textarea>
+        </div>
+        <div class="editor-container">
+          <label style="font-size:0.75rem; text-transform:uppercase; color:var(--text-muted); font-weight:600;">Program Version B</label>
+          <textarea id="diffSourceB" spellcheck="false">#include <stdio.h>
+int main() {
+    int total = 3 + 4 * 2;
+    return 0;
+}</textarea>
+        </div>
+      </div>
+
+      <div class="action-bar">
+        <button class="btn-primary" onclick="runDiff()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"></path></svg>
+          Compare Pipeline Stages Side-by-Side
+        </button>
+      </div>
+    </div>
+
+    <!-- Diff Results Panel -->
+    <div class="stage-panel active">
+      <div class="panel-header">
+        <div>
+          <h2 id="diffTitle">Stage Diff Comparison</h2>
+          <p>Side-by-side inspection showing structural and instruction changes between Version A and Version B.</p>
+        </div>
+      </div>
+      <table class="diff-table">
+        <thead>
+          <tr>
+            <th style="width: 50%;">Version A</th>
+            <th style="width: 50%;">Version B</th>
+          </tr>
+        </thead>
+        <tbody id="diffTableBody"></tbody>
+      </table>
+    </div>
   </div>
 
 <script>
-async function compile() {
-  const source = document.getElementById('sourceInput').value;
+let currentAssemblyData = {};
+let currentAsmMode = "educational";
+let currentDiffData = null;
 
-  const res = await fetch('/compile', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ source })
-  });
-  const data = await res.json();
+// Presets data loaded from backend
+let presetsMap = {};
 
-  renderLines(data.lines);
-  renderSemantic(data.semantic_errors, data.declared_vars);
+async function fetchPresets() {
+  try {
+    const res = await fetch('/presets');
+    presetsMap = await res.json();
+  } catch(e) {
+    console.error("Presets load error:", e);
+  }
 }
 
-function renderLines(lines) {
-  const container = document.getElementById('linesOutput');
-  container.innerHTML = '';
+function loadSelectedPreset() {
+  const val = document.getElementById('presetSelect').value;
+  if (presetsMap[val]) {
+    document.getElementById('sourceEditor').value = presetsMap[val].source;
+    document.getElementById('langSelect').value = presetsMap[val].language;
+    runCompile();
+  }
+}
 
-  lines.forEach(entry => {
-    const block = document.createElement('div');
-    block.className = 'line-block' + (entry.error ? ' has-error' : '');
+function onLanguageChange() {
+  const lang = document.getElementById('langSelect').value;
+  if (lang === 'toy') {
+    document.getElementById('presetSelect').value = 'toy_pipeline';
+    loadSelectedPreset();
+  } else if (lang === 'c') {
+    document.getElementById('presetSelect').value = 'c_complete';
+    loadSelectedPreset();
+  }
+}
 
-    let html = `<div class="line-source">Line ${entry.line}: ${escapeHtml(entry.source)}</div>`;
+function switchMainMode(mode) {
+  document.getElementById('btnModePipeline').classList.toggle('active', mode === 'pipeline');
+  document.getElementById('btnModeDiff').classList.toggle('active', mode === 'diff');
+  document.getElementById('viewPipeline').style.display = mode === 'pipeline' ? 'block' : 'none';
+  document.getElementById('viewDiff').style.display = mode === 'diff' ? 'block' : 'none';
+  if (mode === 'diff' && !currentDiffData) {
+    runDiff();
+  }
+}
 
-    if (entry.error) {
-      html += `<div class="error-text">⚠ ${escapeHtml(entry.error)}</div>`;
-    } else {
-      html += '<strong>Tokens:</strong><table><tr><th>Type</th><th>Value</th></tr>';
-      entry.tokens.forEach(t => {
-        html += `<tr><td>${t.type}</td><td>${t.value === null ? '' : t.value}</td></tr>`;
-      });
-      html += '</table>';
+function showStageTab(stageKey) {
+  const stages = ['tokens', 'ast', 'semantic', 'ir', 'asm', 'explain'];
+  const tabs = document.querySelectorAll('.step-tab');
+  stages.forEach((s, idx) => {
+    const panel = document.getElementById('stage' + s.charAt(0).toUpperCase() + s.slice(1));
+    if (panel) panel.classList.toggle('active', s === stageKey);
+    if (tabs[idx]) tabs[idx].classList.toggle('active', s === stageKey);
+  });
+}
 
-      html += '<strong>AST:</strong><ul class="tree">' + renderTreeNode(entry.ast) + '</ul>';
+async function runCompile() {
+  const source = document.getElementById('sourceEditor').value;
+  const language = document.getElementById('langSelect').value;
+  const statusEl = document.getElementById('compileStatus');
+  const errorBanner = document.getElementById('errorBanner');
+
+  statusEl.textContent = "Compiling pipeline...";
+  errorBanner.style.display = "none";
+
+  try {
+    const res = await fetch('/compile', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ source, language })
+    });
+    const data = await res.json();
+
+    if (!data.success && data.error) {
+      errorBanner.style.display = "block";
+      errorBanner.innerHTML = `<strong>${escapeHtml(data.stage || 'Compilation')} Error:</strong> ${escapeHtml(data.error)}`;
+      statusEl.textContent = "Compilation halted with error";
+      return;
     }
 
-    block.innerHTML = html;
-    container.appendChild(block);
+    renderTokens(data.tokens || []);
+    renderAst(data.ast || {});
+    renderSemantic(data.semantic_errors || [], data.symbol_table || [], data.declared_vars || []);
+    renderIr(data.ir || {});
+    renderAssembly(data.assembly || {});
+    renderExplainer(data.explanation || []);
+
+    statusEl.textContent = `Completed 5-stage compilation successfully (${(data.tokens || []).length} tokens, ${(data.ir?.quadruples || []).length} TAC instructions)`;
+  } catch (err) {
+    errorBanner.style.display = "block";
+    errorBanner.textContent = "Network or server error: " + err.message;
+    statusEl.textContent = "Error running compiler";
+  }
+}
+
+// Stage 1: Tokens
+function renderTokens(tokens) {
+  const tbody = document.getElementById('tokensTableBody');
+  const pillsContainer = document.getElementById('tokenSummaryPills');
+  tbody.innerHTML = '';
+  pillsContainer.innerHTML = '';
+
+  const pillCount = document.getElementById('tokenCountPill');
+  pillCount.textContent = `${tokens.length} Tokens`;
+
+  const counts = {};
+  tokens.forEach((t, i) => {
+    counts[t.type] = (counts[t.type] || 0) + 1;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${i + 1}</td>
+      <td><span class="pill ${getTokenPillClass(t.type)}">${escapeHtml(t.type)}</span></td>
+      <td><code>${escapeHtml(t.value === null ? '<EOF>' : String(t.value))}</code></td>
+      <td>L${t.line} : C${t.col}</td>
+    `;
+    tbody.appendChild(tr);
   });
 
-  document.getElementById('linesSection').style.display = 'block';
+  for (const [type, count] of Object.entries(counts)) {
+    const p = document.createElement('span');
+    p.className = `pill ${getTokenPillClass(type)}`;
+    p.textContent = `${count}x ${type}`;
+    pillsContainer.appendChild(p);
+  }
 }
 
-function renderTreeNode(node) {
-  if (node.type === 'Number') {
-    return `<li><span class="node-type">Number</span>(<span class="node-value">${node.value}</span>)</li>`;
-  }
-  if (node.type === 'Identifier') {
-    return `<li><span class="node-type">Identifier</span>(<span class="node-value">${escapeHtml(node.name)}</span>)</li>`;
-  }
-  if (node.type === 'BinOp') {
-    return `<li><span class="node-type">BinOp</span>(<span class="node-value">${escapeHtml(node.op)}</span>)
-      <ul class="tree">${renderTreeNode(node.left)}${renderTreeNode(node.right)}</ul></li>`;
-  }
-  if (node.type === 'Assign') {
-    return `<li><span class="node-type">Assign</span>(<span class="node-value">${escapeHtml(node.name)}</span>)
-      <ul class="tree">${renderTreeNode(node.value)}</ul></li>`;
-  }
-  return '';
+function getTokenPillClass(type) {
+  if (type === 'PREPROCESSOR') return 'pill-prep';
+  if (type === 'TYPE') return 'pill-type';
+  if (type === 'NUMBER') return 'pill-num';
+  if (type === 'IDENTIFIER') return 'pill-ident';
+  if (type in {PLUS:1, MINUS:1, MUL:1, DIV:1, MOD:1, ASSIGN:1, EQ:1, NEQ:1, LT:1, GT:1}) return 'pill-op';
+  return 'pill-type';
 }
 
-function renderSemantic(errors, declaredVars) {
-  const container = document.getElementById('semanticOutput');
-  let html = '';
+// Stage 2: AST
+function renderAst(ast) {
+  const treeRoot = document.getElementById('astTreeView');
+  treeRoot.innerHTML = renderAstNode(ast);
+}
+
+function renderAstNode(node) {
+  if (!node) return '';
+  const ntype = node.type;
+
+  if (ntype === 'Program') {
+    let inner = '';
+    (node.statements || []).forEach(s => { inner += renderAstNode(s); });
+    return `<li><div class="node-box"><span class="node-tag">Program</span> <span class="node-sub">(${node.statements ? node.statements.length : 0} statements)</span></div><ul>${inner}</ul></li>`;
+  }
+  if (ntype === 'Include') {
+    return `<li><div class="node-box"><span class="node-tag" style="color:#f472b6;">#include</span> <span class="node-val">${escapeHtml(node.header)}</span></div></li>`;
+  }
+  if (ntype === 'FunctionDef') {
+    let bodyHtml = '';
+    (node.body || []).forEach(s => { bodyHtml += renderAstNode(s); });
+    return `<li><div class="node-box"><span class="node-tag" style="color:#a78bfa;">FunctionDef</span>: <span class="node-val">${escapeHtml(node.return_type)} ${escapeHtml(node.name)}()</span></div><ul>${bodyHtml}</ul></li>`;
+  }
+  if (ntype === 'VarDecl') {
+    let valHtml = node.value ? `<ul>${renderAstNode(node.value)}</ul>` : '';
+    return `<li><div class="node-box"><span class="node-tag" style="color:#34d399;">VarDecl</span>: <span class="node-sub">${escapeHtml(node.datatype)}</span> <span class="node-val">${escapeHtml(node.name)}</span></div>${valHtml}</li>`;
+  }
+  if (ntype === 'Assign') {
+    return `<li><div class="node-box"><span class="node-tag">Assign</span>: <span class="node-val">${escapeHtml(node.name)}</span> =</div><ul>${renderAstNode(node.value)}</ul></li>`;
+  }
+  if (ntype === 'BinOp') {
+    return `<li><div class="node-box"><span class="node-tag">BinOp</span> (<span class="node-val" style="font-weight:700;">${escapeHtml(node.op)}</span>)</div><ul>${renderAstNode(node.left)}${renderAstNode(node.right)}</ul></li>`;
+  }
+  if (ntype === 'UnaryOp') {
+    return `<li><div class="node-box"><span class="node-tag">UnaryOp</span> (${escapeHtml(node.op)})</div><ul>${renderAstNode(node.operand)}</ul></li>`;
+  }
+  if (ntype === 'Number') {
+    return `<li><div class="node-box"><span class="node-tag" style="color:#6ee7b7;">Number</span>(<span class="node-val">${node.value}</span>)</div></li>`;
+  }
+  if (ntype === 'String') {
+    return `<li><div class="node-box"><span class="node-tag" style="color:#fbbf24;">String</span>(<span class="node-val">${escapeHtml(JSON.stringify(node.value))}</span>)</div></li>`;
+  }
+  if (ntype === 'Identifier') {
+    return `<li><div class="node-box"><span class="node-tag" style="color:#fcd34d;">Identifier</span>(<span class="node-val">${escapeHtml(node.name)}</span>)</div></li>`;
+  }
+  if (ntype === 'Return') {
+    let valHtml = node.value ? `<ul>${renderAstNode(node.value)}</ul>` : '';
+    return `<li><div class="node-box"><span class="node-tag" style="color:#f87171;">Return</span></div>${valHtml}</li>`;
+  }
+  if (ntype === 'FunctionCall') {
+    let argsHtml = '';
+    (node.args || []).forEach(a => { argsHtml += renderAstNode(a); });
+    return `<li><div class="node-box"><span class="node-tag" style="color:#c084fc;">Call</span> <span class="node-val">${escapeHtml(node.name)}()</span></div><ul>${argsHtml}</ul></li>`;
+  }
+  if (ntype === 'If') {
+    let thenHtml = '';
+    (node.then_branch || []).forEach(s => { thenHtml += renderAstNode(s); });
+    return `<li><div class="node-box"><span class="node-tag" style="color:#c084fc;">If</span></div><ul><li><div class="node-box">Condition</div><ul>${renderAstNode(node.condition)}</ul></li><li><div class="node-box">Then</div><ul>${thenHtml}</ul></li></ul></li>`;
+  }
+  return `<li><div class="node-box">${escapeHtml(ntype)}</div></li>`;
+}
+
+// Stage 3: Semantic
+function renderSemantic(errors, symbolTable, declaredVars) {
+  const statusBox = document.getElementById('semanticStatusBox');
+  const tbody = document.getElementById('symbolTableBody');
+  tbody.innerHTML = '';
 
   if (errors.length === 0) {
-    html += '<div class="semantic-ok">✓ No semantic errors — every variable was assigned before use.</div>';
+    statusBox.innerHTML = `
+      <div class="alert alert-success">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"></polyline></svg>
+        <div><strong>Semantic Check Passed:</strong> All variables and symbols are properly declared, initialized, and scoped.</div>
+      </div>
+    `;
   } else {
-    html += '<div class="semantic-errors"><strong>Semantic errors found:</strong><ul>';
-    errors.forEach(e => {
-      html += `<li>Line ${e.line}: ${escapeHtml(e.message)}</li>`;
+    let listHtml = errors.map(e => `<li><strong>Line ${e.line}:</strong> ${escapeHtml(e.message)}</li>`).join('');
+    statusBox.innerHTML = `
+      <div class="alert alert-danger">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <div>
+          <strong>Semantic Diagnostics (${errors.length} Issue${errors.length > 1 ? 's' : ''}):</strong>
+          <ul style="margin:4px 0 0 0; padding-left:18px;">${listHtml}</ul>
+        </div>
+      </div>
+    `;
+  }
+
+  if (symbolTable.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; color:var(--text-muted);">No symbols in symbol table</td></tr>`;
+    return;
+  }
+
+  symbolTable.forEach(s => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${escapeHtml(s.name)}</strong></td>
+      <td><code>${escapeHtml(s.type)}</code></td>
+      <td><span class="pill pill-type">${escapeHtml(s.scope)}</span></td>
+      <td>Line ${s.line}</td>
+      <td><span class="pill ${s.initialized ? 'pill-num' : 'pill-op'}">${escapeHtml(s.status)}</span></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Stage 4: IR
+function renderIr(ir) {
+  document.getElementById('tacCodeView').textContent = ir.tac_text || "; No IR generated";
+
+  const tempContainer = document.getElementById('irTemporariesPills');
+  tempContainer.innerHTML = '';
+  (ir.temporaries || []).forEach(t => {
+    const s = document.createElement('span');
+    s.className = 'pill pill-ident';
+    s.textContent = t;
+    tempContainer.appendChild(s);
+  });
+  if ((ir.temporaries || []).length === 0) {
+    tempContainer.innerHTML = '<span style="color:var(--text-muted); font-size:0.8rem;">No temporary registers required</span>';
+  }
+
+  const tbody = document.getElementById('quadruplesTableBody');
+  tbody.innerHTML = '';
+  (ir.quadruples || []).forEach(q => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${q.index}</td>
+      <td><code>${escapeHtml(q.op)}</code></td>
+      <td><code>${escapeHtml(q.arg1 || '-')}</code></td>
+      <td><code>${escapeHtml(q.arg2 || '-')}</code></td>
+      <td><strong><code>${escapeHtml(q.result || '-')}</code></strong></td>
+      <td style="color:var(--text-muted); font-size:0.82rem;">${escapeHtml(q.comment || '')}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Stage 5: Target Assembly
+function renderAssembly(assembly) {
+  currentAssemblyData = assembly || {};
+  switchAsmView(currentAsmMode);
+}
+
+function switchAsmView(mode) {
+  currentAsmMode = mode;
+  document.getElementById('btnAsmEdu').classList.toggle('active', mode === 'educational');
+  document.getElementById('btnAsmX86').classList.toggle('active', mode === 'x86_64');
+
+  const text = currentAssemblyData[mode] || "; No assembly generated";
+  document.getElementById('asmCodeView').textContent = text;
+}
+
+// Stage 6: Explainer
+function renderExplainer(explanations) {
+  const container = document.getElementById('explainerCardsContainer');
+  container.innerHTML = '';
+
+  (explanations || []).forEach(exp => {
+    const card = document.createElement('div');
+    card.className = 'explainer-card';
+    let ptsHtml = exp.points.map(p => `<li>${escapeHtml(p)}</li>`).join('');
+    card.innerHTML = `
+      <h3>
+        <span>Stage ${exp.stage}: ${escapeHtml(exp.name)}</span>
+        <span class="pill pill-type">${escapeHtml(exp.badge)}</span>
+      </h3>
+      <p style="margin:4px 0 8px 0; color:var(--text-muted); font-size:0.88rem;">${escapeHtml(exp.description)}</p>
+      <ul>${ptsHtml}</ul>
+      <div class="explainer-takeaway"><strong>Key Takeaway:</strong> ${escapeHtml(exp.takeaway)}</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// ================= DIFF MODE =================
+async function runDiff() {
+  const sourceA = document.getElementById('diffSourceA').value;
+  const sourceB = document.getElementById('diffSourceB').value;
+  const stage = document.getElementById('diffStageSelect').value;
+  const tbody = document.getElementById('diffTableBody');
+
+  try {
+    const res = await fetch('/diff', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ source_a: sourceA, source_b: sourceB, language: 'c' })
     });
-    html += '</ul></div>';
+    const json = await res.json();
+    if (!json.success) {
+      alert("Diff error: " + json.error);
+      return;
+    }
+    currentDiffData = json.data;
+    renderDiffTable(stage);
+  } catch(e) {
+    alert("Failed to compute diff: " + e.message);
+  }
+}
+
+function renderDiffTable(stage) {
+  const tbody = document.getElementById('diffTableBody');
+  tbody.innerHTML = '';
+
+  if (!currentDiffData || !currentDiffData.diffs || !currentDiffData.diffs[stage]) {
+    tbody.innerHTML = `<tr><td colspan="2" style="text-align:center;">No diff data available</td></tr>`;
+    return;
   }
 
-  html += '<div class="declared-vars" style="margin-top:10px;"><strong>Declared variables:</strong><br>';
-  if (declaredVars.length === 0) {
-    html += '<em>none</em>';
-  } else {
-    declaredVars.forEach(v => { html += `<span>${escapeHtml(v)}</span>`; });
-  }
-  html += '</div>';
-
-  container.innerHTML = html;
-  document.getElementById('semanticSection').style.display = 'block';
+  const rows = currentDiffData.diffs[stage];
+  rows.forEach(r => {
+    const tr = document.createElement('tr');
+    tr.className = 'diff-row-' + r.type;
+    tr.innerHTML = `
+      <td>${escapeHtml(r.text_a || '')}</td>
+      <td>${escapeHtml(r.text_b || '')}</td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
 
 function escapeHtml(str) {
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+  if (str === null || str === undefined) return '';
+  const d = document.createElement('div');
+  d.textContent = String(str);
+  return d.innerHTML;
 }
+
+// Initial Boot
+window.addEventListener('DOMContentLoaded', () => {
+  fetchPresets();
+  runCompile();
+});
 </script>
 
 </body>

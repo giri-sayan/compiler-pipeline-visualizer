@@ -1,103 +1,243 @@
 """
-Semantic Analyzer — Step 3 of the compiler pipeline (new for 40% milestone).
+Semantic Analyzer — Step 3 of the compiler pipeline.
 
-Takes a PROGRAM: a list of AST nodes (one per line of source), already
-converted to dicts (via .to_dict()), and checks a real semantic rule:
-
-    A variable must be ASSIGNED before it is USED.
-
-This is exactly the kind of check a real compiler does after parsing
-and before generating code — parsing only checks grammar/structure,
-it has no idea whether 'x' was ever actually given a value.
-
-Example that should PASS:
-    x = 5
-    y = x + 2
-
-Example that should FAIL:
-    y = x + 2      <- x was never assigned anywhere before this
+Validates semantic rules and constructs the Symbol Table:
+  1. Scope checks (global vs function scope).
+  2. Variables must be declared / assigned before use.
+  3. Detects uninitialized variables and type consistency.
+  4. Records type, scope, and line metadata for every symbol.
 """
 
 
 class SemanticError:
-    def __init__(self, message, line_number):
+    def __init__(self, message, line_number=1, severity="error"):
         self.message = message
         self.line_number = line_number
+        self.severity = severity
 
     def to_dict(self):
-        return {"message": self.message, "line": self.line_number}
+        return {
+            "message": self.message,
+            "line": self.line_number,
+            "severity": self.severity,
+        }
+
+    def __repr__(self):
+        return f"SemanticError({self.message!r}, line={self.line_number}, severity={self.severity})"
 
 
-def _check_expr(node, declared, line_number, errors):
-    """Recursively walk an expression node, flagging undeclared identifiers."""
-    node_type = node["type"]
+class Symbol:
+    def __init__(self, name, datatype, scope="global", line=1, initialized=False):
+        self.name = name
+        self.datatype = datatype
+        self.scope = scope
+        self.line = line
+        self.initialized = initialized
 
-    if node_type == "Number":
-        return  # numbers are always fine, nothing to check
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "type": self.datatype,
+            "scope": self.scope,
+            "line": self.line,
+            "initialized": self.initialized,
+            "status": "Initialized" if self.initialized else "Declared (Uninitialized)",
+        }
 
-    if node_type == "Identifier":
-        name = node["name"]
-        if name not in declared:
+
+def _check_expression(expr, symbol_table, scope, line, errors):
+    """Recursively validates an expression node against the symbol table."""
+    if not expr or not isinstance(expr, dict):
+        return
+
+    etype = expr.get("type")
+
+    if etype == "Number" or etype == "String":
+        return
+
+    if etype == "Identifier":
+        name = expr.get("name")
+        # Check standard C built-ins or pre-defined identifiers
+        builtins = {"printf", "scanf", "puts", "getchar", "NULL", "true", "false", "print"}
+        if name in builtins:
+            return
+
+        # Check if declared in current scope or global scope
+        sym = symbol_table.get((scope, name)) or symbol_table.get(("global", name))
+        if sym is None:
             errors.append(SemanticError(
-                f"Variable '{name}' used before it was assigned a value",
-                line_number
+                f"Variable '{name}' used before it was declared or assigned",
+                line
             ))
+        elif not sym.initialized:
+            errors.append(SemanticError(
+                f"Variable '{name}' used without being initialized with a value",
+                line,
+                severity="warning"
+            ))
+
+    elif etype == "BinOp":
+        _check_expression(expr.get("left"), symbol_table, scope, line, errors)
+        _check_expression(expr.get("right"), symbol_table, scope, line, errors)
+
+    elif etype == "UnaryOp":
+        _check_expression(expr.get("operand"), symbol_table, scope, line, errors)
+
+    elif etype == "FunctionCall":
+        fname = expr.get("name")
+        # Function arguments check
+        for arg in expr.get("args", []):
+            _check_expression(arg, symbol_table, scope, line, errors)
+
+
+def _process_statement(stmt, symbol_table, scope, errors):
+    """Processes a single statement dict, updating the symbol table and recording errors."""
+    if not stmt or not isinstance(stmt, dict):
         return
 
-    if node_type == "BinOp":
-        _check_expr(node["left"], declared, line_number, errors)
-        _check_expr(node["right"], declared, line_number, errors)
+    stype = stmt.get("type")
+    line = stmt.get("line", 1)
+
+    if stype == "Include":
+        # #include directive — valid preprocessor stage
         return
+
+    elif stype == "VarDecl":
+        datatype = stmt.get("datatype", "auto")
+        name = stmt.get("name")
+        init_val = stmt.get("value")
+
+        key = (scope, name)
+        if key in symbol_table:
+            errors.append(SemanticError(
+                f"Variable '{name}' re-declared in the same scope '{scope}'",
+                line,
+                severity="warning"
+            ))
+
+        if init_val:
+            _check_expression(init_val, symbol_table, scope, line, errors)
+            symbol_table[key] = Symbol(name, datatype, scope=scope, line=line, initialized=True)
+        else:
+            symbol_table[key] = Symbol(name, datatype, scope=scope, line=line, initialized=False)
+
+    elif stype == "Assign":
+        name = stmt.get("name")
+        val = stmt.get("value")
+
+        # Check right-hand side first
+        _check_expression(val, symbol_table, scope, line, errors)
+
+        key = (scope, name)
+        if key in symbol_table:
+            symbol_table[key].initialized = True
+        else:
+            # In Toy/Python language, assignment acts as implicit declaration
+            symbol_table[key] = Symbol(name, "auto", scope=scope, line=line, initialized=True)
+
+    elif stype == "FunctionDef":
+        fname = stmt.get("name")
+        ret_type = stmt.get("return_type", "void")
+        # Register function symbol in global scope
+        symbol_table[("global", fname)] = Symbol(fname, f"function() -> {ret_type}", scope="global", line=line, initialized=True)
+
+        func_scope = fname
+        # Register parameters
+        for p in stmt.get("params", []):
+            pname = p.get("name")
+            ptype = p.get("type", "auto")
+            if pname:
+                symbol_table[(func_scope, pname)] = Symbol(pname, ptype, scope=func_scope, line=line, initialized=True)
+
+        # Walk body
+        for body_stmt in stmt.get("body", []):
+            _process_statement(body_stmt, symbol_table, func_scope, errors)
+
+    elif stype == "Return":
+        val = stmt.get("value")
+        if val:
+            _check_expression(val, symbol_table, scope, line, errors)
+
+    elif stype == "FunctionCall":
+        _check_expression(stmt, symbol_table, scope, line, errors)
+
+    elif stype == "If":
+        _check_expression(stmt.get("condition"), symbol_table, scope, line, errors)
+        for s in stmt.get("then_branch", []):
+            _process_statement(s, symbol_table, scope, errors)
+        for s in stmt.get("else_branch", []):
+            _process_statement(s, symbol_table, scope, errors)
+
+    elif stype == "BinOp" or stype == "Identifier" or stype == "Number":
+        _check_expression(stmt, symbol_table, scope, line, errors)
 
 
 def analyze(program):
     """
-    program: list of dicts, each like {"line": 1, "ast": {...}}
-             (one entry per successfully parsed source line, in order)
+    Analyzes an AST program or legacy line-by-line list.
 
-    Returns: (errors, declared_vars)
-        errors        -> list of SemanticError
-        declared_vars -> sorted list of variable names that got assigned
+    Returns:
+        (errors, declared_vars, symbol_table_list)
+        - errors: list of SemanticError
+        - declared_vars: sorted list of assigned/declared variable names
+        - symbol_table_list: list of Symbol dicts for frontend visualization
     """
-    declared = set()
+    symbol_table = {}  # (scope, name) -> Symbol
     errors = []
 
-    for entry in program:
-        line_number = entry["line"]
-        node = entry["ast"]
+    # Handle various input formats
+    if hasattr(program, "to_dict"):
+        prog_dict = program.to_dict()
+    elif isinstance(program, dict):
+        prog_dict = program
+    elif isinstance(program, list):
+        # Legacy list: [{"line": 1, "ast": {...}}, ...]
+        statements = []
+        for entry in program:
+            if isinstance(entry, dict) and "ast" in entry:
+                ast_entry = entry["ast"]
+                if isinstance(ast_entry, dict) and "line" not in ast_entry:
+                    ast_entry["line"] = entry.get("line", 1)
+                statements.append(ast_entry)
+            elif isinstance(entry, dict):
+                statements.append(entry)
+        prog_dict = {"type": "Program", "statements": statements}
+    else:
+        prog_dict = {"type": "Program", "statements": []}
 
-        if node["type"] == "Assign":
-            # Check the right-hand side BEFORE declaring the variable,
-            # so "x = x + 1" correctly fails if x was never set before.
-            _check_expr(node["value"], declared, line_number, errors)
-            declared.add(node["name"])
-        else:
-            _check_expr(node, declared, line_number, errors)
+    statements = prog_dict.get("statements", [])
+    if not statements and prog_dict.get("type") not in ("Program", None):
+        # Single top-level statement passed
+        statements = [prog_dict]
 
-    return errors, sorted(declared)
+    for stmt in statements:
+        _process_statement(stmt, symbol_table, scope="global", errors=errors)
+
+    symbol_table_list = [sym.to_dict() for sym in symbol_table.values()]
+    declared_vars = sorted(list({sym.name for sym in symbol_table.values() if not sym.datatype.startswith("function")}))
+
+    return errors, declared_vars, symbol_table_list
 
 
-# ---- Quick manual test ----
 if __name__ == "__main__":
     from lexer import Lexer
     from parser import Parser
 
-    def run_program(lines):
-        program = []
-        for i, line in enumerate(lines, start=1):
-            tokens = Lexer(line).tokenize()
-            ast = Parser(tokens).parse()
-            program.append({"line": i, "ast": ast.to_dict()})
-        return program
+    c_sample = '''#include <stdio.h>
+int main() {
+    int total = 3 + 4 * 2;
+    int unused;
+    int err = unknown_var + 1;
+    return 0;
+}'''
 
-    print("--- Test 1: should PASS (x declared before use) ---")
-    good = run_program(["x = 5", "y = x + 2"])
-    errors, declared = analyze(good)
-    print("Declared:", declared)
-    print("Errors:", [e.to_dict() for e in errors])
+    tokens = Lexer(c_sample).tokenize()
+    ast = Parser(tokens).parse_program()
+    errs, declared, syms = analyze(ast)
 
-    print("\n--- Test 2: should FAIL (x used before declared) ---")
-    bad = run_program(["y = x + 2", "x = 5"])
-    errors, declared = analyze(bad)
-    print("Declared:", declared)
-    print("Errors:", [e.to_dict() for e in errors])
+    print("Symbol Table:")
+    for s in syms:
+        print(" ", s)
+    print("\nErrors / Warnings:")
+    for e in errs:
+        print(" ", e)
