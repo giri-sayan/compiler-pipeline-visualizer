@@ -17,44 +17,67 @@ from lexer import (
 
 # ---- AST Node Classes ----
 
+class ParserError(Exception):
+    def __init__(self, message, line=None, col=None, severity="error"):
+        super().__init__(message)
+        self.message = message
+        self.line = line
+        self.col = col
+        self.stage = "Parser"
+        self.severity = severity
+
+    def to_dict(self):
+        return {
+            "stage": self.stage,
+            "message": self.message,
+            "line": self.line,
+            "col": self.col,
+            "severity": self.severity,
+        }
+
+
 class ASTNode:
     def to_dict(self):
         raise NotImplementedError
 
 
 class NumberNode(ASTNode):
-    def __init__(self, value, line=1):
+    def __init__(self, value, line=1, col=1):
         self.value = value
         self.line = line
+        self.col = col
 
     def to_dict(self):
-        return {"type": "Number", "value": self.value, "line": self.line}
+        return {"type": "Number", "value": self.value, "line": self.line, "col": self.col}
 
 
 class StringNode(ASTNode):
-    def __init__(self, value, line=1):
+    def __init__(self, value, line=1, col=1):
         self.value = value
         self.line = line
+        self.col = col
 
     def to_dict(self):
-        return {"type": "String", "value": self.value, "line": self.line}
+        return {"type": "String", "value": self.value, "line": self.line, "col": self.col}
 
 
 class IdentifierNode(ASTNode):
-    def __init__(self, name, line=1):
+    def __init__(self, name, line=1, col=1):
         self.name = name
         self.line = line
+        self.col = col
 
     def to_dict(self):
-        return {"type": "Identifier", "name": self.name, "line": self.line}
+        return {"type": "Identifier", "name": self.name, "line": self.line, "col": self.col}
 
 
 class BinOpNode(ASTNode):
-    def __init__(self, left, op, right, line=1):
+    def __init__(self, left, op, right, line=1, col=1):
         self.left = left
         self.op = op
         self.right = right
         self.line = line
+        self.col = col
 
     def to_dict(self):
         return {
@@ -63,14 +86,16 @@ class BinOpNode(ASTNode):
             "left": self.left.to_dict() if hasattr(self.left, "to_dict") else self.left,
             "right": self.right.to_dict() if hasattr(self.right, "to_dict") else self.right,
             "line": self.line,
+            "col": self.col,
         }
 
 
 class UnaryOpNode(ASTNode):
-    def __init__(self, op, operand, line=1):
+    def __init__(self, op, operand, line=1, col=1):
         self.op = op
         self.operand = operand
         self.line = line
+        self.col = col
 
     def to_dict(self):
         return {
@@ -78,14 +103,16 @@ class UnaryOpNode(ASTNode):
             "op": self.op,
             "operand": self.operand.to_dict() if hasattr(self.operand, "to_dict") else self.operand,
             "line": self.line,
+            "col": self.col,
         }
 
 
 class AssignNode(ASTNode):
-    def __init__(self, name, value, line=1):
+    def __init__(self, name, value, line=1, col=1):
         self.name = name
         self.value = value
         self.line = line
+        self.col = col
 
     def to_dict(self):
         return {
@@ -93,15 +120,17 @@ class AssignNode(ASTNode):
             "name": self.name,
             "value": self.value.to_dict() if hasattr(self.value, "to_dict") else self.value,
             "line": self.line,
+            "col": self.col,
         }
 
 
 class VarDeclNode(ASTNode):
-    def __init__(self, datatype, name, value=None, line=1):
+    def __init__(self, datatype, name, value=None, line=1, col=1):
         self.datatype = datatype
         self.name = name
         self.value = value
         self.line = line
+        self.col = col
 
     def to_dict(self):
         return {
@@ -110,23 +139,26 @@ class VarDeclNode(ASTNode):
             "name": self.name,
             "value": self.value.to_dict() if self.value and hasattr(self.value, "to_dict") else None,
             "line": self.line,
+            "col": self.col,
         }
 
 
 class IncludeNode(ASTNode):
-    def __init__(self, header, line=1):
+    def __init__(self, header, line=1, col=1):
         self.header = header
         self.line = line
+        self.col = col
 
     def to_dict(self):
-        return {"type": "Include", "header": self.header, "line": self.line}
+        return {"type": "Include", "header": self.header, "line": self.line, "col": self.col}
 
 
 class FunctionCallNode(ASTNode):
-    def __init__(self, name, args=None, line=1):
+    def __init__(self, name, args=None, line=1, col=1):
         self.name = name
         self.args = args or []
         self.line = line
+        self.col = col
 
     def to_dict(self):
         return {
@@ -134,16 +166,18 @@ class FunctionCallNode(ASTNode):
             "name": self.name,
             "args": [a.to_dict() if hasattr(a, "to_dict") else a for a in self.args],
             "line": self.line,
+            "col": self.col,
         }
 
 
 class FunctionDefNode(ASTNode):
-    def __init__(self, return_type, name, params=None, body=None, line=1):
+    def __init__(self, return_type, name, params=None, body=None, line=1, col=1):
         self.return_type = return_type
         self.name = name
         self.params = params or []
         self.body = body or []
         self.line = line
+        self.col = col
 
     def to_dict(self):
         return {
@@ -153,28 +187,32 @@ class FunctionDefNode(ASTNode):
             "params": self.params,
             "body": [s.to_dict() if hasattr(s, "to_dict") else s for s in self.body],
             "line": self.line,
+            "col": self.col,
         }
 
 
 class ReturnNode(ASTNode):
-    def __init__(self, value=None, line=1):
+    def __init__(self, value=None, line=1, col=1):
         self.value = value
         self.line = line
+        self.col = col
 
     def to_dict(self):
         return {
             "type": "Return",
             "value": self.value.to_dict() if self.value and hasattr(self.value, "to_dict") else None,
             "line": self.line,
+            "col": self.col,
         }
 
 
 class IfNode(ASTNode):
-    def __init__(self, condition, then_branch=None, else_branch=None, line=1):
+    def __init__(self, condition, then_branch=None, else_branch=None, line=1, col=1):
         self.condition = condition
         self.then_branch = then_branch or []
         self.else_branch = else_branch or []
         self.line = line
+        self.col = col
 
     def to_dict(self):
         return {
@@ -183,6 +221,7 @@ class IfNode(ASTNode):
             "then_branch": [s.to_dict() if hasattr(s, "to_dict") else s for s in self.then_branch],
             "else_branch": [s.to_dict() if hasattr(s, "to_dict") else s for s in self.else_branch],
             "line": self.line,
+            "col": self.col,
         }
 
 
@@ -207,9 +246,14 @@ class Parser:
 
     def error(self, expected):
         token_info = f"'{self.current_token.value}' ({self.current_token.type})" if self.current_token else "EOF"
-        line = self.current_token.line if self.current_token else "?"
-        col = self.current_token.col if self.current_token else "?"
-        raise Exception(f"Syntax error: expected {expected}, got {token_info} at line {line}, col {col}")
+        line = self.current_token.line if self.current_token else None
+        col = self.current_token.col if self.current_token else None
+        msg = f"Syntax error: expected {expected}, got {token_info}"
+        if line is not None and col is not None:
+            msg += f" at line {line}, col {col}"
+        elif line is not None:
+            msg += f" at line {line}"
+        raise ParserError(msg, line=line, col=col)
 
     def peek(self, offset=1):
         pos = self.pos + offset
@@ -243,21 +287,22 @@ class Parser:
         if tok.type in (PLUS, MINUS):
             op_tok = self.eat(tok.type)
             operand = self.factor()
-            return UnaryOpNode(op_tok.value, operand, line=line)
+            return UnaryOpNode(op_tok.value, operand, line=line, col=op_tok.col)
 
         # Number literal
         if tok.type == NUMBER:
-            self.eat(NUMBER)
-            return NumberNode(tok.value, line=line)
+            num_tok = self.eat(NUMBER)
+            return NumberNode(num_tok.value, line=line, col=num_tok.col)
 
         # String literal
         if tok.type == STRING:
-            self.eat(STRING)
-            return StringNode(tok.value, line=line)
+            str_tok = self.eat(STRING)
+            return StringNode(str_tok.value, line=line, col=str_tok.col)
 
         # Identifier or function call
         if tok.type == IDENTIFIER:
-            name = tok.value
+            id_tok = tok
+            name = id_tok.value
             self.eat(IDENTIFIER)
             # Function call e.g. printf(...)
             if self.current_token and self.current_token.type == LPAREN:
@@ -269,8 +314,8 @@ class Parser:
                         self.eat(COMMA)
                         args.append(self.expr())
                 self.eat(RPAREN)
-                return FunctionCallNode(name, args, line=line)
-            return IdentifierNode(name, line=line)
+                return FunctionCallNode(name, args, line=line, col=id_tok.col)
+            return IdentifierNode(name, line=line, col=id_tok.col)
 
         # Parenthesized expression
         if tok.type == LPAREN:
@@ -287,7 +332,7 @@ class Parser:
         while self.current_token and self.current_token.type in (MUL, DIV, MOD):
             op_tok = self.eat(self.current_token.type)
             right = self.factor()
-            node = BinOpNode(node, op_tok.value, right, line=op_tok.line)
+            node = BinOpNode(node, op_tok.value, right, line=op_tok.line, col=op_tok.col)
         return node
 
     def add_expr(self):
@@ -296,7 +341,7 @@ class Parser:
         while self.current_token and self.current_token.type in (PLUS, MINUS):
             op_tok = self.eat(self.current_token.type)
             right = self.term()
-            node = BinOpNode(node, op_tok.value, right, line=op_tok.line)
+            node = BinOpNode(node, op_tok.value, right, line=op_tok.line, col=op_tok.col)
         return node
 
     def relational_expr(self):
@@ -305,7 +350,7 @@ class Parser:
         while self.current_token and self.current_token.type in (LT, GT, LTE, GTE):
             op_tok = self.eat(self.current_token.type)
             right = self.add_expr()
-            node = BinOpNode(node, op_tok.value, right, line=op_tok.line)
+            node = BinOpNode(node, op_tok.value, right, line=op_tok.line, col=op_tok.col)
         return node
 
     def expr(self):
@@ -314,7 +359,7 @@ class Parser:
         while self.current_token and self.current_token.type in (EQ, NEQ):
             op_tok = self.eat(self.current_token.type)
             right = self.relational_expr()
-            node = BinOpNode(node, op_tok.value, right, line=op_tok.line)
+            node = BinOpNode(node, op_tok.value, right, line=op_tok.line, col=op_tok.col)
         return node
 
     def statement(self):
@@ -333,6 +378,14 @@ class Parser:
             return None
 
         line = tok.line
+        col = tok.col
+
+        # Unsupported loop constructs check
+        if tok.type in (WHILE, FOR):
+            raise ParserError(f"Unsupported construct: '{tok.value}' loop is not supported in this educational pipeline visualizer. Supported control flow includes 'if' and 'if-else' statements.", line=line, col=col)
+
+        if tok.type == ELSE:
+            raise ParserError(f"Syntax error: 'else' without matching 'if' at line {line}, col {col}", line=line, col=col)
 
         # 1. Preprocessor directive (#include, #define)
         if tok.type == PREPROCESSOR:
@@ -344,7 +397,7 @@ class Parser:
                 parts = directive_text.split(None, 1)
                 if len(parts) > 1:
                     header = parts[1].strip()
-            return IncludeNode(header, line=line)
+            return IncludeNode(header, line=line, col=col)
 
         # 2. Type declaration or Function definition
         if tok.type == TYPE:
@@ -357,11 +410,13 @@ class Parser:
                 params = []
                 while self.current_token and self.current_token.type != RPAREN:
                     if self.current_token.type == TYPE:
-                        p_type = self.eat(TYPE).value
+                        p_dtype = self.eat(TYPE)
                         p_name = self.eat(IDENTIFIER).value if self.current_token and self.current_token.type == IDENTIFIER else ""
-                        params.append({"type": p_type, "name": p_name})
-                    if self.current_token and self.current_token.type == COMMA:
-                        self.eat(COMMA)
+                        params.append({"type": p_dtype.value, "name": p_name})
+                        if self.current_token and self.current_token.type == COMMA:
+                            self.eat(COMMA)
+                    else:
+                        self.error("parameter TYPE or ')'")
                 self.eat(RPAREN)
 
                 # Function body in { ... }
@@ -374,7 +429,7 @@ class Parser:
                             body.append(stmt)
                     if self.current_token and self.current_token.type == RBRACE:
                         self.eat(RBRACE)
-                return FunctionDefNode(dtype_tok.value, ident_tok.value, params=params, body=body, line=line)
+                return FunctionDefNode(dtype_tok.value, ident_tok.value, params=params, body=body, line=line, col=ident_tok.col)
 
             # Otherwise, variable declaration: TYPE IDENTIFIER (= expr)? ;?
             init_val = None
@@ -385,7 +440,7 @@ class Parser:
             if self.current_token and self.current_token.type == SEMICOLON:
                 self.eat(SEMICOLON)
 
-            return VarDeclNode(dtype_tok.value, ident_tok.value, init_val, line=line)
+            return VarDeclNode(dtype_tok.value, ident_tok.value, init_val, line=line, col=ident_tok.col)
 
         # 3. Return statement: return expr?;
         if tok.type == RETURN:
@@ -395,7 +450,7 @@ class Parser:
                 val = self.expr()
             if self.current_token and self.current_token.type == SEMICOLON:
                 self.eat(SEMICOLON)
-            return ReturnNode(val, line=line)
+            return ReturnNode(val, line=line, col=col)
 
         # 4. If statement: if (expr) { ... } (else { ... })?
         if tok.type == IF:
@@ -431,18 +486,19 @@ class Parser:
                     s = self.statement()
                     if s: else_body.append(s)
 
-            return IfNode(cond, then_body, else_body, line=line)
+            return IfNode(cond, then_body, else_body, line=line, col=col)
 
         # 5. Assignment without type: IDENTIFIER = expr
         next_tok = self.peek()
         if tok.type == IDENTIFIER and next_tok and next_tok.type == ASSIGN:
             name = tok.value
+            id_col = tok.col
             self.eat(IDENTIFIER)
             self.eat(ASSIGN)
             val = self.expr()
             if self.current_token and self.current_token.type == SEMICOLON:
                 self.eat(SEMICOLON)
-            return AssignNode(name, val, line=line)
+            return AssignNode(name, val, line=line, col=id_col)
 
         # 6. Expression or standalone call: printf(...) or 3 + 4;
         expr_node = self.expr()
@@ -457,6 +513,8 @@ class Parser:
             stmt = self.statement()
             if stmt:
                 statements.append(stmt)
+            else:
+                self.error("valid statement")
         return ProgramNode(statements)
 
     def parse(self):

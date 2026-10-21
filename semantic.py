@@ -10,28 +10,35 @@ Validates semantic rules and constructs the Symbol Table:
 
 
 class SemanticError:
-    def __init__(self, message, line_number=1, severity="error"):
+    def __init__(self, message, line_number=1, severity="error", col=None):
         self.message = message
         self.line_number = line_number
+        self.line = line_number
+        self.col = col
         self.severity = severity
+        self.stage = "Semantic Analyzer"
 
     def to_dict(self):
         return {
+            "stage": self.stage,
             "message": self.message,
             "line": self.line_number,
+            "col": self.col,
             "severity": self.severity,
         }
 
     def __repr__(self):
-        return f"SemanticError({self.message!r}, line={self.line_number}, severity={self.severity})"
+        col_str = f", col={self.col}" if self.col is not None else ""
+        return f"SemanticError({self.message!r}, line={self.line_number}{col_str}, severity={self.severity})"
 
 
 class Symbol:
-    def __init__(self, name, datatype, scope="global", line=1, initialized=False):
+    def __init__(self, name, datatype, scope="global", line=1, initialized=False, col=None):
         self.name = name
         self.datatype = datatype
         self.scope = scope
         self.line = line
+        self.col = col
         self.initialized = initialized
 
     def to_dict(self):
@@ -40,6 +47,7 @@ class Symbol:
             "type": self.datatype,
             "scope": self.scope,
             "line": self.line,
+            "col": self.col,
             "initialized": self.initialized,
             "status": "Initialized" if self.initialized else "Declared (Uninitialized)",
         }
@@ -51,6 +59,8 @@ def _check_expression(expr, symbol_table, scope, line, errors):
         return
 
     etype = expr.get("type")
+    expr_line = expr.get("line", line)
+    expr_col = expr.get("col", None)
 
     if etype == "Number" or etype == "String":
         return
@@ -67,13 +77,16 @@ def _check_expression(expr, symbol_table, scope, line, errors):
         if sym is None:
             errors.append(SemanticError(
                 f"Variable '{name}' used before it was declared or assigned",
-                line
+                expr_line,
+                severity="error",
+                col=expr_col
             ))
         elif not sym.initialized:
             errors.append(SemanticError(
                 f"Variable '{name}' used without being initialized with a value",
-                line,
-                severity="warning"
+                expr_line,
+                severity="warning",
+                col=expr_col
             ))
 
     elif etype == "BinOp":
@@ -97,6 +110,7 @@ def _process_statement(stmt, symbol_table, scope, errors):
 
     stype = stmt.get("type")
     line = stmt.get("line", 1)
+    col = stmt.get("col", None)
 
     if stype == "Include":
         # #include directive — valid preprocessor stage
@@ -112,14 +126,15 @@ def _process_statement(stmt, symbol_table, scope, errors):
             errors.append(SemanticError(
                 f"Variable '{name}' re-declared in the same scope '{scope}'",
                 line,
-                severity="warning"
+                severity="warning",
+                col=col
             ))
 
         if init_val:
             _check_expression(init_val, symbol_table, scope, line, errors)
-            symbol_table[key] = Symbol(name, datatype, scope=scope, line=line, initialized=True)
+            symbol_table[key] = Symbol(name, datatype, scope=scope, line=line, initialized=True, col=col)
         else:
-            symbol_table[key] = Symbol(name, datatype, scope=scope, line=line, initialized=False)
+            symbol_table[key] = Symbol(name, datatype, scope=scope, line=line, initialized=False, col=col)
 
     elif stype == "Assign":
         name = stmt.get("name")
@@ -131,15 +146,17 @@ def _process_statement(stmt, symbol_table, scope, errors):
         key = (scope, name)
         if key in symbol_table:
             symbol_table[key].initialized = True
+        elif ("global", name) in symbol_table:
+            symbol_table[("global", name)].initialized = True
         else:
             # In Toy/Python language, assignment acts as implicit declaration
-            symbol_table[key] = Symbol(name, "auto", scope=scope, line=line, initialized=True)
+            symbol_table[key] = Symbol(name, "auto", scope=scope, line=line, initialized=True, col=col)
 
     elif stype == "FunctionDef":
         fname = stmt.get("name")
         ret_type = stmt.get("return_type", "void")
         # Register function symbol in global scope
-        symbol_table[("global", fname)] = Symbol(fname, f"function() -> {ret_type}", scope="global", line=line, initialized=True)
+        symbol_table[("global", fname)] = Symbol(fname, f"function() -> {ret_type}", scope="global", line=line, initialized=True, col=col)
 
         func_scope = fname
         # Register parameters

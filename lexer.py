@@ -65,6 +65,25 @@ KEYWORDS = {
 }
 
 
+class LexerError(Exception):
+    def __init__(self, message, line=1, col=1):
+        super().__init__(message)
+        self.message = message
+        self.line = line
+        self.col = col
+        self.stage = "Lexer"
+        self.severity = "error"
+
+    def to_dict(self):
+        return {
+            "stage": self.stage,
+            "message": self.message,
+            "line": self.line,
+            "col": self.col,
+            "severity": self.severity,
+        }
+
+
 class Token:
     def __init__(self, type_, value, line=1, col=1):
         self.type = type_
@@ -186,6 +205,8 @@ class Lexer:
         result = ""
 
         while self.current_char is not None and self.current_char != quote_char:
+            if self.current_char == "\n":
+                raise LexerError(f"Lexical error: Unterminated string literal at line {start_line}, col {start_col}", line=start_line, col=start_col)
             if self.current_char == "\\" and self.peek() is not None:
                 self.advance()
                 escape_map = {"n": "\n", "t": "\t", "r": "\r", "\\": "\\", '"': '"', "'": "'"}
@@ -194,8 +215,10 @@ class Lexer:
                 result += self.current_char
             self.advance()
 
-        if self.current_char == quote_char:
-            self.advance()  # Skip closing quote
+        if self.current_char != quote_char:
+            raise LexerError(f"Lexical error: Unterminated string literal at line {start_line}, col {start_col}", line=start_line, col=start_col)
+
+        self.advance()  # Skip closing quote
 
         return Token(STRING, result, line=start_line, col=start_col)
 
@@ -288,19 +311,19 @@ class Lexer:
                 token_type, token_val = single_char_tokens[ch]
                 return Token(token_type, token_val, line=cur_line, col=cur_col)
 
-            raise Exception(f"Lexical error: Unrecognized character {ch!r} at line {cur_line}, col {cur_col}")
+            raise LexerError(f"Lexical error: Unrecognized character {ch!r} at line {cur_line}, col {cur_col}", line=cur_line, col=cur_col)
 
         return Token(EOF, None, line=self.line, col=self.col)
 
     def tokenize(self):
         """Tokenize entire input string into a list of tokens."""
-        tokens = []
+        self.tokens_so_far = []
         while True:
             tok = self.get_next_token()
-            tokens.append(tok)
+            self.tokens_so_far.append(tok)
             if tok.type == EOF:
                 break
-        return tokens
+        return self.tokens_so_far
 
 
 if __name__ == "__main__":
