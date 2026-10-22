@@ -6,6 +6,8 @@ parser. Supports C programs (with #include, types, functions, return, printf,
 semicolons), Toy Mini-Lang statements, and expressions.
 """
 
+import difflib
+
 from lexer import (
     PREPROCESSOR, TYPE, IDENTIFIER, NUMBER, STRING,
     PLUS, MINUS, MUL, DIV, MOD, ASSIGN,
@@ -13,6 +15,35 @@ from lexer import (
     LPAREN, RPAREN, LBRACE, RBRACE, SEMICOLON, COMMA,
     IF, ELSE, WHILE, FOR, RETURN, EOF
 )
+
+
+KEYWORD_TYPO_MAP = {
+    "return": {"eturn", "retun", "retrun", "reurn", "reutrn", "retunr", "ruturn", "rturn", "retn", "reton"},
+    "int": {"itn", "nit", "intt", "in"},
+    "void": {"viod", "vod", "voide"},
+    "char": {"chra", "car"},
+    "float": {"flaot", "flot"},
+    "double": {"doulbe", "duble"},
+    "if": {"fi", "iff"},
+    "else": {"esle", "els", "lese"},
+    "while": {"whlie", "wile"},
+    "for": {"fro", "fo"},
+}
+
+
+def detect_keyword_typo(word):
+    if not word or not isinstance(word, str):
+        return None
+    w = word.lower()
+    for kw, typos in KEYWORD_TYPO_MAP.items():
+        if w in typos:
+            return kw
+    for kw in KEYWORD_TYPO_MAP.keys():
+        if abs(len(w) - len(kw)) <= 1:
+            ratio = difflib.SequenceMatcher(None, w, kw).ratio()
+            if ratio >= 0.7:
+                return kw
+    return None
 
 
 # ---- AST Node Classes ----
@@ -23,6 +54,7 @@ class ParserError(Exception):
         self.message = message
         self.line = line
         self.col = col
+        self.column = col
         self.stage = "Parser"
         self.severity = severity
 
@@ -32,6 +64,7 @@ class ParserError(Exception):
             "message": self.message,
             "line": self.line,
             "col": self.col,
+            "column": self.col,
             "severity": self.severity,
         }
 
@@ -226,29 +259,52 @@ class IfNode(ASTNode):
 
 
 class ProgramNode(ASTNode):
-    def __init__(self, statements=None):
+    def __init__(self, statements=None, language=None):
         self.statements = statements or []
+        self.language = language
 
     def to_dict(self):
-        return {
+        d = {
             "type": "Program",
             "statements": [s.to_dict() if hasattr(s, "to_dict") else s for s in self.statements],
         }
+        if self.language:
+            d["language"] = self.language
+        return d
 
 
 # ---- Parser Class ----
 
 class Parser:
-    def __init__(self, tokens):
+    def __init__(self, tokens, language=None):
         self.tokens = tokens or []
+        if language is not None:
+            self.language = str(language).lower()
+        else:
+            has_c_tokens = any(t.type in (TYPE, PREPROCESSOR, RETURN) for t in self.tokens)
+            self.language = "c" if has_c_tokens else "toy"
         self.pos = 0
         self.current_token = self.tokens[self.pos] if len(self.tokens) > 0 else None
+
+    FRIENDLY_TOKENS = {
+        SEMICOLON: "';'",
+        RBRACE: "'}'",
+        LBRACE: "'{'",
+        RPAREN: "')'",
+        LPAREN: "'('",
+        COMMA: "','",
+        ASSIGN: "'='",
+    }
 
     def error(self, expected):
         token_info = f"'{self.current_token.value}' ({self.current_token.type})" if self.current_token else "EOF"
         line = self.current_token.line if self.current_token else None
         col = self.current_token.col if self.current_token else None
-        msg = f"Syntax error: expected {expected}, got {token_info}"
+        if expected in self.FRIENDLY_TOKENS:
+            expected_str = f"{self.FRIENDLY_TOKENS[expected]} ({expected})"
+        else:
+            expected_str = str(expected)
+        msg = f"Syntax error: expected {expected_str}, got {token_info}"
         if line is not None and col is not None:
             msg += f" at line {line}, col {col}"
         elif line is not None:
@@ -309,9 +365,13 @@ class Parser:
                 self.eat(LPAREN)
                 args = []
                 if self.current_token and self.current_token.type != RPAREN:
+                    if self.current_token.type == COMMA:
+                        raise ParserError(f"Syntax error: unexpected ',' at start of argument list at line {self.current_token.line}, col {self.current_token.col}", line=self.current_token.line, col=self.current_token.col)
                     args.append(self.expr())
                     while self.current_token and self.current_token.type == COMMA:
                         self.eat(COMMA)
+                        if self.current_token and self.current_token.type == RPAREN:
+                            raise ParserError(f"Syntax error: trailing ',' in argument list without following expression at line {self.current_token.line}, col {self.current_token.col}", line=self.current_token.line, col=self.current_token.col)
                         args.append(self.expr())
                 self.eat(RPAREN)
                 return FunctionCallNode(name, args, line=line, col=id_tok.col)
@@ -320,6 +380,8 @@ class Parser:
         # Parenthesized expression
         if tok.type == LPAREN:
             self.eat(LPAREN)
+            if self.current_token and self.current_token.type == RPAREN:
+                raise ParserError(f"Syntax error: empty expression in parentheses at line {tok.line}, col {tok.col}", line=tok.line, col=tok.col)
             node = self.expr()
             self.eat(RPAREN)
             return node
@@ -387,6 +449,56 @@ class Parser:
         if tok.type == ELSE:
             raise ParserError(f"Syntax error: 'else' without matching 'if' at line {line}, col {col}", line=line, col=col)
 
+        if tok.type == RBRACE:
+            raise ParserError(f"Syntax error: unexpected '}}' without matching '{{' at line {line}, col {col}", line=line, col=col)
+
+        # Check for keyword typos or invalid statement forms starting with an identifier
+        if tok.type == IDENTIFIER:
+            ident_name = tok.value
+            next_tok = self.peek()
+            kw_match = detect_keyword_typo(ident_name)
+
+            if not (next_tok and next_tok.type == ASSIGN):
+                if kw_match == "return":
+                    raise ParserError(
+                        f"Unknown keyword or statement '{ident_name}'. Did you mean 'return'?",
+                        line=line,
+                        col=col
+                    )
+                elif kw_match in ("int", "float", "char", "double", "void", "const", "unsigned", "long", "short"):
+                    if next_tok and next_tok.type == IDENTIFIER:
+                        raise ParserError(
+                            f"Unknown type or keyword '{ident_name}'. Did you mean '{kw_match}'?",
+                            line=line,
+                            col=col
+                        )
+                elif kw_match in ("if", "while", "for"):
+                    if next_tok and next_tok.type == LPAREN:
+                        raise ParserError(
+                            f"Unknown keyword or statement '{ident_name}'. Did you mean '{kw_match}'?",
+                            line=line,
+                            col=col
+                        )
+                elif kw_match == "else":
+                    raise ParserError(
+                        f"Unknown keyword or statement '{ident_name}'. Did you mean 'else'?",
+                        line=line,
+                        col=col
+                    )
+
+            if next_tok and next_tok.type in (NUMBER, STRING):
+                if kw_match:
+                    raise ParserError(
+                        f"Unknown keyword or statement '{ident_name}'. Did you mean '{kw_match}'?",
+                        line=line,
+                        col=col
+                    )
+                raise ParserError(
+                    f"Syntax error: unexpected {next_tok.type.lower()} literal '{next_tok.value}' after identifier '{ident_name}' at line {next_tok.line}, col {next_tok.col}",
+                    line=line,
+                    col=col
+                )
+
         # 1. Preprocessor directive (#include, #define)
         if tok.type == PREPROCESSOR:
             directive_text = tok.value
@@ -427,8 +539,7 @@ class Parser:
                         stmt = self.statement()
                         if stmt:
                             body.append(stmt)
-                    if self.current_token and self.current_token.type == RBRACE:
-                        self.eat(RBRACE)
+                    self.eat(RBRACE)
                 return FunctionDefNode(dtype_tok.value, ident_tok.value, params=params, body=body, line=line, col=ident_tok.col)
 
             # Otherwise, variable declaration: TYPE IDENTIFIER (= expr)? ;?
@@ -437,7 +548,9 @@ class Parser:
                 self.eat(ASSIGN)
                 init_val = self.expr()
 
-            if self.current_token and self.current_token.type == SEMICOLON:
+            if self.language == "c":
+                self.eat(SEMICOLON)
+            elif self.current_token and self.current_token.type == SEMICOLON:
                 self.eat(SEMICOLON)
 
             return VarDeclNode(dtype_tok.value, ident_tok.value, init_val, line=line, col=ident_tok.col)
@@ -448,7 +561,9 @@ class Parser:
             val = None
             if self.current_token and self.current_token.type not in (SEMICOLON, RBRACE, EOF):
                 val = self.expr()
-            if self.current_token and self.current_token.type == SEMICOLON:
+            if self.language == "c":
+                self.eat(SEMICOLON)
+            elif self.current_token and self.current_token.type == SEMICOLON:
                 self.eat(SEMICOLON)
             return ReturnNode(val, line=line, col=col)
 
@@ -496,13 +611,17 @@ class Parser:
             self.eat(IDENTIFIER)
             self.eat(ASSIGN)
             val = self.expr()
-            if self.current_token and self.current_token.type == SEMICOLON:
+            if self.language == "c":
+                self.eat(SEMICOLON)
+            elif self.current_token and self.current_token.type == SEMICOLON:
                 self.eat(SEMICOLON)
             return AssignNode(name, val, line=line, col=id_col)
 
         # 6. Expression or standalone call: printf(...) or 3 + 4;
         expr_node = self.expr()
-        if self.current_token and self.current_token.type == SEMICOLON:
+        if self.language == "c":
+            self.eat(SEMICOLON)
+        elif self.current_token and self.current_token.type == SEMICOLON:
             self.eat(SEMICOLON)
         return expr_node
 
@@ -515,7 +634,7 @@ class Parser:
                 statements.append(stmt)
             else:
                 self.error("valid statement")
-        return ProgramNode(statements)
+        return ProgramNode(statements, language=self.language)
 
     def parse(self):
         """

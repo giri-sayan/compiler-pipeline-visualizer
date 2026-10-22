@@ -119,8 +119,8 @@ z = (x + y) * 3"""
 
 def make_diagnostic(stage, err, default_line=None, default_col=None, severity="error"):
     line = getattr(err, "line", None) or getattr(err, "line_number", None) or default_line
-    col = getattr(err, "col", None) or default_col
-    msg = str(err)
+    col = getattr(err, "col", None) or getattr(err, "column", None) or default_col
+    msg = getattr(err, "message", None) or str(err)
     if line is None:
         m_line = re.search(r'line\s+(\d+)', msg, re.IGNORECASE)
         if m_line:
@@ -134,6 +134,7 @@ def make_diagnostic(stage, err, default_line=None, default_col=None, severity="e
         "message": msg,
         "line": line,
         "col": col,
+        "column": col,
         "severity": getattr(err, "severity", severity)
     }
 
@@ -178,7 +179,10 @@ def compile_source():
         partial_tokens = [t.to_dict() for t in getattr(lexer, "tokens_so_far", [])]
         return jsonify({
             "success": False,
-            "pipeline_success": False,
+            "pipeline_success": True,
+            "syntax_valid": False,
+            "semantic_valid": False,
+            "has_semantic_errors": False,
             "stage": "Lexer",
             "error": str(e),
             "diagnostics": [diag],
@@ -197,14 +201,17 @@ def compile_source():
 
     # 2. Whole-Program Syntax Analysis (AST)
     try:
-        parser = Parser(tokens)
+        parser = Parser(tokens, language=language)
         ast = parser.parse_program()
         ast_dict = ast.to_dict()
     except Exception as e:
         diag = make_diagnostic("Parser", e)
         return jsonify({
             "success": False,
-            "pipeline_success": False,
+            "pipeline_success": True,
+            "syntax_valid": False,
+            "semantic_valid": False,
+            "has_semantic_errors": False,
             "stage": "Parser",
             "error": str(e),
             "diagnostics": [diag],
@@ -233,12 +240,15 @@ def compile_source():
 
     # 3. Semantic Analysis & Symbol Table
     try:
-        semantic_errors, declared_vars, symbol_table = semantic.analyze(ast)
+        semantic_errors, declared_vars, symbol_table = semantic.analyze(ast, language=language)
     except Exception as e:
         diag = make_diagnostic("Semantic Analyzer", e)
         return jsonify({
             "success": False,
-            "pipeline_success": False,
+            "pipeline_success": True,
+            "syntax_valid": True,
+            "semantic_valid": False,
+            "has_semantic_errors": True,
             "stage": "Semantic Analyzer",
             "error": f"Semantic analysis error: {e}",
             "diagnostics": [diag],
@@ -254,6 +264,45 @@ def compile_source():
             "tokens": tokens_list,
             "ast": ast_dict,
             "lines": line_results,
+        }), 200
+
+    semantic_diagnostics = [e.to_dict() if hasattr(e, "to_dict") else e for e in semantic_errors]
+    has_semantic_errors = any(
+        (e.severity if hasattr(e, "severity") else e.get("severity", "error")) == "error"
+        for e in semantic_errors
+    )
+    semantic_valid = len(semantic_errors) == 0
+
+    if has_semantic_errors:
+        first_err = next(
+            (e for e in semantic_diagnostics if e.get("severity") == "error"),
+            semantic_diagnostics[0] if semantic_diagnostics else {"message": "Semantic analysis failed"}
+        )
+        return jsonify({
+            "success": False,
+            "pipeline_success": True,
+            "syntax_valid": True,
+            "semantic_valid": False,
+            "has_semantic_errors": True,
+            "stage": "Semantic Analyzer",
+            "error": first_err.get("message", "Semantic analysis failed"),
+            "diagnostics": semantic_diagnostics,
+            "stages": {
+                "source": "passed",
+                "tokens": "passed",
+                "ast": "passed",
+                "semantic": "failed",
+                "ir": "blocked",
+                "asm": "blocked",
+                "explain": "blocked",
+            },
+            "language": language,
+            "lines": line_results,
+            "tokens": tokens_list,
+            "ast": ast_dict,
+            "semantic_errors": semantic_diagnostics,
+            "declared_vars": declared_vars,
+            "symbol_table": symbol_table,
         }), 200
 
     # 4. Intermediate Representation (Three-Address Code & Quadruples)
@@ -325,18 +374,7 @@ def compile_source():
         explanation = []
 
     semantic_diagnostics = [e.to_dict() if hasattr(e, "to_dict") else e for e in semantic_errors]
-    has_semantic_errors = any(
-        (e.severity if hasattr(e, "severity") else e.get("severity", "error")) == "error"
-        for e in semantic_errors
-    )
-    semantic_valid = len(semantic_errors) == 0
-
-    if has_semantic_errors:
-        semantic_stage_status = "failed"
-    elif len(semantic_errors) > 0:
-        semantic_stage_status = "warning"
-    else:
-        semantic_stage_status = "passed"
+    semantic_stage_status = "warning" if len(semantic_errors) > 0 else "passed"
 
     stages_status = {
         "source": "passed",
@@ -351,8 +389,9 @@ def compile_source():
     return jsonify({
         "success": True,
         "pipeline_success": True,
-        "semantic_valid": semantic_valid,
-        "has_semantic_errors": has_semantic_errors,
+        "syntax_valid": True,
+        "semantic_valid": len(semantic_errors) == 0,
+        "has_semantic_errors": False,
         "diagnostics": semantic_diagnostics,
         "stages": stages_status,
         "language": language,

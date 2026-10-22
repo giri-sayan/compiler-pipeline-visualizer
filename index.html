@@ -774,16 +774,124 @@
     transition: all 0.2s ease;
   }
 
+  body.ast-fullscreen-active {
+    overflow: hidden !important;
+  }
+
   .ast-viewport.fullscreen-mode {
     position: fixed;
-    top: 16px;
-    left: 16px;
-    right: 16px;
-    bottom: 16px;
+    top: 14px;
+    left: 14px;
+    right: 14px;
+    bottom: 14px;
     max-height: none;
     z-index: 1000;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 24px 48px rgba(0, 0, 0, 0.25);
     border: 2px solid var(--primary);
+    border-radius: var(--radius-lg);
+    padding: 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-surface-alt);
+  }
+
+  .ast-expanded-header {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 18px;
+    background: #FFFFFF;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    z-index: 20;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  }
+  .ast-viewport.fullscreen-mode .ast-expanded-header {
+    display: flex !important;
+  }
+
+  .ast-expanded-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ast-expanded-header-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-back-pipeline {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    padding: 6px 12px;
+    border-radius: var(--radius-md);
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+  }
+  .btn-back-pipeline:hover {
+    background: var(--bg-surface-alt);
+    border-color: var(--border-hover);
+    color: var(--primary);
+  }
+
+  .ast-expanded-title-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .ast-expanded-badge {
+    background: var(--primary-subtle);
+    color: var(--primary);
+    border: 1px solid var(--primary-border);
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    border-radius: var(--radius-sm);
+    letter-spacing: 0.4px;
+  }
+  .ast-expanded-title {
+    font-size: 0.90rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .btn-close-expanded {
+    width: 32px;
+    height: 32px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn-close-expanded:hover {
+    background: #FEE2E2;
+    border-color: #FCA5A5;
+    color: #DC2626;
+  }
+
+  .ast-canvas-scroll-area {
+    display: contents;
+  }
+  .ast-viewport.fullscreen-mode .ast-canvas-scroll-area {
+    display: block;
+    flex: 1;
+    overflow: auto;
+    padding: 36px 24px 50px 24px;
+    position: relative;
   }
 
   .ast-canvas-wrapper {
@@ -1266,6 +1374,233 @@
     opacity: 0.55;
   }
 
+  /* AST Visual Comparison Styles */
+  .diff-ast-wrapper {
+    transition: opacity 0.2s ease;
+    border-top: 1px solid var(--border);
+    background: var(--bg-surface);
+  }
+  .diff-ast-wrapper.outdated {
+    opacity: 0.55;
+  }
+
+  .diff-ast-topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-surface-alt);
+  }
+  .diff-ast-topbar-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .diff-ast-heading {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+  .diff-ast-subtext {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+  }
+
+  .diff-ast-legend {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .diff-legend-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    padding: 3px 8px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+  }
+  .diff-legend-chip.chip-a {
+    color: #991B1B;
+    background: #FFF5F5;
+    border-color: #FECACA;
+  }
+  .diff-legend-chip.chip-b {
+    color: #166534;
+    background: #F0FDF4;
+    border-color: #BBF7D0;
+  }
+  .legend-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .legend-dot.dot-neutral { background: #94A3B8; }
+  .legend-dot.dot-a { background: #DC2626; }
+  .legend-dot.dot-b { background: #059669; }
+
+  .diff-ast-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+  }
+  @media (max-width: 900px) {
+    .diff-ast-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .diff-ast-panel {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    background: #FAFAFA;
+  }
+  .diff-ast-panel:first-child {
+    border-right: 1px solid var(--border);
+  }
+  @media (max-width: 900px) {
+    .diff-ast-panel:first-child {
+      border-right: none;
+      border-bottom: 2px solid var(--border);
+    }
+  }
+
+  .diff-ast-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  .diff-ast-panel-header.header-a {
+    background: #FEF2F2;
+    border-color: #FECACA;
+  }
+  .diff-ast-panel-header.header-b {
+    background: #F0FDF4;
+    border-color: #BBF7D0;
+  }
+
+  .panel-header-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .diff-version-pill {
+    font-size: 0.70rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 2px 7px;
+    border-radius: var(--radius-sm);
+  }
+  .diff-version-pill.pill-ver-a {
+    background: #FEE2E2;
+    color: #991B1B;
+    border: 1px solid #FCA5A5;
+  }
+  .diff-version-pill.pill-ver-b {
+    background: #DCFCE7;
+    color: #166534;
+    border: 1px solid #86EFAC;
+  }
+
+  .panel-header-title {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+  .diff-node-count-badge {
+    font-size: 0.74rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    background: var(--bg-surface);
+    padding: 2px 8px;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border);
+  }
+
+  .diff-ast-viewport {
+    overflow: auto;
+    max-height: 540px;
+    min-height: 380px;
+    padding: 32px 18px 48px 18px;
+    background-color: var(--bg-surface-alt);
+    background-image: radial-gradient(circle, #CBD5E1 1px, transparent 1px);
+    background-size: 20px 20px;
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+
+  .diff-ast-canvas {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-width: 100%;
+    width: max-content;
+    margin: 0 auto;
+  }
+
+  /* Node diff cards */
+  .ast-card.diff-card-a {
+    border-color: #F87171 !important;
+    background: #FEF2F2 !important;
+    box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.22), 0 3px 8px rgba(239, 68, 68, 0.12) !important;
+  }
+  .ast-card.diff-card-a .ast-card-type {
+    color: #991B1B !important;
+  }
+  .ast-card.diff-card-a .ast-card-val {
+    color: #7F1D1D !important;
+  }
+
+  .ast-card.diff-card-b {
+    border-color: #34D399 !important;
+    background: #F0FDF4 !important;
+    box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.22), 0 3px 8px rgba(16, 185, 129, 0.12) !important;
+  }
+  .ast-card.diff-card-b .ast-card-type {
+    color: #166534 !important;
+  }
+  .ast-card.diff-card-b .ast-card-val {
+    color: #14532D !important;
+  }
+
+  .diff-card-badge {
+    position: absolute;
+    top: -8px;
+    right: 8px;
+    font-size: 0.58rem;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: var(--radius-sm);
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    z-index: 5;
+    line-height: 1.2;
+  }
+  .diff-card-badge.badge-a {
+    background: #FEE2E2;
+    color: #991B1B;
+    border: 1px solid #FCA5A5;
+  }
+  .diff-card-badge.badge-b {
+    background: #DCFCE7;
+    color: #166534;
+    border: 1px solid #86EFAC;
+  }
+
   /* Empty state box */
   .empty-state-box {
     text-align: center;
@@ -1587,8 +1922,34 @@ int main() {
               </div>
             </div>
             <div class="ast-viewport" id="astViewport">
-              <div class="ast-canvas-wrapper" id="astCanvasWrapper">
-                <div class="ast-tree-container" id="astTreeView"></div>
+              <!-- Expanded View Sticky Control Bar (Visible in Expanded/Fullscreen Mode) -->
+              <div class="ast-expanded-header" id="astExpandedHeader">
+                <div class="ast-expanded-header-left">
+                  <button class="btn-back-pipeline" id="btnBackToPipeline" onclick="closeAstFullscreen()" title="Back to Pipeline Inspector">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+                    <span>Back to Pipeline</span>
+                  </button>
+                  <div class="ast-expanded-title-group">
+                    <span class="ast-expanded-badge">Expanded View</span>
+                    <span class="ast-expanded-title">Abstract Syntax Tree (AST)</span>
+                  </div>
+                </div>
+                <div class="ast-expanded-header-right">
+                  <div class="zoom-controls" style="margin-right: 8px;">
+                    <button class="zoom-btn" onclick="changeAstZoom(-0.1)" title="Zoom Out">&minus;</button>
+                    <span class="zoom-display" id="astZoomDisplayExpanded">100%</span>
+                    <button class="zoom-btn" onclick="changeAstZoom(0.1)" title="Zoom In">&plus;</button>
+                    <button class="zoom-btn" onclick="resetAstZoom()" title="Reset Zoom" style="border-left:1px solid var(--border); font-size:0.75rem; padding:6px 8px;">Reset</button>
+                  </div>
+                  <button class="btn-close-expanded" id="btnCloseExpandedAst" onclick="closeAstFullscreen()" aria-label="Close expanded AST" title="Close expanded AST (Esc)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="ast-canvas-scroll-area" id="astCanvasScrollArea">
+                <div class="ast-canvas-wrapper" id="astCanvasWrapper">
+                  <div class="ast-tree-container" id="astTreeView"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -1812,6 +2173,55 @@ int main() {
               </thead>
               <tbody id="diffTableBody"></tbody>
             </table>
+          </div>
+
+          <!-- AST Visual Comparison Wrapper (Hidden until Compare is run with AST target) -->
+          <div id="diffAstWrapper" class="diff-ast-wrapper" style="display:none;">
+            <div class="diff-ast-topbar">
+              <div class="diff-ast-topbar-info">
+                <span class="diff-ast-heading">Abstract Syntax Tree (AST) Comparison</span>
+                <span class="diff-ast-subtext">Side-by-side visual tree comparison with structural difference highlighting</span>
+              </div>
+              <div class="diff-ast-legend">
+                <span class="diff-legend-chip chip-neutral"><span class="legend-dot dot-neutral"></span>Unchanged</span>
+                <span class="diff-legend-chip chip-a"><span class="legend-dot dot-a"></span>Version A (Changed / Removed)</span>
+                <span class="diff-legend-chip chip-b"><span class="legend-dot dot-b"></span>Version B (Modified / Added)</span>
+              </div>
+            </div>
+
+            <div class="diff-ast-grid">
+              <!-- Version A Tree Panel -->
+              <div class="diff-ast-panel" id="diffAstPanelA">
+                <div class="diff-ast-panel-header header-a">
+                  <div class="panel-header-left">
+                    <span class="diff-version-pill pill-ver-a">Version A</span>
+                    <span class="panel-header-title" id="diffAstTitleA">Program Version A</span>
+                  </div>
+                  <span class="diff-node-count-badge" id="diffAstCountA">0 Nodes</span>
+                </div>
+                <div class="diff-ast-viewport" id="diffAstViewportA">
+                  <div class="diff-ast-canvas" id="diffAstCanvasA">
+                    <div class="ast-tree-container" id="diffAstTreeContainerA"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Version B Tree Panel -->
+              <div class="diff-ast-panel" id="diffAstPanelB">
+                <div class="diff-ast-panel-header header-b">
+                  <div class="panel-header-left">
+                    <span class="diff-version-pill pill-ver-b">Version B</span>
+                    <span class="panel-header-title" id="diffAstTitleB">Program Version B</span>
+                  </div>
+                  <span class="diff-node-count-badge" id="diffAstCountB">0 Nodes</span>
+                </div>
+                <div class="diff-ast-viewport" id="diffAstViewportB">
+                  <div class="diff-ast-canvas" id="diffAstCanvasB">
+                    <div class="ast-tree-container" id="diffAstTreeContainerB"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -2239,6 +2649,9 @@ function clearStaleResults() {
 
 function clearDownstreamStages(failedStageName, msg, diag = null) {
   const locStr = (diag && diag.line) ? ` (Line ${diag.line}${diag.col ? ', Col ' + diag.col : ''})` : '';
+  const isLexer = failedStageName.toLowerCase().includes('lexer');
+  const isParser = failedStageName.toLowerCase().includes('parser');
+  const isSemantic = failedStageName.toLowerCase().includes('semantic');
 
   function makeBlockedHtml(targetStage) {
     return `
@@ -2248,7 +2661,7 @@ function clearDownstreamStages(failedStageName, msg, diag = null) {
           ${escapeHtml(targetStage)} Blocked
         </div>
         <div style="font-size:0.83rem; color:var(--text-secondary); max-width:480px; margin:0 auto 12px auto;">
-          This stage could not execute because <strong>${escapeHtml(failedStageName)}</strong> encountered an error. Fix the syntax/lexical error to unblock downstream compilation.
+          This stage could not execute because <strong>${escapeHtml(failedStageName)}</strong> encountered an error. Fix the issue to unblock downstream compilation.
         </div>
         <div class="ide-alert ide-alert-danger" style="max-width:520px; margin:0 auto; text-align:left;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
@@ -2258,38 +2671,40 @@ function clearDownstreamStages(failedStageName, msg, diag = null) {
     `;
   }
 
-  // Clear AST
-  const astContainer = document.getElementById('astTreeView');
-  if (astContainer) {
-    if (failedStageName.toLowerCase() === 'lexer') {
-      astContainer.innerHTML = makeBlockedHtml('Abstract Syntax Tree (AST)');
-    } else if (failedStageName.toLowerCase() === 'parser') {
-      astContainer.innerHTML = `
-        <div class="blocked-stage-box" style="border-color:var(--error-border); background:#FEF2F2;">
-          <div class="pill pill-danger" style="margin-bottom:8px;">✕ Parser Error</div>
-          <div style="font-size:0.95rem; font-weight:700; color:#991B1B; margin-bottom:4px;">Syntax Analysis Failed</div>
-          <div style="font-size:0.84rem; color:#7F1D1D; max-width:500px; margin:0 auto 12px auto;">The recursive-descent parser encountered invalid syntax and halted. An AST could not be constructed.</div>
-          <div class="ide-alert ide-alert-danger" style="max-width:520px; margin:0 auto; text-align:left;">
-            <div><strong>Parser Error${locStr}:</strong> ${escapeHtml(msg)}</div>
+  // Clear AST only if lexer or parser failed
+  if (isLexer || isParser) {
+    const astContainer = document.getElementById('astTreeView');
+    if (astContainer) {
+      if (isLexer) {
+        astContainer.innerHTML = makeBlockedHtml('Abstract Syntax Tree (AST)');
+      } else {
+        astContainer.innerHTML = `
+          <div class="blocked-stage-box" style="border-color:var(--error-border); background:#FEF2F2;">
+            <div class="pill pill-danger" style="margin-bottom:8px;">✕ Parser Error</div>
+            <div style="font-size:0.95rem; font-weight:700; color:#991B1B; margin-bottom:4px;">Syntax Analysis Failed</div>
+            <div style="font-size:0.84rem; color:#7F1D1D; max-width:500px; margin:0 auto 12px auto;">The recursive-descent parser encountered invalid syntax and halted. An AST could not be constructed.</div>
+            <div class="ide-alert ide-alert-danger" style="max-width:520px; margin:0 auto; text-align:left;">
+              <div><strong>Parser Error${locStr}:</strong> ${escapeHtml(msg)}</div>
+            </div>
           </div>
-        </div>
-      `;
-    } else {
-      astContainer.innerHTML = makeBlockedHtml('Abstract Syntax Tree (AST)');
+        `;
+      }
     }
   }
 
-  // Clear Semantic
-  const semanticStatusBox = document.getElementById('semanticStatusBox');
-  if (semanticStatusBox) {
-    semanticStatusBox.innerHTML = makeBlockedHtml('Semantic Analysis');
-  }
-  const tbodySymbol = document.getElementById('symbolTableBody');
-  if (tbodySymbol) {
-    tbodySymbol.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:24px; color:var(--text-muted);">Symbol table unavailable due to ${escapeHtml(failedStageName)} error.</td></tr>`;
+  // Clear Semantic only if Lexer or Parser failed (if Semantic failed, renderSemantic handles diagnostics)
+  if (isLexer || isParser) {
+    const semanticStatusBox = document.getElementById('semanticStatusBox');
+    if (semanticStatusBox) {
+      semanticStatusBox.innerHTML = makeBlockedHtml('Semantic Analysis');
+    }
+    const tbodySymbol = document.getElementById('symbolTableBody');
+    if (tbodySymbol) {
+      tbodySymbol.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:24px; color:var(--text-muted);">Symbol table unavailable due to ${escapeHtml(failedStageName)} error.</td></tr>`;
+    }
   }
 
-  // Clear IR
+  // Clear IR (downstream of Lexer, Parser, and Semantic)
   const tacView = document.getElementById('tacCodeView');
   if (tacView) tacView.textContent = `// IR generation blocked: ${failedStageName} error`;
   const tbodyQuad = document.getElementById('quadruplesTableBody');
@@ -2299,13 +2714,13 @@ function clearDownstreamStages(failedStageName, msg, diag = null) {
   const irTemps = document.getElementById('irTemporariesPills');
   if (irTemps) irTemps.innerHTML = '<span style="color:var(--text-muted); font-size:0.8rem;">Stage blocked</span>';
 
-  // Clear Assembly
+  // Clear Assembly (downstream)
   const asmView = document.getElementById('asmCodeView');
   if (asmView) asmView.textContent = `; Target code generation blocked: ${failedStageName} error`;
   const archBadge = document.getElementById('asmArchBadge');
   if (archBadge) archBadge.textContent = `Target code generation blocked due to error in ${failedStageName}.`;
 
-  // Clear Explainer
+  // Clear Explainer (downstream)
   const explainerContainer = document.getElementById('explainerCardsContainer');
   if (explainerContainer) {
     explainerContainer.innerHTML = makeBlockedHtml('Compiler Explainer');
@@ -2419,7 +2834,7 @@ async function runCompile() {
         errorBanner.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><div><strong>${escapeHtml(failedStage)} Error${locInfo}:</strong> ${escapeHtml(errorMsg)}</div>`;
       }
       if (statusEl) {
-        statusEl.textContent = `Compilation halted at Stage: ${failedStage}`;
+        statusEl.textContent = `Compilation failed · ${failedStage} Error`;
       }
       if (statusDot) statusDot.className = 'status-dot dot-error';
 
@@ -2430,9 +2845,9 @@ async function runCompile() {
 
       // Update stepper with backend stages or fallback mapping
       const statusMap = data.stages || {
-        tokens: failedStage.toLowerCase() === 'lexer' ? 'failed' : 'passed',
-        ast: failedStage.toLowerCase() === 'parser' ? 'failed' : 'blocked',
-        semantic: 'blocked',
+        tokens: failedStage.toLowerCase().includes('lexer') ? 'failed' : 'passed',
+        ast: failedStage.toLowerCase().includes('parser') ? 'failed' : (failedStage.toLowerCase().includes('lexer') ? 'blocked' : 'passed'),
+        semantic: failedStage.toLowerCase().includes('semantic') ? 'failed' : 'blocked',
         ir: 'blocked',
         asm: 'blocked',
         explain: 'blocked'
@@ -2445,12 +2860,27 @@ async function runCompile() {
         const tbodyTokens = document.getElementById('tokensTableBody');
         if (tbodyTokens) tbodyTokens.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:32px; color:var(--error);">Lexical analysis failed. No tokens available.</td></tr>`;
       }
-      renderAst(null);
+
+      if (data.ast && !failedStage.toLowerCase().includes('lexer') && !failedStage.toLowerCase().includes('parser')) {
+        renderAst(data.ast);
+      } else {
+        renderAst(null);
+      }
+
+      if (failedStage.toLowerCase().includes('semantic')) {
+        renderSemantic(data.semantic_errors || data.diagnostics || [], data.symbol_table || [], data.declared_vars || []);
+      }
+
       clearDownstreamStages(failedStage, errorMsg, firstDiag);
 
       // Auto-switch to failing stage tab
-      if (failedStage.toLowerCase() === 'parser') showStageTab('ast');
-      else showStageTab('tokens');
+      if (failedStage.toLowerCase().includes('semantic')) {
+        showStageTab('semantic');
+      } else if (failedStage.toLowerCase().includes('parser')) {
+        showStageTab('ast');
+      } else {
+        showStageTab('tokens');
+      }
       return;
     }
 
@@ -2571,16 +3001,44 @@ let astAnimTimer = null;
 let currentAstData = null;
 let isAstFullscreen = false;
 
-function toggleAstFullscreen() {
+function openAstFullscreen() {
   const viewport = document.getElementById('astViewport');
   const btnText = document.getElementById('fullscreenBtnText');
   if (!viewport) return;
-  isAstFullscreen = !isAstFullscreen;
-  viewport.classList.toggle('fullscreen-mode', isAstFullscreen);
-  if (btnText) {
-    btnText.textContent = isAstFullscreen ? 'Exit Fullscreen' : 'Expand';
+  isAstFullscreen = true;
+  viewport.classList.add('fullscreen-mode');
+  document.body.classList.add('ast-fullscreen-active');
+  if (btnText) btnText.textContent = 'Exit Fullscreen';
+  applyAstZoom();
+}
+
+function closeAstFullscreen() {
+  const viewport = document.getElementById('astViewport');
+  const btnText = document.getElementById('fullscreenBtnText');
+  if (!viewport) return;
+  isAstFullscreen = false;
+  viewport.classList.remove('fullscreen-mode');
+  document.body.classList.remove('ast-fullscreen-active');
+  document.body.style.overflow = '';
+  if (btnText) btnText.textContent = 'Expand';
+  applyAstZoom();
+}
+
+function toggleAstFullscreen() {
+  if (isAstFullscreen) {
+    closeAstFullscreen();
+  } else {
+    openAstFullscreen();
   }
 }
+
+// Global keydown listener for accessible Escape exit
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape' && isAstFullscreen) {
+    e.preventDefault();
+    closeAstFullscreen();
+  }
+});
 
 function renderAst(ast) {
   currentAstData = ast;
@@ -2892,11 +3350,16 @@ function resetAstZoom() {
 function applyAstZoom() {
   const canvas = document.getElementById('astCanvasWrapper');
   const display = document.getElementById('astZoomDisplay');
+  const displayExp = document.getElementById('astZoomDisplayExpanded');
+  const zoomText = `${Math.round(astZoomLevel * 100)}%`;
   if (canvas) {
     canvas.style.transform = `scale(${astZoomLevel})`;
   }
   if (display) {
-    display.textContent = `${Math.round(astZoomLevel * 100)}%`;
+    display.textContent = zoomText;
+  }
+  if (displayExp) {
+    displayExp.textContent = zoomText;
   }
 }
 
@@ -3035,8 +3498,8 @@ const DIFF_STAGE_META = {
     desc: 'Line-by-line comparison of Three-Address Code intermediate representations.'
   },
   'ast': {
-    title: 'Abstract Syntax Tree (AST) Diff',
-    desc: 'Structural syntax tree diff showing AST node additions, modifications, and deletions.'
+    title: 'Abstract Syntax Tree (AST) Comparison',
+    desc: 'Side-by-side visual syntax tree comparison displaying structural and node differences.'
   },
   'tokens': {
     title: 'Token Stream Diff',
@@ -3119,6 +3582,10 @@ function markDiffOutdated(msg) {
   if (tableWrap) {
     tableWrap.classList.add('outdated');
   }
+  const astWrap = document.getElementById('diffAstWrapper');
+  if (astWrap) {
+    astWrap.classList.add('outdated');
+  }
 }
 
 function clearDiffOutdated() {
@@ -3137,6 +3604,10 @@ function clearDiffOutdated() {
   const tableWrap = document.getElementById('diffTableWrapper');
   if (tableWrap) {
     tableWrap.classList.remove('outdated');
+  }
+  const astWrap = document.getElementById('diffAstWrapper');
+  if (astWrap) {
+    astWrap.classList.remove('outdated');
   }
 }
 
@@ -3161,6 +3632,9 @@ function showDiffError(msg) {
 
   const tableWrapper = document.getElementById('diffTableWrapper');
   if (tableWrapper) tableWrapper.style.display = 'none';
+
+  const astWrapper = document.getElementById('diffAstWrapper');
+  if (astWrapper) astWrapper.style.display = 'none';
 
   const tbody = document.getElementById('diffTableBody');
   if (tbody) tbody.innerHTML = '';
@@ -3232,7 +3706,7 @@ async function runDiff() {
     lastDiffSourceB = sourceB;
     lastDiffStage = stage;
 
-    // Hide empty state, hide outdated banner, show table wrapper
+    // Hide empty state, hide outdated banner
     const emptyState = document.getElementById('diffEmptyState');
     if (emptyState) emptyState.style.display = 'none';
 
@@ -3240,9 +3714,19 @@ async function runDiff() {
     if (outdatedBanner) outdatedBanner.style.display = 'none';
 
     const tableWrapper = document.getElementById('diffTableWrapper');
-    if (tableWrapper) {
-      tableWrapper.style.display = 'block';
-      tableWrapper.classList.remove('outdated');
+    const astWrapper = document.getElementById('diffAstWrapper');
+    if (stage === 'ast') {
+      if (tableWrapper) tableWrapper.style.display = 'none';
+      if (astWrapper) {
+        astWrapper.style.display = 'block';
+        astWrapper.classList.remove('outdated');
+      }
+    } else {
+      if (astWrapper) astWrapper.style.display = 'none';
+      if (tableWrapper) {
+        tableWrapper.style.display = 'block';
+        tableWrapper.classList.remove('outdated');
+      }
     }
 
     const badge = document.getElementById('diffStatusBadge');
@@ -3271,7 +3755,29 @@ async function runDiff() {
 }
 
 function renderDiffTable(stage) {
+  const tableWrapper = document.getElementById('diffTableWrapper');
+  const astWrapper = document.getElementById('diffAstWrapper');
   const tbody = document.getElementById('diffTableBody');
+
+  if (stage === 'ast') {
+    if (tableWrapper) tableWrapper.style.display = 'none';
+    if (astWrapper) {
+      astWrapper.style.display = 'block';
+      if (isDiffOutdated) astWrapper.classList.add('outdated');
+      else astWrapper.classList.remove('outdated');
+    }
+    renderAstComparison();
+    return;
+  }
+
+  // Non-AST stages: ir, tokens, assembly_edu, assembly_x86, source
+  if (astWrapper) astWrapper.style.display = 'none';
+  if (tableWrapper) {
+    tableWrapper.style.display = 'block';
+    if (isDiffOutdated) tableWrapper.classList.add('outdated');
+    else tableWrapper.classList.remove('outdated');
+  }
+
   if (!tbody) return;
   tbody.innerHTML = '';
 
@@ -3297,6 +3803,443 @@ function renderDiffTable(stage) {
     `;
     tbody.appendChild(tr);
   });
+}
+
+// ================= AST STRUCTURAL DIFF & VISUAL RENDERER =================
+
+function computeSubtreeSignature(node) {
+  if (!node || typeof node !== 'object') return '';
+  const type = node.type || '';
+  if (type === 'Number') return `Num:${node.value}`;
+  if (type === 'Identifier') return `Id:${node.name}`;
+  if (type === 'String') return `Str:${JSON.stringify(node.value)}`;
+  if (type === 'Include') return `Inc:${node.header}`;
+  if (type === 'BinOp') return `BinOp:${node.op}(${computeSubtreeSignature(node.left)},${computeSubtreeSignature(node.right)})`;
+  if (type === 'UnaryOp') return `UnaryOp:${node.op}(${computeSubtreeSignature(node.operand)})`;
+  if (type === 'VarDecl') return `VarDecl:${node.datatype}:${node.name}(${computeSubtreeSignature(node.value)})`;
+  if (type === 'Assign') return `Assign:${node.name}(${computeSubtreeSignature(node.value)})`;
+  if (type === 'Return') return `Return(${computeSubtreeSignature(node.value)})`;
+  if (type === 'FunctionCall') {
+    const args = (node.args || []).map(computeSubtreeSignature).join(',');
+    return `Call:${node.name}(${args})`;
+  }
+  if (type === 'FunctionDef') {
+    const body = (node.body || []).map(computeSubtreeSignature).join(';');
+    return `Func:${node.return_type}:${node.name}(${body})`;
+  }
+  if (type === 'If') {
+    const cond = computeSubtreeSignature(node.condition);
+    const thenB = (node.then_branch || []).map(computeSubtreeSignature).join(';');
+    const elseB = (node.else_branch || []).map(computeSubtreeSignature).join(';');
+    return `If(${cond}){${thenB}}else{${elseB}}`;
+  }
+  if (type === 'Program') {
+    const stmts = (node.statements || []).map(computeSubtreeSignature).join(';');
+    return `Prog(${stmts})`;
+  }
+  return `${type}:${node.name || node.value || ''}`;
+}
+
+function markSubtreeStatus(node, status) {
+  if (!node || typeof node !== 'object') return;
+  node._diffStatus = status;
+  if (node.statements) node.statements.forEach(s => markSubtreeStatus(s, status));
+  if (node.body) node.body.forEach(s => markSubtreeStatus(s, status));
+  if (node.value) markSubtreeStatus(node.value, status);
+  if (node.left) markSubtreeStatus(node.left, status);
+  if (node.right) markSubtreeStatus(node.right, status);
+  if (node.operand) markSubtreeStatus(node.operand, status);
+  if (node.args) node.args.forEach(a => markSubtreeStatus(a, status));
+  if (node.condition) markSubtreeStatus(node.condition, status);
+  if (node.then_branch) node.then_branch.forEach(s => markSubtreeStatus(s, status));
+  if (node.else_branch) node.else_branch.forEach(s => markSubtreeStatus(s, status));
+}
+
+function markAstDiff(nodeA, nodeB) {
+  if (!nodeA && !nodeB) return;
+
+  if (nodeA && !nodeB) {
+    markSubtreeStatus(nodeA, 'changed_a');
+    return;
+  }
+  if (!nodeA && nodeB) {
+    markSubtreeStatus(nodeB, 'changed_b');
+    return;
+  }
+
+  const sigA = computeSubtreeSignature(nodeA);
+  const sigB = computeSubtreeSignature(nodeB);
+  if (sigA === sigB) {
+    markSubtreeStatus(nodeA, 'unchanged');
+    markSubtreeStatus(nodeB, 'unchanged');
+    return;
+  }
+
+  const typeA = nodeA.type;
+  const typeB = nodeB.type;
+
+  if (typeA !== typeB) {
+    markSubtreeStatus(nodeA, 'changed_a');
+    markSubtreeStatus(nodeB, 'changed_b');
+    return;
+  }
+
+  if (typeA === 'Program') {
+    nodeA._diffStatus = 'parent_mod';
+    nodeB._diffStatus = 'parent_mod';
+    diffAstStatementLists(nodeA.statements || [], nodeB.statements || []);
+  } else if (typeA === 'FunctionDef') {
+    if (nodeA.name === nodeB.name && nodeA.return_type === nodeB.return_type) {
+      nodeA._diffStatus = 'parent_mod';
+      nodeB._diffStatus = 'parent_mod';
+      diffAstStatementLists(nodeA.body || [], nodeB.body || []);
+    } else {
+      markSubtreeStatus(nodeA, 'changed_a');
+      markSubtreeStatus(nodeB, 'changed_b');
+    }
+  } else if (typeA === 'VarDecl') {
+    if (nodeA.name === nodeB.name && nodeA.datatype === nodeB.datatype) {
+      nodeA._diffStatus = 'parent_mod';
+      nodeB._diffStatus = 'parent_mod';
+      markAstDiff(nodeA.value, nodeB.value);
+    } else {
+      markSubtreeStatus(nodeA, 'changed_a');
+      markSubtreeStatus(nodeB, 'changed_b');
+    }
+  } else if (typeA === 'Assign') {
+    if (nodeA.name === nodeB.name) {
+      nodeA._diffStatus = 'parent_mod';
+      nodeB._diffStatus = 'parent_mod';
+      markAstDiff(nodeA.value, nodeB.value);
+    } else {
+      markSubtreeStatus(nodeA, 'changed_a');
+      markSubtreeStatus(nodeB, 'changed_b');
+    }
+  } else if (typeA === 'BinOp') {
+    if (nodeA.op === nodeB.op) {
+      nodeA._diffStatus = 'parent_mod';
+      nodeB._diffStatus = 'parent_mod';
+      markAstDiff(nodeA.left, nodeB.left);
+      markAstDiff(nodeA.right, nodeB.right);
+    } else {
+      markSubtreeStatus(nodeA, 'changed_a');
+      markSubtreeStatus(nodeB, 'changed_b');
+    }
+  } else if (typeA === 'UnaryOp') {
+    if (nodeA.op === nodeB.op) {
+      nodeA._diffStatus = 'parent_mod';
+      nodeB._diffStatus = 'parent_mod';
+      markAstDiff(nodeA.operand, nodeB.operand);
+    } else {
+      markSubtreeStatus(nodeA, 'changed_a');
+      markSubtreeStatus(nodeB, 'changed_b');
+    }
+  } else if (typeA === 'Return') {
+    nodeA._diffStatus = 'parent_mod';
+    nodeB._diffStatus = 'parent_mod';
+    markAstDiff(nodeA.value, nodeB.value);
+  } else if (typeA === 'FunctionCall') {
+    if (nodeA.name === nodeB.name) {
+      nodeA._diffStatus = 'parent_mod';
+      nodeB._diffStatus = 'parent_mod';
+      const argsA = nodeA.args || [];
+      const argsB = nodeB.args || [];
+      const maxLen = Math.max(argsA.length, argsB.length);
+      for (let i = 0; i < maxLen; i++) {
+        markAstDiff(argsA[i], argsB[i]);
+      }
+    } else {
+      markSubtreeStatus(nodeA, 'changed_a');
+      markSubtreeStatus(nodeB, 'changed_b');
+    }
+  } else if (typeA === 'If') {
+    nodeA._diffStatus = 'parent_mod';
+    nodeB._diffStatus = 'parent_mod';
+    markAstDiff(nodeA.condition, nodeB.condition);
+    diffAstStatementLists(nodeA.then_branch || [], nodeB.then_branch || []);
+    diffAstStatementLists(nodeA.else_branch || [], nodeB.else_branch || []);
+  } else {
+    // Leaf nodes with different values
+    nodeA._diffStatus = 'changed_a';
+    nodeB._diffStatus = 'changed_b';
+  }
+}
+
+function diffAstStatementLists(stmtsA, stmtsB) {
+  const maxLen = Math.max(stmtsA.length, stmtsB.length);
+  for (let i = 0; i < maxLen; i++) {
+    markAstDiff(stmtsA[i], stmtsB[i]);
+  }
+}
+
+function countAstNodesAndDiffs(node, targetDiffStatus) {
+  let total = 0;
+  let changed = 0;
+  function walk(n) {
+    if (!n || typeof n !== 'object') return;
+    total++;
+    if (n._diffStatus === targetDiffStatus) {
+      changed++;
+    }
+    if (n.statements) n.statements.forEach(walk);
+    if (n.body) n.body.forEach(walk);
+    if (n.value) walk(n.value);
+    if (n.left) walk(n.left);
+    if (n.right) walk(n.right);
+    if (n.operand) walk(n.operand);
+    if (n.args) n.args.forEach(walk);
+    if (n.condition) walk(n.condition);
+    if (n.then_branch) n.then_branch.forEach(walk);
+    if (n.else_branch) n.else_branch.forEach(walk);
+  }
+  walk(node);
+  return { total, changed };
+}
+
+function renderAstComparison() {
+  const containerA = document.getElementById('diffAstTreeContainerA');
+  const containerB = document.getElementById('diffAstTreeContainerB');
+  const countAEl = document.getElementById('diffAstCountA');
+  const countBEl = document.getElementById('diffAstCountB');
+  if (!containerA || !containerB) return;
+
+  if (!currentDiffData || !currentDiffData.program_a || !currentDiffData.program_b) {
+    containerA.innerHTML = '<div class="empty-state-box" style="padding:32px;"><div class="empty-state-title">No AST Data Available</div></div>';
+    containerB.innerHTML = '<div class="empty-state-box" style="padding:32px;"><div class="empty-state-title">No AST Data Available</div></div>';
+    return;
+  }
+
+  // Deep clone to avoid mutating original compilation data
+  const astA = JSON.parse(JSON.stringify(currentDiffData.program_a.ast || {}));
+  const astB = JSON.parse(JSON.stringify(currentDiffData.program_b.ast || {}));
+
+  // Perform structural diff
+  markAstDiff(astA, astB);
+
+  // Statistics
+  const statsA = countAstNodesAndDiffs(astA, 'changed_a');
+  const statsB = countAstNodesAndDiffs(astB, 'changed_b');
+
+  if (countAEl) {
+    countAEl.textContent = `${statsA.total} Nodes` + (statsA.changed > 0 ? ` · ${statsA.changed} changed` : ' · unchanged');
+  }
+  if (countBEl) {
+    countBEl.textContent = `${statsB.total} Nodes` + (statsB.changed > 0 ? ` · ${statsB.changed} modified` : ' · unchanged');
+  }
+
+  // Render trees
+  containerA.innerHTML = buildDiffAstNodeHtml(astA, 0, null, 'A');
+  containerB.innerHTML = buildDiffAstNodeHtml(astB, 0, null, 'B');
+}
+
+function buildDiffAstNodeHtml(node, level, branchBadge, versionSide) {
+  if (!node || typeof node !== 'object') return '';
+  const ntype = node.type || 'Unknown';
+
+  let cardType = ntype;
+  let cardVal = '';
+  let cardSub = '';
+  let catClass = 'cat-program';
+  let children = [];
+
+  if (ntype === 'Program') {
+    cardType = 'Program';
+    const stmts = node.statements || [];
+    cardVal = `${stmts.length} statement${stmts.length === 1 ? '' : 's'}`;
+    catClass = 'cat-program';
+    children = stmts.map(s => ({ node: s }));
+  } else if (ntype === 'Include') {
+    cardType = '#include';
+    cardVal = node.header || '';
+    catClass = 'cat-include';
+  } else if (ntype === 'FunctionDef') {
+    cardType = 'FunctionDef';
+    cardVal = `${node.name || 'func'}()`;
+    cardSub = `returns ${node.return_type || 'void'}`;
+    catClass = 'cat-function';
+    children = (node.body || []).map(s => ({ node: s }));
+  } else if (ntype === 'VarDecl') {
+    cardType = 'VarDecl';
+    cardVal = node.name || '';
+    cardSub = 'type: ' + (node.datatype || 'int');
+    catClass = 'cat-decl';
+    if (node.value) {
+      children = [{ node: node.value, badge: 'init' }];
+    }
+  } else if (ntype === 'Assign') {
+    cardType = 'Assign';
+    cardVal = `${node.name || ''} =`;
+    catClass = 'cat-assign';
+    if (node.value) {
+      children = [{ node: node.value, badge: 'val' }];
+    }
+  } else if (ntype === 'BinOp') {
+    cardType = 'BinaryOp';
+    cardVal = node.op || '?';
+    catClass = 'cat-op';
+    children = [
+      { node: node.left, badge: 'Left' },
+      { node: node.right, badge: 'Right' }
+    ];
+  } else if (ntype === 'UnaryOp') {
+    cardType = 'UnaryOp';
+    cardVal = node.op || '?';
+    catClass = 'cat-op';
+    if (node.operand) {
+      children = [{ node: node.operand, badge: 'expr' }];
+    }
+  } else if (ntype === 'Number') {
+    cardType = 'Number';
+    cardVal = String(node.value !== undefined ? node.value : '');
+    catClass = 'cat-leaf-num';
+  } else if (ntype === 'String') {
+    cardType = 'String';
+    cardVal = JSON.stringify(node.value || '');
+    catClass = 'cat-leaf-str';
+  } else if (ntype === 'Identifier') {
+    cardType = 'Identifier';
+    cardVal = node.name || '';
+    catClass = 'cat-leaf-id';
+  } else if (ntype === 'Return') {
+    cardType = 'Return';
+    cardVal = 'return';
+    catClass = 'cat-return';
+    if (node.value) {
+      children = [{ node: node.value, badge: 'val' }];
+    }
+  } else if (ntype === 'FunctionCall') {
+    cardType = 'Call';
+    cardVal = `${node.name || 'call'}()`;
+    catClass = 'cat-call';
+    children = (node.args || []).map((arg, idx) => ({ node: arg, badge: `arg ${idx + 1}` }));
+  } else if (ntype === 'If') {
+    cardType = 'If';
+    cardVal = 'if / branch';
+    catClass = 'cat-control';
+
+    if (node.condition) {
+      children.push({
+        virtualNode: {
+          cardType: 'Condition',
+          cardVal: 'test',
+          catClass: 'cat-branch-cond',
+          children: [{ node: node.condition }]
+        }
+      });
+    }
+
+    const thenStmts = node.then_branch || [];
+    children.push({
+      virtualNode: {
+        cardType: 'Then',
+        cardVal: `${thenStmts.length} stmt${thenStmts.length === 1 ? '' : 's'}`,
+        catClass: 'cat-branch-then',
+        children: thenStmts.map(s => ({ node: s }))
+      }
+    });
+
+    if (node.else_branch && node.else_branch.length > 0) {
+      const elseStmts = node.else_branch;
+      children.push({
+        virtualNode: {
+          cardType: 'Else',
+          cardVal: `${elseStmts.length} stmt${elseStmts.length === 1 ? '' : 's'}`,
+          catClass: 'cat-branch-else',
+          children: elseStmts.map(s => ({ node: s }))
+        }
+      });
+    }
+  } else {
+    cardType = ntype;
+    cardVal = node.value || node.name || '';
+    catClass = 'cat-program';
+  }
+
+  // Diff highlighting
+  let diffClass = '';
+  let diffBadge = '';
+  if (versionSide === 'A' && node._diffStatus === 'changed_a') {
+    diffClass = 'diff-card-a';
+    diffBadge = '<span class="diff-card-badge badge-a">Version A</span>';
+  } else if (versionSide === 'B' && node._diffStatus === 'changed_b') {
+    diffClass = 'diff-card-b';
+    diffBadge = '<span class="diff-card-badge badge-b">Version B</span>';
+  }
+
+  // Children branches HTML
+  let childrenHtml = '';
+  if (children.length > 0) {
+    let branchesHtml = '';
+    children.forEach(ch => {
+      let branchInner = '';
+      if (ch.virtualNode) {
+        branchInner = buildDiffVirtualNodeHtml(ch.virtualNode, level + 1, versionSide);
+      } else {
+        branchInner = buildDiffAstNodeHtml(ch.node, level + 1, ch.badge, versionSide);
+      }
+      branchesHtml += `
+        <div class="ast-child-branch" data-branch-level="${level + 1}">
+          <div class="ast-child-stem"></div>
+          ${ch.badge ? `<span class="ast-branch-badge">${escapeHtml(ch.badge)}</span>` : ''}
+          ${branchInner}
+        </div>
+      `;
+    });
+    childrenHtml = `<div class="ast-children">${branchesHtml}</div>`;
+  }
+
+  const subHtml = cardSub ? `<div class="ast-card-sub">${escapeHtml(cardSub)}</div>` : '';
+  const lineHtml = node.line ? `<div class="ast-card-line">L${node.line}</div>` : '';
+
+  return `
+    <div class="ast-node" data-level="${level}">
+      <div class="ast-card ${catClass} ${diffClass}" title="Line ${node.line || 'N/A'}: ${escapeHtml(cardType)}">
+        ${diffBadge}
+        <div class="ast-card-type">${escapeHtml(cardType)}</div>
+        <div class="ast-card-val">${escapeHtml(cardVal)}</div>
+        ${subHtml}
+        ${lineHtml}
+      </div>
+      ${childrenHtml}
+    </div>
+  `;
+}
+
+function buildDiffVirtualNodeHtml(vnode, level, versionSide) {
+  let branchesHtml = '';
+  let allChanged = true;
+  if (vnode.children && vnode.children.length > 0) {
+    vnode.children.forEach(ch => {
+      if (ch.node && ((versionSide === 'A' && ch.node._diffStatus !== 'changed_a') || (versionSide === 'B' && ch.node._diffStatus !== 'changed_b'))) {
+        allChanged = false;
+      }
+      branchesHtml += `
+        <div class="ast-child-branch" data-branch-level="${level + 1}">
+          <div class="ast-child-stem"></div>
+          ${ch.badge ? `<span class="ast-branch-badge">${escapeHtml(ch.badge)}</span>` : ''}
+          ${buildDiffAstNodeHtml(ch.node, level + 1, ch.badge, versionSide)}
+        </div>
+      `;
+    });
+  } else {
+    allChanged = false;
+  }
+
+  let diffClass = '';
+  if (allChanged) {
+    diffClass = versionSide === 'A' ? 'diff-card-a' : 'diff-card-b';
+  }
+
+  const childrenHtml = branchesHtml ? `<div class="ast-children">${branchesHtml}</div>` : '';
+  return `
+    <div class="ast-node" data-level="${level}">
+      <div class="ast-card ${vnode.catClass} ${diffClass}">
+        <div class="ast-card-type">${escapeHtml(vnode.cardType)}</div>
+        <div class="ast-card-val">${escapeHtml(vnode.cardVal)}</div>
+      </div>
+      ${childrenHtml}
+    </div>
+  `;
 }
 
 function escapeHtml(str) {

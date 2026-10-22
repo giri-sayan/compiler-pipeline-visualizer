@@ -138,6 +138,92 @@ int main() {
             self.assertIn("markDiffOutdated", html)
             self.assertIn("showDiffError", html)
 
+    def test_8_ast_visual_tree_diff_dom_and_highlighting(self):
+        """Verify AST Diff mode contains two dedicated tree panels, visual AST nodes, and highlighting."""
+        for name, html in [("index.html", self.index_html), ("static/index.html", self.static_html)]:
+            self.assertIn('id="diffAstWrapper"', html)
+            self.assertIn('Abstract Syntax Tree (AST) Comparison', html)
+            self.assertIn('id="diffAstPanelA"', html)
+            self.assertIn('id="diffAstPanelB"', html)
+            self.assertIn('id="diffAstTreeContainerA"', html)
+            self.assertIn('id="diffAstTreeContainerB"', html)
+            self.assertIn('renderAstComparison', html)
+            self.assertIn('diff-card-a', html)
+            self.assertIn('diff-card-b', html)
+            self.assertIn('computeSubtreeSignature', html)
+            self.assertIn('markAstDiff', html)
+
+    def test_9_expanded_ast_view_controls_and_lifecycle(self):
+        """Verify expanded AST view includes visible top-right close button, Back to Pipeline, and Esc handler."""
+        for name, html in [("index.html", self.index_html), ("static/index.html", self.static_html)]:
+            self.assertIn('id="astExpandedHeader"', html)
+            self.assertIn('id="btnCloseExpandedAst"', html)
+            self.assertIn('aria-label="Close expanded AST"', html)
+            self.assertIn('id="btnBackToPipeline"', html)
+            self.assertIn('Back to Pipeline', html)
+            self.assertIn('closeAstFullscreen()', html)
+            self.assertIn('openAstFullscreen()', html)
+            self.assertIn("e.key === 'Escape'", html)
+            # Ensure close control does not trigger page refresh
+            self.assertNotIn("location.reload", html.split("closeAstFullscreen()")[1].split("}")[0])
+
+    def test_10_ast_arithmetic_structural_comparison(self):
+        """Verify Version A vs Version B arithmetic AST structures match expected hierarchy."""
+        src_a = "int total = 3 + 4;"
+        src_b = "int total = 3 + 4 * 2;"
+        res = diff_service.compare_programs(src_a, src_b, language="c")
+
+        ast_a = res["program_a"]["ast"]["statements"][0]["value"]
+        self.assertEqual(ast_a["type"], "BinOp")
+        self.assertEqual(ast_a["op"], "+")
+        self.assertEqual(ast_a["left"]["value"], 3)
+        self.assertEqual(ast_a["right"]["value"], 4)
+
+        ast_b = res["program_b"]["ast"]["statements"][0]["value"]
+        self.assertEqual(ast_b["type"], "BinOp")
+        self.assertEqual(ast_b["op"], "+")
+        self.assertEqual(ast_b["left"]["value"], 3)
+        self.assertEqual(ast_b["right"]["type"], "BinOp")
+        self.assertEqual(ast_b["right"]["op"], "*")
+        self.assertEqual(ast_b["right"]["left"]["value"], 4)
+        self.assertEqual(ast_b["right"]["right"]["value"], 2)
+
+    def test_11_conditional_ast_diff_structure(self):
+        """Verify conditional AST with then/else branches parses correctly for diffing."""
+        src_a = """int main() {
+    int score = 85;
+    int bonus = 0;
+    if (score > 80) {
+        bonus = 10;
+    }
+    return 0;
+}"""
+        src_b = """int main() {
+    int score = 85;
+    int bonus = 0;
+    if (score > 80) {
+        bonus = 10;
+    } else {
+        bonus = 2;
+    }
+    return 0;
+}"""
+        res = diff_service.compare_programs(src_a, src_b, language="c")
+        func_a = res["program_a"]["ast"]["statements"][0]
+        func_b = res["program_b"]["ast"]["statements"][0]
+
+        if_a = [s for s in func_a["body"] if s.get("type") == "If"][0]
+        if_b = [s for s in func_b["body"] if s.get("type") == "If"][0]
+
+        self.assertEqual(if_a["condition"]["op"], ">")
+        self.assertEqual(len(if_a["then_branch"]), 1)
+        self.assertEqual(len(if_a.get("else_branch", [])), 0)
+
+        self.assertEqual(if_b["condition"]["op"], ">")
+        self.assertEqual(len(if_b["then_branch"]), 1)
+        self.assertEqual(len(if_b["else_branch"]), 1)
+        self.assertEqual(if_b["else_branch"][0]["name"], "bonus")
+
 
 if __name__ == "__main__":
     unittest.main()

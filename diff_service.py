@@ -53,11 +53,17 @@ def compile_pipeline(source, language="c"):
     tokens = Lexer(source, language=language).tokenize()
     token_dicts = [t.to_dict() for t in tokens]
 
-    parser = Parser(tokens)
+    parser = Parser(tokens, language=language)
     ast = parser.parse_program()
     ast_dict = ast.to_dict()
 
-    semantic_errors, declared_vars, symbol_table = analyze(ast)
+    semantic_errors, declared_vars, symbol_table = analyze(ast, language=language)
+    has_errors = any((e.severity if hasattr(e, "severity") else e.get("severity", "error")) == "error" for e in semantic_errors)
+    if has_errors:
+        first_err = next(e for e in semantic_errors if (e.severity if hasattr(e, "severity") else e.get("severity", "error")) == "error")
+        msg = first_err.message if hasattr(first_err, "message") else first_err.get("message", "Semantic error")
+        line = first_err.line_number if hasattr(first_err, "line_number") else first_err.get("line", 1)
+        raise Exception(f"Line {line}: Semantic error: {msg}")
 
     ir_data = generate_ir(ast)
     asm_data = generate_code(ir_data)

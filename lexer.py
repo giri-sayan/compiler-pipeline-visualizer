@@ -71,6 +71,7 @@ class LexerError(Exception):
         self.message = message
         self.line = line
         self.col = col
+        self.column = col
         self.stage = "Lexer"
         self.severity = "error"
 
@@ -80,6 +81,7 @@ class LexerError(Exception):
             "message": self.message,
             "line": self.line,
             "col": self.col,
+            "column": self.col,
             "severity": self.severity,
         }
 
@@ -144,13 +146,19 @@ class Lexer:
 
     def skip_multi_line_comment(self):
         """Skip /* ... */ comments."""
+        start_line = self.line
+        start_col = max(1, self.col - 1)
         self.advance()  # consume '*'
+        terminated = False
         while self.current_char is not None:
             if self.current_char == "*" and self.peek() == "/":
                 self.advance()  # '*'
                 self.advance()  # '/'
+                terminated = True
                 break
             self.advance()
+        if not terminated:
+            raise LexerError(f"Lexical error: Unterminated multi-line comment '/*' starting at line {start_line}, col {start_col}", line=start_line, col=start_col)
 
     def read_preprocessor(self):
         """
@@ -177,10 +185,26 @@ class Lexer:
         while self.current_char is not None and (self.current_char.isdigit() or self.current_char == "."):
             if self.current_char == ".":
                 if is_float:
-                    break
+                    raise LexerError(
+                        f"Lexical error: Malformed numeric literal '{result}.' with multiple decimal points at line {start_line}, col {self.col}",
+                        line=start_line,
+                        col=self.col,
+                    )
                 is_float = True
             result += self.current_char
             self.advance()
+
+        # Check for malformed suffix e.g. 123abc
+        if self.current_char is not None and (self.current_char.isalpha() or self.current_char == "_"):
+            bad_suffix = ""
+            while self.current_char is not None and (self.current_char.isalnum() or self.current_char == "_"):
+                bad_suffix += self.current_char
+                self.advance()
+            raise LexerError(
+                f"Lexical error: Malformed numeric literal '{result}{bad_suffix}' with invalid suffix at line {start_line}, col {start_col}",
+                line=start_line,
+                col=start_col,
+            )
 
         val = float(result) if is_float else int(result)
         return Token(NUMBER, val, line=start_line, col=start_col)

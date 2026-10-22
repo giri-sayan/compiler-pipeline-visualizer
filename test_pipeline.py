@@ -300,13 +300,18 @@ z = (x + y) * 3"""
         self.assertIn("ir", data)
         self.assertIn("assembly", data)
 
-        # 2. Semantic error: pipeline_success = True, but semantic_valid = False
+        # 2. Semantic error: success = False, pipeline_success = True, semantic_valid = False, ir blocked
         res_sem = client.post("/compile", json={"source": "int x = missing_var + 1;", "language": "c"})
         self.assertEqual(res_sem.status_code, 200)
         data_sem = res_sem.get_json()
+        self.assertFalse(data_sem["success"])
         self.assertTrue(data_sem["pipeline_success"])
         self.assertFalse(data_sem["semantic_valid"])
         self.assertTrue(data_sem["has_semantic_errors"])
+        self.assertEqual(data_sem["stage"], "Semantic Analyzer")
+        self.assertEqual(data_sem["stages"]["semantic"], "failed")
+        self.assertEqual(data_sem["stages"]["ir"], "blocked")
+        self.assertEqual(data_sem["stages"]["asm"], "blocked")
         self.assertGreaterEqual(len(data_sem["semantic_errors"]), 1)
 
         # 3. Syntax error: success = False, stage = Parser
@@ -465,6 +470,278 @@ z = (x + y) * 3"""
         self.assertIn("Syntax error", str(ctx.exception))
         self.assertIsNotNone(ctx.exception.line)
         self.assertIsNotNone(ctx.exception.col)
+
+
+    def test_unknown_function_name_diagnosed_with_suggestion(self):
+        client = app.test_client()
+        source = """#include <stdio.h>
+
+int main() {
+    int total = 3 + 4 * 2;
+    rintf("Result = %d\\n", total);
+    return 0;
+}"""
+        res = client.post("/compile", json={"source": source, "language": "c"})
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+
+        # Overall compilation must fail
+        self.assertFalse(data["success"])
+        self.assertTrue(data["pipeline_success"])
+        self.assertFalse(data["semantic_valid"])
+        self.assertTrue(data["has_semantic_errors"])
+        self.assertEqual(data["stage"], "Semantic Analyzer")
+
+        # Stage statuses: upstream stages passed, downstream blocked
+        stages = data["stages"]
+        self.assertEqual(stages["source"], "passed")
+        self.assertEqual(stages["tokens"], "passed")
+        self.assertEqual(stages["ast"], "passed")
+        self.assertEqual(stages["semantic"], "failed")
+        self.assertEqual(stages["ir"], "blocked")
+        self.assertEqual(stages["asm"], "blocked")
+        self.assertEqual(stages["explain"], "blocked")
+
+        # Upstream results preserved for inspection
+        self.assertIn("tokens", data)
+        self.assertGreater(len(data["tokens"]), 0)
+        self.assertIn("ast", data)
+        self.assertIn("statements", data["ast"])
+
+        # Downstream results must NOT be present as valid compiler output
+        self.assertNotIn("ir", data)
+        self.assertNotIn("assembly", data)
+
+        # Precise diagnostics with line, col, and typo suggestion
+        self.assertGreaterEqual(len(data["diagnostics"]), 1)
+        diag = data["diagnostics"][0]
+        self.assertEqual(diag["stage"], "Semantic Analyzer")
+        self.assertEqual(diag["line"], 5)
+        self.assertEqual(diag["col"], 5)
+        self.assertEqual(diag["severity"], "error")
+        self.assertIn("Unknown function 'rintf'", diag["message"])
+        self.assertIn("Did you mean 'printf'?", diag["message"])
+
+    def test_keyword_typo_return_diagnosed_with_suggestion(self):
+        source = """#include <stdio.h>
+
+int main() {
+    int total = 3 + 4 * 2;
+    printf("Result = %d\\n", total);
+    eturn 0;
+}"""
+        client = app.test_client()
+        res = client.post("/compile", json={"source": source, "language": "c"})
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+
+        self.assertFalse(data["success"])
+        self.assertEqual(data["stage"], "Parser")
+        self.assertEqual(data["stages"]["ast"], "failed")
+        self.assertEqual(data["stages"]["semantic"], "blocked")
+        self.assertEqual(data["stages"]["ir"], "blocked")
+
+        self.assertGreaterEqual(len(data["diagnostics"]), 1)
+        diag = data["diagnostics"][0]
+        self.assertEqual(diag["stage"], "Parser")
+        self.assertEqual(diag["line"], 6)
+        self.assertEqual(diag["col"], 5)
+        self.assertEqual(diag["severity"], "error")
+        self.assertIn("Unknown keyword or statement 'eturn'", diag["message"])
+        self.assertIn("Did you mean 'return'?", diag["message"])
+
+    def test_keyword_typo_type_and_control_flow(self):
+        from parser import Parser, ParserError
+        # 1. Type keyword typo: itn
+        tokens1 = Lexer("int main() { itn x = 5; }", language="c").tokenize()
+        with self.assertRaises(ParserError) as ctx1:
+            Parser(tokens1, language="c").parse_program()
+        self.assertIn("Unknown type or keyword 'itn'", str(ctx1.exception))
+        self.assertIn("Did you mean 'int'?", str(ctx1.exception))
+        self.assertEqual(ctx1.exception.line, 1)
+
+        # 2. Control flow keyword typo: fi
+        tokens2 = Lexer("int main() { fi (x > 0) { } }", language="c").tokenize()
+        with self.assertRaises(ParserError) as ctx2:
+            Parser(tokens2, language="c").parse_program()
+        self.assertIn("Unknown keyword or statement 'fi'", str(ctx2.exception))
+        self.assertIn("Did you mean 'if'?", str(ctx2.exception))
+
+    def test_c_program_requires_main_entry_point(self):
+        # 1. Typo in main: ain()
+        source_ain = """#include <stdio.h>
+
+int ain() {
+    int total = 3 + 4 * 2;
+    printf("Result = %d\\n", total);
+    return 0;
+}"""
+        client = app.test_client()
+        res = client.post("/compile", json={"source": source_ain, "language": "c"})
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+        self.assertFalse(data["success"])
+        self.assertEqual(data["stage"], "Semantic Analyzer")
+        self.assertEqual(data["stages"]["semantic"], "failed")
+        self.assertEqual(data["stages"]["ir"], "blocked")
+        self.assertEqual(data["stages"]["asm"], "blocked")
+
+        self.assertGreaterEqual(len(data["diagnostics"]), 1)
+        diag = data["diagnostics"][0]
+        self.assertEqual(diag["stage"], "Semantic Analyzer")
+        self.assertEqual(diag["line"], 3)
+        self.assertEqual(diag["col"], 5)
+        self.assertIn("Unknown entry point function 'ain'", diag["message"])
+        self.assertIn("Did you mean 'main'?", diag["message"])
+
+        # 2. Missing main altogether with custom function
+        source_no_main = """#include <stdio.h>
+
+int calculate() {
+    return 42;
+}"""
+        res_nm = client.post("/compile", json={"source": source_no_main, "language": "c"})
+        self.assertEqual(res_nm.status_code, 200)
+        data_nm = res_nm.get_json()
+        self.assertFalse(data_nm["success"])
+        self.assertEqual(data_nm["stage"], "Semantic Analyzer")
+        self.assertIn("Missing 'main' function", data_nm["diagnostics"][0]["message"])
+
+    def test_undeclared_identifier_with_typo_suggestion(self):
+        source = """int main() {
+    int count = 10;
+    int x = cont + 1;
+    return 0;
+}"""
+        tokens = Lexer(source, language="c").tokenize()
+        ast = Parser(tokens, language="c").parse_program()
+        errors, declared, syms = semantic.analyze(ast, language="c")
+
+        self.assertGreaterEqual(len(errors), 1)
+        err = [e for e in errors if "cont" in e.message][0]
+        self.assertEqual(err.line, 3)
+        self.assertEqual(err.severity, "error")
+        self.assertIn("Variable 'cont' used before it was declared or assigned", err.message)
+        self.assertIn("Did you mean 'count'?", err.message)
+
+    def test_forgotten_header_suggestion(self):
+        source = """int main() {
+    int x = sqrt(16);
+    return 0;
+}"""
+        tokens = Lexer(source, language="c").tokenize()
+        ast = Parser(tokens, language="c").parse_program()
+        errors, declared, syms = semantic.analyze(ast, language="c")
+
+        self.assertGreaterEqual(len(errors), 1)
+        err = [e for e in errors if "sqrt" in e.message][0]
+        self.assertIn("Unknown function 'sqrt'", err.message)
+        self.assertIn("Did you forget to '#include <math.h>'?", err.message)
+
+    def test_unterminated_multiline_comment(self):
+        from lexer import Lexer, LexerError
+        src = "/* this is an unterminated comment\nint x = 5;"
+        with self.assertRaises(LexerError) as ctx:
+            Lexer(src, language="c").tokenize()
+        self.assertIn("Unterminated multi-line comment", str(ctx.exception))
+        self.assertEqual(ctx.exception.line, 1)
+        self.assertEqual(ctx.exception.col, 1)
+
+    def test_malformed_numeric_literals(self):
+        from lexer import Lexer, LexerError
+        # Invalid suffix like 123abc
+        with self.assertRaises(LexerError) as ctx:
+            Lexer("int x = 123abc;", language="c").tokenize()
+        self.assertIn("Malformed numeric literal", str(ctx.exception))
+        self.assertEqual(ctx.exception.line, 1)
+
+        # Multiple decimal points like 1.2.3
+        with self.assertRaises(LexerError) as ctx:
+            Lexer("float y = 1.2.3;", language="c").tokenize()
+        self.assertIn("multiple decimal points", str(ctx.exception))
+        self.assertEqual(ctx.exception.line, 1)
+
+    def test_missing_semicolon_in_c(self):
+        from parser import Parser, ParserError
+        src = """int main() {
+    int x = 5
+    return 0;
+}"""
+        tokens = Lexer(src, language="c").tokenize()
+        with self.assertRaises(ParserError) as ctx:
+            Parser(tokens, language="c").parse_program()
+        self.assertIn("expected ';'", str(ctx.exception))
+        self.assertEqual(ctx.exception.line, 3)
+
+    def test_unclosed_or_mismatched_braces(self):
+        from parser import Parser, ParserError
+        src = """int main() {
+    int x = 5;
+"""
+        tokens = Lexer(src, language="c").tokenize()
+        with self.assertRaises(ParserError) as ctx:
+            Parser(tokens, language="c").parse_program()
+        self.assertIn("expected '}'", str(ctx.exception))
+
+    def test_trailing_comma_in_function_call(self):
+        from parser import Parser, ParserError
+        src = """#include <stdio.h>
+int main() {
+    printf("hello", );
+    return 0;
+}"""
+        tokens = Lexer(src, language="c").tokenize()
+        with self.assertRaises(ParserError) as ctx:
+            Parser(tokens, language="c").parse_program()
+        self.assertIn("trailing ','", str(ctx.exception).lower())
+        self.assertEqual(ctx.exception.line, 3)
+
+    def test_duplicate_variable_declaration_same_scope(self):
+        source = """int main() {
+    int x = 1;
+    int x = 2;
+    return 0;
+}"""
+        tokens = Lexer(source, language="c").tokenize()
+        ast = Parser(tokens, language="c").parse_program()
+        errors, declared, syms = semantic.analyze(ast, language="c")
+
+        self.assertTrue(any(
+            e.severity == "error" and "Redeclaration of variable 'x'" in e.message
+            for e in errors
+        ))
+
+    def test_valid_full_compilation_all_stages_pass(self):
+        client = app.test_client()
+        source = """#include <stdio.h>
+
+int main() {
+    int total = 3 + 4 * 2;
+    printf("Result = %d\\n", total);
+    return 0;
+}"""
+        res = client.post("/compile", json={"source": source, "language": "c"})
+        self.assertEqual(res.status_code, 200)
+        data = res.get_json()
+
+        self.assertTrue(data["success"])
+        self.assertTrue(data["pipeline_success"])
+        self.assertTrue(data["semantic_valid"])
+        self.assertFalse(data["has_semantic_errors"])
+
+        # All 7 stages passed
+        stages = data["stages"]
+        for stg in ["source", "tokens", "ast", "semantic", "ir", "asm", "explain"]:
+            self.assertEqual(stages[stg], "passed")
+
+        # Downstream artifacts generated
+        self.assertIn("ir", data)
+        self.assertIn("quadruples", data["ir"])
+        self.assertIn("assembly", data)
+        self.assertIn("x86_64", data["assembly"])
+        self.assertIn("educational", data["assembly"])
+        self.assertIn("explanation", data)
+        self.assertGreater(len(data["explanation"]), 0)
 
 
 if __name__ == "__main__":
