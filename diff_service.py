@@ -12,11 +12,7 @@ Compares two versions of a program side-by-side across all 5 compiler stages:
 
 import difflib
 import json
-from lexer import Lexer
-from parser import Parser
-from semantic import analyze
-from ir_generator import generate_ir
-from codegen import generate_code
+from languages import get_compiler
 
 
 def _line_diff(text_a, text_b):
@@ -50,33 +46,15 @@ def _line_diff(text_a, text_b):
 
 def compile_pipeline(source, language="c"):
     """Runs a full compilation pipeline pass on a source string."""
-    tokens = Lexer(source, language=language).tokenize()
-    token_dicts = [t.to_dict() for t in tokens]
-
-    parser = Parser(tokens, language=language)
-    ast = parser.parse_program()
-    ast_dict = ast.to_dict()
-
-    semantic_errors, declared_vars, symbol_table = analyze(ast, language=language)
-    has_errors = any((e.severity if hasattr(e, "severity") else e.get("severity", "error")) == "error" for e in semantic_errors)
-    if has_errors:
-        first_err = next(e for e in semantic_errors if (e.severity if hasattr(e, "severity") else e.get("severity", "error")) == "error")
-        msg = first_err.message if hasattr(first_err, "message") else first_err.get("message", "Semantic error")
-        line = first_err.line_number if hasattr(first_err, "line_number") else first_err.get("line", 1)
-        raise Exception(f"Line {line}: Semantic error: {msg}")
-
-    ir_data = generate_ir(ast)
-    asm_data = generate_code(ir_data)
-
-    return {
-        "tokens": token_dicts,
-        "ast": ast_dict,
-        "semantic_errors": [e.to_dict() if hasattr(e, "to_dict") else e for e in semantic_errors],
-        "declared_vars": declared_vars,
-        "symbol_table": symbol_table,
-        "ir": ir_data,
-        "assembly": asm_data,
-    }
+    compiler = get_compiler(language)
+    res = compiler.compile(source)
+    if not res.get("success", False):
+        diags = res.get("diagnostics") or []
+        first_diag = diags[0] if diags else {}
+        msg = first_diag.get("message") or res.get("error") or "Compilation failed"
+        line = first_diag.get("line") or 1
+        raise Exception(f"Line {line}: {msg}")
+    return res
 
 
 def compare_programs(source_a, source_b, language="c"):

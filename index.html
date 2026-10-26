@@ -45,7 +45,733 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.06), 0 4px 6px -4px rgba(0, 0, 0, 0.04);
     --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+
+    /* AST Node Category Tokens (Light Mode) */
+    --ast-cat-prog-bg: #EEF2FF;
+    --ast-cat-prog-border: #C7D2FE;
+    --ast-cat-prog-top: #4F46E5;
+    --ast-cat-prog-type: #4338CA;
+    --ast-cat-prog-val: #1E1B4B;
+
+    --ast-cat-func-bg: #F5F3FF;
+    --ast-cat-func-border: #DDD6FE;
+    --ast-cat-func-top: #7C3AED;
+    --ast-cat-func-type: #6D28D9;
+    --ast-cat-func-val: #2E1065;
+
+    --ast-cat-decl-bg: #ECFDF5;
+    --ast-cat-decl-border: #A7F3D0;
+    --ast-cat-decl-top: #059669;
+    --ast-cat-decl-type: #047857;
+    --ast-cat-decl-val: #064E3B;
+
+    --ast-cat-assign-bg: #EFF6FF;
+    --ast-cat-assign-border: #BFDBFE;
+    --ast-cat-assign-top: #2563EB;
+    --ast-cat-assign-type: #1D4ED8;
+    --ast-cat-assign-val: #1E3A8A;
+
+    --ast-cat-ret-bg: #FFF1F2;
+    --ast-cat-ret-border: #FECDD3;
+    --ast-cat-ret-top: #E11D48;
+    --ast-cat-ret-type: #BE123C;
+    --ast-cat-ret-val: #881337;
+
+    --ast-cat-inc-bg: #FDF2F8;
+    --ast-cat-inc-border: #FBCFE8;
+    --ast-cat-inc-top: #DB2777;
+    --ast-cat-inc-type: #BE185D;
+    --ast-cat-inc-val: #831843;
+
+    --ast-cat-call-bg: #FAF5FF;
+    --ast-cat-call-border: #E9D5FF;
+    --ast-cat-call-top: #9333EA;
+    --ast-cat-call-type: #7E22CE;
+    --ast-cat-call-val: #581C87;
+
+    --ast-cat-op-bg: #FAF5FF;
+    --ast-cat-op-border: #DDD6FE;
+    --ast-cat-op-top: #8B5CF6;
+    --ast-cat-op-type: #6D28D9;
+    --ast-cat-op-val: #4C1D95;
+
+    --ast-cat-ctrl-bg: #FFFBEB;
+    --ast-cat-ctrl-border: #FDE68A;
+    --ast-cat-ctrl-top: #D97706;
+    --ast-cat-ctrl-type: #B45309;
+    --ast-cat-ctrl-val: #78350F;
+
+    --ast-cat-cond-bg: #FEF9C3;
+    --ast-cat-cond-border: #FDE047;
+    --ast-cat-cond-top: #CA8A04;
+    --ast-cat-cond-type: #A16207;
+    --ast-cat-cond-val: #713F12;
+
+    --ast-cat-then-bg: #EFF6FF;
+    --ast-cat-then-border: #BFDBFE;
+    --ast-cat-then-top: #3B82F6;
+    --ast-cat-then-type: #1D4ED8;
+    --ast-cat-then-val: #1E3A8A;
+
+    --ast-cat-else-bg: #FDF2F8;
+    --ast-cat-else-border: #FBCFE8;
+    --ast-cat-else-top: #EC4899;
+    --ast-cat-else-type: #BE185D;
+    --ast-cat-else-val: #831843;
+
+    --ast-cat-num-bg: #F0FDFA;
+    --ast-cat-num-border: #99F6E4;
+    --ast-cat-num-top: #0891B2;
+    --ast-cat-num-type: #0E7490;
+    --ast-cat-num-val: #155E75;
+
+    --ast-cat-id-bg: #EFF6FF;
+    --ast-cat-id-border: #BFDBFE;
+    --ast-cat-id-top: #2563EB;
+    --ast-cat-id-type: #1D4ED8;
+    --ast-cat-id-val: #1E3A8A;
+
+    --ast-cat-str-bg: #FFF7ED;
+    --ast-cat-str-border: #FED7AA;
+    --ast-cat-str-top: #EA580C;
+    --ast-cat-str-type: #C2410C;
+    --ast-cat-str-val: #7C2D12;
+
+    --ast-card-sub: #475569;
+    --ast-card-line: #64748B;
+    --ast-connector-line: #94A3B8;
+    --ast-badge-bg: var(--bg-surface);
+    --ast-badge-text: var(--text-secondary);
+    --ast-badge-border: var(--border);
+
+    /* Diff AST Node Cards (Light) */
+    --ast-diff-a-bg: #FEF2F2;
+    --ast-diff-a-border: #F87171;
+    --ast-diff-a-type: #991B1B;
+    --ast-diff-a-val: #7F1D1D;
+
+    --ast-diff-b-bg: #F0FDF4;
+    --ast-diff-b-border: #34D399;
+    --ast-diff-b-type: #166534;
+    --ast-diff-b-val: #14532D;
+
+    /* Explainer & Takeaway (Light) */
+    --explainer-card-bg: var(--bg-surface);
+    --explainer-card-border: var(--border);
+    --explainer-card-accent: var(--primary);
+    --explainer-takeaway-bg: var(--bg-surface-alt);
+    --explainer-takeaway-text: #1E293B;
+    --explainer-takeaway-border: var(--border);
+
+    /* Diff Viewer & Tables (Light) */
+    --diff-row-added-bg: #ECFDF5;
+    --diff-row-added-text: #065F46;
+    --diff-row-removed-bg: #FEF2F2;
+    --diff-row-removed-text: #991B1B;
+    --diff-row-modified-bg: #FFFBEB;
+    --diff-row-modified-text: #92400E;
+    --diff-header-a-bg: #FEF2F2;
+    --diff-header-a-border: #FECACA;
+    --diff-header-b-bg: #F0FDF4;
+    --diff-header-b-border: #BBF7D0;
+    --diff-pill-a-bg: #FEE2E2;
+    --diff-pill-a-text: #991B1B;
+    --diff-pill-a-border: #FCA5A5;
+    --diff-pill-b-bg: #DCFCE7;
+    --diff-pill-b-text: #166534;
+    --diff-pill-b-border: #86EFAC;
+
+    /* Gutter Highlights (Light) */
+    --gutter-error-bg: #FEE2E2;
+    --gutter-error-text: #DC2626;
+    --gutter-warning-bg: #FEF3C7;
+    --gutter-warning-text: #D97706;
+
+    /* Diagnostic Chips (Light) */
+    --chip-error-bg: #FEF2F2;
+    --chip-error-text: #991B1B;
+    --chip-error-border: #FECACA;
+    --chip-warning-bg: #FFFBEB;
+    --chip-warning-text: #92400E;
+    --chip-warning-border: #FDE68A;
+
+    /* Alert Text (Light) */
+    --alert-warn-text: #92400E;
+    --alert-danger-text: #991B1B;
+    --alert-success-text: #065F46;
+    --alert-info-text: #3730A3;
+
+    /* Token Pills (Light) */
+    --pill-type-bg: #EEF2FF;
+    --pill-type-text: #4338CA;
+    --pill-type-border: #C7D2FE;
+    --pill-num-bg: #ECFEFF;
+    --pill-num-text: #0E7490;
+    --pill-num-border: #A5F3FC;
+    --pill-ident-bg: #EFF6FF;
+    --pill-ident-text: #1D4ED8;
+    --pill-ident-border: #BFDBFE;
+    --pill-op-bg: #FAF5FF;
+    --pill-op-text: #7E22CE;
+    --pill-op-border: #E9D5FF;
+    --pill-prep-bg: #FFF7ED;
+    --pill-prep-text: #C2410C;
+    --pill-prep-border: #FED7AA;
   }
+
+  /* High-Contrast Accessible Dark Theme (Review 3 Upgrade) */
+  :root[data-theme="dark"] {
+    --bg-app: #0A0E17;
+    --bg-surface: #111827;
+    --bg-surface-alt: #172033;
+    --bg-subtle: #1F293D;
+    --text-primary: #F8FAFC;
+    --text-secondary: #94A3B8;
+    --text-muted: #64748B;
+    --border: #26334D;
+    --border-hover: #3E4D6B;
+    --border-strong: #5B6E94;
+    --primary: #6366F1;
+    --primary-hover: #818CF8;
+    --primary-subtle: #1E2342;
+    --primary-border: #373F73;
+    --secondary-accent: #06B6D4;
+    --secondary-subtle: #153342;
+    --success: #10B981;
+    --success-subtle: #0E3528;
+    --success-border: #1B5E45;
+    --warning: #F59E0B;
+    --warning-subtle: #382B14;
+    --warning-border: #6B4D1B;
+    --error: #EF4444;
+    --error-subtle: #3B1B1F;
+    --error-border: #6B272E;
+    --blocked: #94A3B8;
+    --blocked-subtle: #1F2937;
+    --blocked-border: #374151;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.4);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.6);
+
+    /* AST Node Category Tokens (Dark Mode) */
+    --ast-cat-prog-bg: #141A30;
+    --ast-cat-prog-border: #2D3A6E;
+    --ast-cat-prog-top: #818CF8;
+    --ast-cat-prog-type: #A5B4FC;
+    --ast-cat-prog-val: #F1F5F9;
+
+    --ast-cat-func-bg: #19142E;
+    --ast-cat-func-border: #3E2B6B;
+    --ast-cat-func-top: #A78BFA;
+    --ast-cat-func-type: #C4B5FD;
+    --ast-cat-func-val: #F5F3FF;
+
+    --ast-cat-decl-bg: #0D211B;
+    --ast-cat-decl-border: #16533D;
+    --ast-cat-decl-top: #34D399;
+    --ast-cat-decl-type: #6EE7B7;
+    --ast-cat-decl-val: #ECFDF5;
+
+    --ast-cat-assign-bg: #101D33;
+    --ast-cat-assign-border: #213F70;
+    --ast-cat-assign-top: #60A5FA;
+    --ast-cat-assign-type: #93C5FD;
+    --ast-cat-assign-val: #EFF6FF;
+
+    --ast-cat-ret-bg: #27121B;
+    --ast-cat-ret-border: #5B2032;
+    --ast-cat-ret-top: #FB7185;
+    --ast-cat-ret-type: #FDA4AF;
+    --ast-cat-ret-val: #FFF1F2;
+
+    --ast-cat-inc-bg: #261226;
+    --ast-cat-inc-border: #5C2055;
+    --ast-cat-inc-top: #F472B6;
+    --ast-cat-inc-type: #F9A8D4;
+    --ast-cat-inc-val: #FDF2F8;
+
+    --ast-cat-call-bg: #1E1330;
+    --ast-cat-call-border: #462270;
+    --ast-cat-call-top: #C084FC;
+    --ast-cat-call-type: #D8B4FE;
+    --ast-cat-call-val: #FAF5FF;
+
+    --ast-cat-op-bg: #1C1530;
+    --ast-cat-op-border: #3D296B;
+    --ast-cat-op-top: #A78BFA;
+    --ast-cat-op-type: #C4B5FD;
+    --ast-cat-op-val: #DDD6FE;
+
+    --ast-cat-ctrl-bg: #241A0E;
+    --ast-cat-ctrl-border: #543B14;
+    --ast-cat-ctrl-top: #FBBF24;
+    --ast-cat-ctrl-type: #FCD34D;
+    --ast-cat-ctrl-val: #FEF3C7;
+
+    --ast-cat-cond-bg: #231E0C;
+    --ast-cat-cond-border: #4F4312;
+    --ast-cat-cond-top: #FACC15;
+    --ast-cat-cond-type: #FDE047;
+    --ast-cat-cond-val: #FEF9C3;
+
+    --ast-cat-then-bg: #101D33;
+    --ast-cat-then-border: #213F70;
+    --ast-cat-then-top: #60A5FA;
+    --ast-cat-then-type: #93C5FD;
+    --ast-cat-then-val: #EFF6FF;
+
+    --ast-cat-else-bg: #261221;
+    --ast-cat-else-border: #5E1D48;
+    --ast-cat-else-top: #F472B6;
+    --ast-cat-else-type: #F9A8D4;
+    --ast-cat-else-val: #FDF2F8;
+
+    --ast-cat-num-bg: #0C1E24;
+    --ast-cat-num-border: #144954;
+    --ast-cat-num-top: #22D3EE;
+    --ast-cat-num-type: #67E8F9;
+    --ast-cat-num-val: #ECFEFF;
+
+    --ast-cat-id-bg: #101D33;
+    --ast-cat-id-border: #213F70;
+    --ast-cat-id-top: #60A5FA;
+    --ast-cat-id-type: #93C5FD;
+    --ast-cat-id-val: #EFF6FF;
+
+    --ast-cat-str-bg: #24160E;
+    --ast-cat-str-border: #573019;
+    --ast-cat-str-top: #FB923C;
+    --ast-cat-str-type: #FDBA74;
+    --ast-cat-str-val: #FFF7ED;
+
+    --ast-card-sub: #CBD5E1;
+    --ast-card-line: #94A3B8;
+    --ast-connector-line: #475569;
+    --ast-badge-bg: #172033;
+    --ast-badge-text: #E2E8F0;
+    --ast-badge-border: #334466;
+
+    /* Diff AST Node Cards (Dark) */
+    --ast-diff-a-bg: #281116;
+    --ast-diff-a-border: #991B1B;
+    --ast-diff-a-type: #FCA5A5;
+    --ast-diff-a-val: #FEE2E2;
+
+    --ast-diff-b-bg: #0C2318;
+    --ast-diff-b-border: #059669;
+    --ast-diff-b-type: #6EE7B7;
+    --ast-diff-b-val: #DCFCE7;
+
+    /* Explainer & Takeaway (Dark) */
+    --explainer-card-bg: #111827;
+    --explainer-card-border: #26334D;
+    --explainer-card-accent: #6366F1;
+    --explainer-takeaway-bg: #172033;
+    --explainer-takeaway-text: #E2E8F0;
+    --explainer-takeaway-border: #2D3D5E;
+
+    /* Diff Viewer & Tables (Dark) */
+    --diff-row-added-bg: #0E291C;
+    --diff-row-added-text: #6EE7B7;
+    --diff-row-removed-bg: #2B1115;
+    --diff-row-removed-text: #FDA4AF;
+    --diff-row-modified-bg: #2A1D0B;
+    --diff-row-modified-text: #FDE68A;
+    --diff-header-a-bg: #241014;
+    --diff-header-a-border: #501B22;
+    --diff-header-b-bg: #0C2116;
+    --diff-header-b-border: #174830;
+    --diff-pill-a-bg: #3B1B1F;
+    --diff-pill-a-text: #FCA5A5;
+    --diff-pill-a-border: #6B272E;
+    --diff-pill-b-bg: #0E3528;
+    --diff-pill-b-text: #6EE7B7;
+    --diff-pill-b-border: #1B5E45;
+
+    /* Gutter Highlights (Dark) */
+    --gutter-error-bg: #3B1B1F;
+    --gutter-error-text: #FCA5A5;
+    --gutter-warning-bg: #382B14;
+    --gutter-warning-text: #FCD34D;
+
+    /* Diagnostic Chips (Dark) */
+    --chip-error-bg: #2D1418;
+    --chip-error-text: #FCA5A5;
+    --chip-error-border: #6B272E;
+    --chip-warning-bg: #2B1E0D;
+    --chip-warning-text: #FCD34D;
+    --chip-warning-border: #6B4D1B;
+
+    /* Alert Text (Dark) */
+    --alert-warn-text: #FCD34D;
+    --alert-danger-text: #FCA5A5;
+    --alert-success-text: #6EE7B7;
+    --alert-info-text: #A5B4FC;
+
+    /* Token Pills (Dark) */
+    --pill-type-bg: #1E2342;
+    --pill-type-text: #A5B4FC;
+    --pill-type-border: #373F73;
+    --pill-num-bg: #153342;
+    --pill-num-text: #67E8F9;
+    --pill-num-border: #1E4F63;
+    --pill-ident-bg: #152642;
+    --pill-ident-text: #93C5FD;
+    --pill-ident-border: #234575;
+    --pill-op-bg: #261A42;
+    --pill-op-text: #C4B5FD;
+    --pill-op-border: #432E6E;
+    --pill-prep-bg: #3B2314;
+    --pill-prep-text: #FDBA74;
+    --pill-prep-border: #633618;
+  }
+
+  [data-theme="dark"] .ast-viewport {
+    background: #0E1422;
+    background-image: radial-gradient(#26334D 1.2px, transparent 1.2px);
+  }
+
+  [data-theme="dark"] .source-textarea {
+    background: #0D121D;
+    color: #E2E8F0;
+  }
+
+  [data-theme="dark"] .line-numbers-gutter {
+    background: #0A0E17;
+    border-color: #26334D;
+    color: #64748B;
+  }
+
+  [data-theme="dark"] .code-view,
+  [data-theme="dark"] .code-block-viewer {
+    background: #0D121D;
+    color: #E2E8F0;
+    border-color: #26334D;
+  }
+
+  [data-theme="dark"] .diff-ast-panel {
+    background: #0E1422;
+  }
+
+  [data-theme="dark"] .diff-ast-viewport {
+    background: #0D121D;
+    background-image: radial-gradient(#26334D 1.2px, transparent 1.2px);
+  }
+
+  [data-theme="dark"] .modal-dialog {
+    background: #111827;
+    border-color: #26334D;
+  }
+
+  /* Language Specs Modal Styles */
+  .modal-backdrop {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(3px);
+    z-index: 2000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    animation: modalFadeIn 0.15s ease-out;
+  }
+  @keyframes modalFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  .modal-dialog {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    max-width: 640px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+  }
+  .modal-header {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .modal-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .modal-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.4rem;
+    line-height: 1;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 4px 8px;
+    border-radius: var(--radius-sm);
+  }
+  .modal-close-btn:hover {
+    color: var(--text-primary);
+    background: var(--bg-surface-alt);
+  }
+  .modal-body {
+    padding: 20px;
+  }
+
+  .btn-specs-link {
+    background: transparent;
+    border: none;
+    color: var(--primary);
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    text-decoration: underline;
+  }
+  .btn-specs-link:hover {
+    color: var(--primary-hover);
+  }
+
+  /* Terminal Execution Console Styles */
+  .terminal-container {
+    background: #0B0F19;
+    border: 1px solid #1E293B;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    margin: 16px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  }
+  .terminal-topbar {
+    background: #151D2A;
+    border-bottom: 1px solid #1E293B;
+    padding: 8px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .terminal-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .terminal-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+  .dot-red { background: #EF4444; }
+  .dot-yellow { background: #F59E0B; }
+  .dot-green { background: #10B981; }
+  .terminal-title {
+    font-size: 0.75rem;
+    color: #94A3B8;
+    font-family: var(--font-mono);
+  }
+  .terminal-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .btn-term-copy {
+    background: #1E293B;
+    color: #CBD5E1;
+    border: 1px solid #334155;
+    border-radius: var(--radius-sm);
+    padding: 3px 8px;
+    font-size: 0.72rem;
+    cursor: pointer;
+  }
+  .btn-term-copy:hover {
+    background: #334155;
+    color: #FFFFFF;
+  }
+  .terminal-body {
+    padding: 16px 18px;
+    margin: 0;
+    color: #10B981;
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    min-height: 120px;
+    max-height: 380px;
+    overflow-y: auto;
+  }
+
+  .pedagogical-banner {
+    display: flex;
+    gap: 12px;
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    background: var(--primary-subtle);
+    border: 1px solid var(--primary-border);
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .pedagogical-banner-icon {
+    color: var(--primary);
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .pedagogical-banner-body strong {
+    font-size: 0.84rem;
+    color: var(--text-primary);
+    display: block;
+    margin-bottom: 3px;
+  }
+  .pedagogical-banner-body p {
+    font-size: 0.80rem;
+    color: var(--text-secondary);
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .exec-metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 14px;
+  }
+  @media (max-width: 800px) {
+    .exec-metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+  .metric-card {
+    background: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
+  }
+  .metric-label {
+    font-size: 0.70rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    margin-bottom: 4px;
+  }
+  .metric-val {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+  }
+
+  /* Live Quick Output Strip */
+  .ide-alert-output {
+    background: #0B0F19;
+    border: 1px solid #1E293B;
+    color: #F8FAFC;
+    padding: 10px 14px;
+    border-radius: var(--radius-md);
+    margin-top: 10px;
+  }
+  .output-preview-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.76rem;
+    color: #94A3B8;
+    margin-bottom: 6px;
+  }
+  .btn-link-tab {
+    background: transparent;
+    border: none;
+    color: #38BDF8;
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-left: auto;
+    padding: 0;
+  }
+  .quick-output-pre {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: #34D399;
+    white-space: pre-wrap;
+    max-height: 80px;
+    overflow-y: auto;
+  }
+
+  /* Table Pagination & Virtualization Styles */
+  .table-pagination-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .pagination-info {
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+  }
+  .pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .btn-page {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    padding: 3px 8px;
+    font-size: 0.76rem;
+    cursor: pointer;
+  }
+  .btn-page:hover:not(:disabled) {
+    background: var(--bg-subtle);
+    border-color: var(--border-hover);
+  }
+  .btn-page:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+  .page-indicator {
+    font-size: 0.76rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+    padding: 0 4px;
+  }
+  .form-input-sm {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    border-radius: var(--radius-sm);
+    padding: 4px 8px;
+    font-size: 0.76rem;
+    outline: none;
+    width: 170px;
+  }
+  .form-input-sm:focus {
+    border-color: var(--primary);
+  }
+
+  .ast-pagination-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 6px 14px;
+    background: var(--bg-surface-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    margin-bottom: 12px;
+    font-size: 0.78rem;
+    color: var(--text-secondary);
+  }
+
 
   * { box-sizing: border-box; }
   body {
@@ -168,6 +894,17 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
   }
 
+  #btnThemeToggle {
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    color: var(--text-primary);
+    border-radius: var(--radius-md);
+  }
+  #btnThemeToggle:hover {
+    background: var(--bg-surface-alt);
+    border-color: var(--border-hover);
+  }
+
   /* App Main Workspace Layout */
   .app-container {
     padding: 20px 24px 40px 24px;
@@ -271,12 +1008,12 @@
 
   /* Source Code Editor with Synchronized Line Numbers */
   .code-editor-wrapper {
-    display: flex;
+    position: relative;
+    display: block;
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
     background: var(--bg-surface);
     overflow: hidden;
-    position: relative;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
   }
 
@@ -286,60 +1023,89 @@
   }
 
   .line-numbers-gutter {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 48px;
     background: var(--bg-surface-alt);
     border-right: 1px solid var(--border);
-    padding: 12px 8px;
+    padding: 12px 8px 12px 6px;
     font-family: var(--font-mono);
     font-size: 13px;
     line-height: 1.55;
     color: var(--text-muted);
     text-align: right;
     user-select: none;
-    overflow: hidden;
-    min-width: 40px;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    z-index: 2;
     box-sizing: border-box;
   }
   .line-numbers-gutter div {
     height: 20.15px;
     padding-right: 4px;
     transition: background 0.15s;
+    white-space: nowrap;
+    overflow: hidden;
   }
 
   /* Gutter line error/warning highlights */
   .line-numbers-gutter div.gutter-error-line {
-    background: #FEE2E2 !important;
-    color: #DC2626 !important;
+    background: var(--gutter-error-bg) !important;
+    color: var(--gutter-error-text) !important;
     font-weight: 700;
-    border-left: 3px solid #DC2626;
-    margin-left: -8px;
-    padding-left: 5px;
+    border-left: 3px solid var(--error);
+    margin-left: -6px;
+    padding-left: 3px;
   }
   .line-numbers-gutter div.gutter-warning-line {
-    background: #FEF3C7 !important;
-    color: #D97706 !important;
+    background: var(--gutter-warning-bg) !important;
+    color: var(--gutter-warning-text) !important;
     font-weight: 700;
-    border-left: 3px solid #D97706;
-    margin-left: -8px;
-    padding-left: 5px;
+    border-left: 3px solid var(--warning);
+    margin-left: -6px;
+    padding-left: 3px;
   }
 
   textarea.source-textarea {
-    flex: 1;
+    display: block;
+    width: 100%;
+    box-sizing: border-box;
     border: none;
     outline: none;
     resize: vertical;
-    padding: 12px 14px;
+    padding: 12px 14px 12px 60px;
     font-family: var(--font-mono);
     font-size: 13px;
     line-height: 1.55;
     color: var(--text-primary);
     background: var(--bg-surface);
-    min-height: 230px;
-    max-height: 520px;
+    min-height: 280px;
+    max-height: 650px;
     white-space: pre;
     overflow-x: auto;
     overflow-y: auto;
     tab-size: 4;
+  }
+
+  .btn-upload-file {
+    background: var(--bg-surface-alt);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: var(--radius-sm);
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .btn-upload-file:hover {
+    background: var(--border);
+    color: var(--primary);
   }
 
   /* Action Bar */
@@ -421,22 +1187,22 @@
   .ide-alert-warning {
     background: var(--warning-subtle);
     border: 1px solid var(--warning-border);
-    color: #92400E;
+    color: var(--alert-warn-text);
   }
   .ide-alert-danger {
     background: var(--error-subtle);
     border: 1px solid var(--error-border);
-    color: #991B1B;
+    color: var(--alert-danger-text);
   }
   .ide-alert-success {
     background: var(--success-subtle);
     border: 1px solid var(--success-border);
-    color: #065F46;
+    color: var(--alert-success-text);
   }
   .ide-alert-info {
     background: var(--primary-subtle);
     border: 1px solid var(--primary-border);
-    color: #3730A3;
+    color: var(--alert-info-text);
   }
 
   /* Diagnostic chip in Editor Card */
@@ -452,30 +1218,31 @@
     line-height: 1.4;
   }
   .diagnostic-chip.chip-error {
-    background: #FEF2F2;
-    border: 1px solid #FECACA;
-    color: #991B1B;
+    background: var(--chip-error-bg);
+    border: 1px solid var(--chip-error-border);
+    color: var(--chip-error-text);
   }
   .diagnostic-chip.chip-warning {
-    background: #FFFBEB;
-    border: 1px solid #FDE68A;
-    color: #92400E;
+    background: var(--chip-warning-bg);
+    border: 1px solid var(--chip-warning-border);
+    color: var(--chip-warning-text);
   }
   .btn-jump-loc {
-    background: white;
-    border: 1px solid rgba(0, 0, 0, 0.15);
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     padding: 3px 8px;
     font-size: 0.72rem;
     font-weight: 600;
     cursor: pointer;
-    color: inherit;
+    color: var(--text-primary);
     flex-shrink: 0;
     transition: background 0.15s, box-shadow 0.15s;
   }
   .btn-jump-loc:hover {
     box-shadow: var(--shadow-sm);
     background: var(--bg-surface-alt);
+    border-color: var(--border-hover);
   }
 
   /* Pipeline Column */
@@ -556,9 +1323,9 @@
     border-color: var(--error-border);
   }
   .step-node.status-blocked .step-icon-badge {
-    background: #F1F5F9;
-    color: #64748B;
-    border-color: #CBD5E1;
+    background: var(--blocked-subtle);
+    color: var(--blocked);
+    border-color: var(--blocked-border);
   }
   .step-node.status-warning .step-icon-badge {
     background: var(--warning-subtle);
@@ -583,9 +1350,9 @@
     border-color: var(--error);
   }
   .step-node.active.status-blocked .step-icon-badge {
-    background: #64748B;
+    background: var(--blocked);
     color: white;
-    border-color: #64748B;
+    border-color: var(--blocked);
   }
   .step-node.active.status-warning .step-icon-badge {
     background: var(--warning);
@@ -619,7 +1386,7 @@
   }
   .step-node.status-passed .step-sub { color: var(--success); }
   .step-node.status-failed .step-sub { color: var(--error); font-weight: 600; }
-  .step-node.status-blocked .step-sub { color: #64748B; font-style: italic; }
+  .step-node.status-blocked .step-sub { color: var(--blocked); font-style: italic; }
   .step-node.status-warning .step-sub { color: var(--warning); }
 
   .step-divider {
@@ -696,9 +1463,9 @@
     font-weight: 700;
     padding: 3px 10px;
     border-radius: 9999px;
-    background: #F1F5F9;
-    color: #64748B;
-    border: 1px solid #CBD5E1;
+    background: var(--blocked-subtle);
+    color: var(--blocked);
+    border: 1px solid var(--blocked-border);
     margin-bottom: 8px;
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -747,16 +1514,16 @@
     font-weight: 600;
     border: 1px solid transparent;
   }
-  .pill-type { background: #EEF2FF; color: #4338CA; border-color: #C7D2FE; }
-  .pill-num { background: #ECFEFF; color: #0E7490; border-color: #A5F3FC; }
-  .pill-ident { background: #EFF6FF; color: #1D4ED8; border-color: #BFDBFE; }
-  .pill-op { background: #FAF5FF; color: #7E22CE; border-color: #E9D5FF; }
-  .pill-prep { background: #FFF7ED; color: #C2410C; border-color: #FED7AA; }
+  .pill-type { background: var(--pill-type-bg); color: var(--pill-type-text); border-color: var(--pill-type-border); }
+  .pill-num { background: var(--pill-num-bg); color: var(--pill-num-text); border-color: var(--pill-num-border); }
+  .pill-ident { background: var(--pill-ident-bg); color: var(--pill-ident-text); border-color: var(--pill-ident-border); }
+  .pill-op { background: var(--pill-op-bg); color: var(--pill-op-text); border-color: var(--pill-op-border); }
+  .pill-prep { background: var(--pill-prep-bg); color: var(--pill-prep-text); border-color: var(--pill-prep-border); }
   .pill-neutral { background: var(--bg-subtle); color: var(--text-secondary); border-color: var(--border); }
   .pill-passed, .pill-success { background: var(--success-subtle); color: var(--success); border-color: var(--success-border); }
   .pill-warning { background: var(--warning-subtle); color: var(--warning); border-color: var(--warning-border); }
   .pill-failed, .pill-error, .pill-danger { background: var(--error-subtle); color: var(--error); border-color: var(--error-border); }
-  .pill-blocked { background: #F1F5F9; color: #64748B; border-color: #CBD5E1; }
+  .pill-blocked { background: var(--blocked-subtle); color: var(--blocked); border-color: var(--blocked-border); }
 
   /* AST Tree Diagram CSS */
   .ast-viewport {
@@ -801,7 +1568,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 18px;
-    background: #FFFFFF;
+    background: var(--bg-surface);
     border-bottom: 1px solid var(--border);
     flex-shrink: 0;
     z-index: 20;
@@ -878,9 +1645,9 @@
     transition: all 0.15s ease;
   }
   .btn-close-expanded:hover {
-    background: #FEE2E2;
-    border-color: #FCA5A5;
-    color: #DC2626;
+    background: var(--error-subtle);
+    border-color: var(--error-border);
+    color: var(--error);
   }
 
   .ast-canvas-scroll-area {
@@ -969,133 +1736,136 @@
 
   .ast-card-sub {
     font-size: 0.70rem;
-    color: var(--text-secondary);
+    color: var(--ast-card-sub);
     margin-top: 2px;
   }
 
   .ast-card-line {
     font-size: 0.62rem;
-    color: var(--text-muted);
+    color: var(--ast-card-line);
     margin-top: 2px;
   }
 
   /* Node Categories */
   .ast-card.cat-program {
-    background: #EEF2FF;
-    border-color: #C7D2FE;
-    border-top: 3px solid #4F46E5;
+    background: var(--ast-cat-prog-bg);
+    border-color: var(--ast-cat-prog-border);
+    border-top: 3px solid var(--ast-cat-prog-top);
   }
-  .ast-card.cat-program .ast-card-type { color: #4338CA; }
-  .ast-card.cat-program .ast-card-val { color: #1E1B4B; }
+  .ast-card.cat-program .ast-card-type { color: var(--ast-cat-prog-type); }
+  .ast-card.cat-program .ast-card-val { color: var(--ast-cat-prog-val); }
 
   .ast-card.cat-function {
-    background: #F5F3FF;
-    border-color: #DDD6FE;
-    border-top: 3px solid #7C3AED;
+    background: var(--ast-cat-func-bg);
+    border-color: var(--ast-cat-func-border);
+    border-top: 3px solid var(--ast-cat-func-top);
   }
-  .ast-card.cat-function .ast-card-type { color: #6D28D9; }
-  .ast-card.cat-function .ast-card-val { color: #2E1065; }
+  .ast-card.cat-function .ast-card-type { color: var(--ast-cat-func-type); }
+  .ast-card.cat-function .ast-card-val { color: var(--ast-cat-func-val); }
 
   .ast-card.cat-decl {
-    background: #ECFDF5;
-    border-color: #A7F3D0;
-    border-top: 3px solid #059669;
+    background: var(--ast-cat-decl-bg);
+    border-color: var(--ast-cat-decl-border);
+    border-top: 3px solid var(--ast-cat-decl-top);
   }
-  .ast-card.cat-decl .ast-card-type { color: #047857; }
-  .ast-card.cat-decl .ast-card-val { color: #064E3B; }
+  .ast-card.cat-decl .ast-card-type { color: var(--ast-cat-decl-type); }
+  .ast-card.cat-decl .ast-card-val { color: var(--ast-cat-decl-val); }
 
   .ast-card.cat-assign {
-    background: #EFF6FF;
-    border-color: #BFDBFE;
-    border-top: 3px solid #2563EB;
+    background: var(--ast-cat-assign-bg);
+    border-color: var(--ast-cat-assign-border);
+    border-top: 3px solid var(--ast-cat-assign-top);
   }
-  .ast-card.cat-assign .ast-card-type { color: #1D4ED8; }
-  .ast-card.cat-assign .ast-card-val { color: #1E3A8A; }
+  .ast-card.cat-assign .ast-card-type { color: var(--ast-cat-assign-type); }
+  .ast-card.cat-assign .ast-card-val { color: var(--ast-cat-assign-val); }
 
   .ast-card.cat-return {
-    background: #FFF1F2;
-    border-color: #FECDD3;
-    border-top: 3px solid #E11D48;
+    background: var(--ast-cat-ret-bg);
+    border-color: var(--ast-cat-ret-border);
+    border-top: 3px solid var(--ast-cat-ret-top);
   }
-  .ast-card.cat-return .ast-card-type { color: #BE123C; }
-  .ast-card.cat-return .ast-card-val { color: #881337; }
+  .ast-card.cat-return .ast-card-type { color: var(--ast-cat-ret-type); }
+  .ast-card.cat-return .ast-card-val { color: var(--ast-cat-ret-val); }
 
   .ast-card.cat-include {
-    background: #FDF2F8;
-    border-color: #FBCFE8;
-    border-top: 3px solid #DB2777;
+    background: var(--ast-cat-inc-bg);
+    border-color: var(--ast-cat-inc-border);
+    border-top: 3px solid var(--ast-cat-inc-top);
   }
-  .ast-card.cat-include .ast-card-type { color: #BE185D; }
-  .ast-card.cat-include .ast-card-val { color: #831843; }
+  .ast-card.cat-include .ast-card-type { color: var(--ast-cat-inc-type); }
+  .ast-card.cat-include .ast-card-val { color: var(--ast-cat-inc-val); }
 
   .ast-card.cat-call {
-    background: #FAF5FF;
-    border-color: #E9D5FF;
-    border-top: 3px solid #9333EA;
+    background: var(--ast-cat-call-bg);
+    border-color: var(--ast-cat-call-border);
+    border-top: 3px solid var(--ast-cat-call-top);
   }
-  .ast-card.cat-call .ast-card-type { color: #7E22CE; }
-  .ast-card.cat-call .ast-card-val { color: #581C87; }
+  .ast-card.cat-call .ast-card-type { color: var(--ast-cat-call-type); }
+  .ast-card.cat-call .ast-card-val { color: var(--ast-cat-call-val); }
 
   .ast-card.cat-op {
-    background: #FAF5FF;
-    border-color: #DDD6FE;
-    border-top: 3px solid #8B5CF6;
+    background: var(--ast-cat-op-bg);
+    border-color: var(--ast-cat-op-border);
+    border-top: 3px solid var(--ast-cat-op-top);
   }
-  .ast-card.cat-op .ast-card-type { color: #6D28D9; }
-  .ast-card.cat-op .ast-card-val { color: #4C1D95; font-size: 1.05rem; font-weight: 700; }
+  .ast-card.cat-op .ast-card-type { color: var(--ast-cat-op-type); }
+  .ast-card.cat-op .ast-card-val { color: var(--ast-cat-op-val); font-size: 1.05rem; font-weight: 700; }
 
   .ast-card.cat-control {
-    background: #FFFBEB;
-    border-color: #FDE68A;
-    border-top: 3px solid #D97706;
+    background: var(--ast-cat-ctrl-bg);
+    border-color: var(--ast-cat-ctrl-border);
+    border-top: 3px solid var(--ast-cat-ctrl-top);
   }
-  .ast-card.cat-control .ast-card-type { color: #B45309; }
-  .ast-card.cat-control .ast-card-val { color: #78350F; }
+  .ast-card.cat-control .ast-card-type { color: var(--ast-cat-ctrl-type); }
+  .ast-card.cat-control .ast-card-val { color: var(--ast-cat-ctrl-val); }
 
   .ast-card.cat-branch-cond {
-    background: #FEF9C3;
-    border-color: #FDE047;
-    border-top: 3px solid #CA8A04;
+    background: var(--ast-cat-cond-bg);
+    border-color: var(--ast-cat-cond-border);
+    border-top: 3px solid var(--ast-cat-cond-top);
   }
-  .ast-card.cat-branch-cond .ast-card-type { color: #A16207; }
+  .ast-card.cat-branch-cond .ast-card-type { color: var(--ast-cat-cond-type); }
+  .ast-card.cat-branch-cond .ast-card-val { color: var(--ast-cat-cond-val); }
 
   .ast-card.cat-branch-then {
-    background: #EFF6FF;
-    border-color: #BFDBFE;
-    border-top: 3px solid #3B82F6;
+    background: var(--ast-cat-then-bg);
+    border-color: var(--ast-cat-then-border);
+    border-top: 3px solid var(--ast-cat-then-top);
   }
-  .ast-card.cat-branch-then .ast-card-type { color: #1D4ED8; }
+  .ast-card.cat-branch-then .ast-card-type { color: var(--ast-cat-then-type); }
+  .ast-card.cat-branch-then .ast-card-val { color: var(--ast-cat-then-val); }
 
   .ast-card.cat-branch-else {
-    background: #FDF2F8;
-    border-color: #FBCFE8;
-    border-top: 3px solid #EC4899;
+    background: var(--ast-cat-else-bg);
+    border-color: var(--ast-cat-else-border);
+    border-top: 3px solid var(--ast-cat-else-top);
   }
-  .ast-card.cat-branch-else .ast-card-type { color: #BE185D; }
+  .ast-card.cat-branch-else .ast-card-type { color: var(--ast-cat-else-type); }
+  .ast-card.cat-branch-else .ast-card-val { color: var(--ast-cat-else-val); }
 
   .ast-card.cat-leaf-num {
-    background: #F0FDFA;
-    border-color: #99F6E4;
-    border-top: 3px solid #0891B2;
+    background: var(--ast-cat-num-bg);
+    border-color: var(--ast-cat-num-border);
+    border-top: 3px solid var(--ast-cat-num-top);
   }
-  .ast-card.cat-leaf-num .ast-card-type { color: #0E7490; }
-  .ast-card.cat-leaf-num .ast-card-val { color: #155E75; }
+  .ast-card.cat-leaf-num .ast-card-type { color: var(--ast-cat-num-type); }
+  .ast-card.cat-leaf-num .ast-card-val { color: var(--ast-cat-num-val); }
 
   .ast-card.cat-leaf-id {
-    background: #EFF6FF;
-    border-color: #BFDBFE;
-    border-top: 3px solid #2563EB;
+    background: var(--ast-cat-id-bg);
+    border-color: var(--ast-cat-id-border);
+    border-top: 3px solid var(--ast-cat-id-top);
   }
-  .ast-card.cat-leaf-id .ast-card-type { color: #1D4ED8; }
-  .ast-card.cat-leaf-id .ast-card-val { color: #1E3A8A; }
+  .ast-card.cat-leaf-id .ast-card-type { color: var(--ast-cat-id-type); }
+  .ast-card.cat-leaf-id .ast-card-val { color: var(--ast-cat-id-val); }
 
   .ast-card.cat-leaf-str {
-    background: #FFF7ED;
-    border-color: #FED7AA;
-    border-top: 3px solid #EA580C;
+    background: var(--ast-cat-str-bg);
+    border-color: var(--ast-cat-str-border);
+    border-top: 3px solid var(--ast-cat-str-top);
   }
-  .ast-card.cat-leaf-str .ast-card-type { color: #C2410C; }
-  .ast-card.cat-leaf-str .ast-card-val { color: #7C2D12; }
+  .ast-card.cat-leaf-str .ast-card-type { color: var(--ast-cat-str-type); }
+  .ast-card.cat-leaf-str .ast-card-val { color: var(--ast-cat-str-val); }
 
   /* Connectors */
   .ast-children {
@@ -1111,7 +1881,7 @@
     left: 50%;
     width: 2px;
     height: 22px;
-    background: #94A3B8;
+    background: var(--ast-connector-line);
     transform: translateX(-50%);
   }
   .ast-child-branch {
@@ -1127,7 +1897,7 @@
     position: absolute;
     top: 0;
     height: 2px;
-    background: #94A3B8;
+    background: var(--ast-connector-line);
   }
   .ast-child-branch::before {
     left: 0;
@@ -1148,7 +1918,7 @@
     left: 50%;
     width: 2px;
     height: 22px;
-    background: #94A3B8;
+    background: var(--ast-connector-line);
     transform: translateX(-50%);
   }
 
@@ -1157,11 +1927,11 @@
     top: 3px;
     font-size: 0.62rem;
     font-weight: 700;
-    color: var(--text-secondary);
-    background: var(--bg-surface);
+    color: var(--ast-badge-text);
+    background: var(--ast-badge-bg);
     padding: 1px 6px;
     border-radius: 4px;
-    border: 1px solid var(--border);
+    border: 1px solid var(--ast-badge-border);
     z-index: 4;
     user-select: none;
     line-height: 1.2;
@@ -1300,11 +2070,15 @@
   .explainer-takeaway {
     margin-top: 10px;
     font-size: 0.82rem;
-    color: #1E293B;
-    background: var(--bg-surface-alt);
+    color: var(--explainer-takeaway-text);
+    background: var(--explainer-takeaway-bg);
     padding: 8px 12px;
     border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
+    border: 1px solid var(--explainer-takeaway-border);
+  }
+  .explainer-takeaway strong {
+    color: var(--text-primary);
+    font-weight: 700;
   }
 
   /* Diff Viewer Styles */
@@ -1337,9 +2111,9 @@
     line-height: 1.5;
   }
   .diff-table tr:last-child td { border-bottom: none; }
-  .diff-row-added td:nth-child(2) { background: #ECFDF5; color: #065F46; }
-  .diff-row-removed td:nth-child(1) { background: #FEF2F2; color: #991B1B; }
-  .diff-row-modified td { background: #FFFBEB; color: #92400E; }
+  .diff-row-added td:nth-child(2) { background: var(--diff-row-added-bg); color: var(--diff-row-added-text); }
+  .diff-row-removed td:nth-child(1) { background: var(--diff-row-removed-bg); color: var(--diff-row-removed-text); }
+  .diff-row-modified td { background: var(--diff-row-modified-bg); color: var(--diff-row-modified-text); }
 
   /* Diff Status Badges & Controls */
   .diff-status-pill {
@@ -1428,14 +2202,14 @@
     border: 1px solid var(--border);
   }
   .diff-legend-chip.chip-a {
-    color: #991B1B;
-    background: #FFF5F5;
-    border-color: #FECACA;
+    color: var(--diff-pill-a-text);
+    background: var(--diff-header-a-bg);
+    border-color: var(--diff-header-a-border);
   }
   .diff-legend-chip.chip-b {
-    color: #166534;
-    background: #F0FDF4;
-    border-color: #BBF7D0;
+    color: var(--diff-pill-b-text);
+    background: var(--diff-header-b-bg);
+    border-color: var(--diff-header-b-border);
   }
   .legend-dot {
     width: 8px;
@@ -1483,12 +2257,12 @@
     font-size: 0.82rem;
   }
   .diff-ast-panel-header.header-a {
-    background: #FEF2F2;
-    border-color: #FECACA;
+    background: var(--diff-header-a-bg);
+    border-color: var(--diff-header-a-border);
   }
   .diff-ast-panel-header.header-b {
-    background: #F0FDF4;
-    border-color: #BBF7D0;
+    background: var(--diff-header-b-bg);
+    border-color: var(--diff-header-b-border);
   }
 
   .panel-header-left {
@@ -1505,14 +2279,14 @@
     border-radius: var(--radius-sm);
   }
   .diff-version-pill.pill-ver-a {
-    background: #FEE2E2;
-    color: #991B1B;
-    border: 1px solid #FCA5A5;
+    background: var(--diff-pill-a-bg);
+    color: var(--diff-pill-a-text);
+    border: 1px solid var(--diff-pill-a-border);
   }
   .diff-version-pill.pill-ver-b {
-    background: #DCFCE7;
-    color: #166534;
-    border: 1px solid #86EFAC;
+    background: var(--diff-pill-b-bg);
+    color: var(--diff-pill-b-text);
+    border: 1px solid var(--diff-pill-b-border);
   }
 
   .panel-header-title {
@@ -1554,27 +2328,27 @@
 
   /* Node diff cards */
   .ast-card.diff-card-a {
-    border-color: #F87171 !important;
-    background: #FEF2F2 !important;
+    border-color: var(--ast-diff-a-border) !important;
+    background: var(--ast-diff-a-bg) !important;
     box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.22), 0 3px 8px rgba(239, 68, 68, 0.12) !important;
   }
   .ast-card.diff-card-a .ast-card-type {
-    color: #991B1B !important;
+    color: var(--ast-diff-a-type) !important;
   }
   .ast-card.diff-card-a .ast-card-val {
-    color: #7F1D1D !important;
+    color: var(--ast-diff-a-val) !important;
   }
 
   .ast-card.diff-card-b {
-    border-color: #34D399 !important;
-    background: #F0FDF4 !important;
+    border-color: var(--ast-diff-b-border) !important;
+    background: var(--ast-diff-b-bg) !important;
     box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.22), 0 3px 8px rgba(16, 185, 129, 0.12) !important;
   }
   .ast-card.diff-card-b .ast-card-type {
-    color: #166534 !important;
+    color: var(--ast-diff-b-type) !important;
   }
   .ast-card.diff-card-b .ast-card-val {
-    color: #14532D !important;
+    color: var(--ast-diff-b-val) !important;
   }
 
   .diff-card-badge {
@@ -1591,14 +2365,14 @@
     line-height: 1.2;
   }
   .diff-card-badge.badge-a {
-    background: #FEE2E2;
-    color: #991B1B;
-    border: 1px solid #FCA5A5;
+    background: var(--diff-pill-a-bg);
+    color: var(--diff-pill-a-text);
+    border: 1px solid var(--diff-pill-a-border);
   }
   .diff-card-badge.badge-b {
-    background: #DCFCE7;
-    color: #166534;
-    border: 1px solid #86EFAC;
+    background: var(--diff-pill-b-bg);
+    color: var(--diff-pill-b-text);
+    border: 1px solid var(--diff-pill-b-border);
   }
 
   /* Empty state box */
@@ -1646,11 +2420,21 @@
     </div>
 
     <div class="header-controls">
-      <div class="lang-capsules">
-        <span class="capsule capsule-active" id="capsuleC">C Subset</span>
-        <span class="capsule" id="capsuleToy">Toy Lang</span>
-        <span class="capsule" id="capsulePython">Python</span>
+      <div class="lang-capsules" id="headerCapsules">
+        <span class="capsule capsule-active" id="capsuleC" onclick="selectTargetLanguage('c')" style="cursor:pointer;" title="Switch to C">C</span>
+        <span class="capsule" id="capsuleCpp" onclick="selectTargetLanguage('cpp')" style="cursor:pointer;" title="Switch to C++">C++</span>
+        <span class="capsule" id="capsuleJava" onclick="selectTargetLanguage('java')" style="cursor:pointer;" title="Switch to Java">Java</span>
+        <span class="capsule" id="capsulePython" onclick="selectTargetLanguage('python')" style="cursor:pointer;" title="Switch to Python">Python</span>
+        <span class="capsule" id="capsuleJs" onclick="selectTargetLanguage('js')" style="cursor:pointer;" title="Switch to JavaScript">JavaScript</span>
+        <span class="capsule" id="capsuleToy" onclick="selectTargetLanguage('toy')" style="cursor:pointer;" title="Switch to Toy Lang">Toy Lang</span>
       </div>
+
+      <!-- Theme Toggle Button -->
+      <button class="switch-btn" id="btnThemeToggle" onclick="toggleTheme()" title="Toggle Dark/Light Theme (Alt+T)" aria-label="Toggle Theme">
+        <svg id="themeIconSun" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="display:none;"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+        <svg id="themeIconMoon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+        <span id="themeToggleText">Dark Theme</span>
+      </button>
 
       <!-- Segmented Mode Switcher -->
       <div class="segmented-switch">
@@ -1688,29 +2472,50 @@
             <div class="editor-toolbar">
               <div class="toolbar-row">
                 <div class="form-control-group">
-                  <label for="langSelect">Target Language</label>
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <label for="langSelect">Target Language</label>
+                    <button type="button" class="btn-specs-link" onclick="openLanguageSpecsModal()" title="View supported features &amp; compiler limits">Specs &amp; Limits ⓘ</button>
+                  </div>
                   <select id="langSelect" class="form-select" onchange="onLanguageChange()">
-                    <option value="c" selected>C (Subset: #include, main, types, printf)</option>
+                    <option value="c" selected>C (C99 Educational Subset)</option>
+                    <option value="cpp">C++ (Classes, cout &lt;&lt;, cin &gt;&gt;, auto)</option>
+                    <option value="java">Java (public class Main, static main, println)</option>
+                    <option value="python">Python (Functions, print, control flow)</option>
+                    <option value="js">JavaScript (let/const, functions, console.log)</option>
                     <option value="toy">Toy Mini-Lang (x = 5, y = x + 2)</option>
-                    <option value="python">Python Subset (Assignments &amp; Expressions)</option>
                   </select>
                 </div>
               </div>
 
               <div class="toolbar-row">
                 <div class="form-control-group">
-                  <label for="presetSelect">Example Preset</label>
+                  <div style="display:flex; justify-content:space-between; align-items:center;">
+                    <label for="presetSelect">Example Preset</label>
+                    <span id="activeLanguageBadge" style="font-size:0.72rem; color:var(--text-secondary); font-weight:600;">C Compiler Active</span>
+                  </div>
                   <select id="presetSelect" class="form-select" onchange="loadSelectedPreset()">
-                    <option value="c_complete">C Complete: #include &lt;stdio.h&gt; &amp; main() with Math</option>
-                    <option value="c_precedence">C Precedence: 2 + 3 * 4 vs (2 + 3) * 4</option>
-                    <option value="c_lexical_error">C Lexical Error: Unrecognized '@' Character</option>
-                    <option value="c_syntax_error">C Syntax Error: Missing Operand ('3 + ;')</option>
-                    <option value="c_semantic_error">C Semantic Error: Undeclared Variable Error</option>
-                    <option value="c_semantic_warning">C Semantic Warning: Uninitialized Variable</option>
-                    <option value="c_conditional">C Control Flow: if / else Branching</option>
-                    <option value="toy_pipeline">Toy Language: Multi-line Variable Assignment</option>
+                    <option value="c_complete" selected>C: Complete Program (#include &amp; printf)</option>
+                    <option value="c_precedence">C: Precedence Demo ((2 + 3) * 4)</option>
+                    <option value="c_variables">C: Typed Variables &amp; Declarations</option>
+                    <option value="c_conditional">C: Control Flow (if / else)</option>
+                    <option value="c_unsupported_loop">C [Unsupported]: while Loop (Educational Diagnostic)</option>
+                    <option value="c_function">C: Functions &amp; Parameter Passing</option>
+                    <option value="c_semantic_error">C [Error]: Typo 'rintf' Diagnostic</option>
+                    <option value="c_lexical_error">C [Error]: Unrecognized '@' Character</option>
+                    <option value="c_syntax_error">C [Error]: Missing Operand '3 + ;'</option>
+                    <option value="c_semantic_warning">C [Warning]: Uninitialized Var</option>
+                    <option value="c_large_benchmark">C [Scale]: 500-Line Large Benchmark</option>
                   </select>
                 </div>
+              </div>
+
+              <div class="toolbar-row" style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+                <input type="file" id="sourceFileInput" accept=".c,.cpp,.h,.hpp,.cc,.cxx,.java,.js,.mjs,.py,.toy,.txt" style="display:none;" onchange="handleSourceFileUpload(event)" />
+                <button type="button" class="btn-upload-file" onclick="document.getElementById('sourceFileInput').click()" title="Upload source file from disk (.c, .cpp, .java, .js, .py)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                  <span>Upload Source File</span>
+                </button>
+                <span id="fileUploadStatus" style="font-size:0.72rem; color:var(--text-muted); font-weight:500;"></span>
               </div>
             </div>
 
@@ -1744,6 +2549,16 @@ int main() {
                 <span class="status-dot dot-ready" id="statusDot"></span>
                 <span id="compileStatus">Ready to compile. Click Run Full Compiler Pipeline.</span>
               </div>
+            </div>
+
+            <!-- Live Program Output Preview Banner -->
+            <div id="quickOutputBanner" style="display:none;" class="ide-alert ide-alert-output">
+              <div class="output-preview-header">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+                <strong>Program Output (stdout):</strong>
+                <button type="button" class="btn-link-tab" onclick="showStageTab('exec')">View Sandbox Console &rarr;</button>
+              </div>
+              <pre id="quickOutputText" class="quick-output-pre"></pre>
             </div>
 
             <!-- Outdated Notification Banner -->
@@ -1829,7 +2644,18 @@ int main() {
 
               <div class="step-divider">&rsaquo;</div>
 
-              <!-- Step 6: Explainer -->
+              <!-- Step 6: Output / Execution -->
+              <div class="step-node status-not-run" id="stepNodeExec" onclick="showStageTab('exec')">
+                <span class="step-icon-badge" id="stepBadgeExec">&gt;_</span>
+                <div class="step-details">
+                  <span class="step-title">Execution</span>
+                  <span class="step-sub" id="stepSubExec">Not Run</span>
+                </div>
+              </div>
+
+              <div class="step-divider">&rsaquo;</div>
+
+              <!-- Step 7: Explainer -->
               <div class="step-node status-not-run" id="stepNodeExplain" onclick="showStageTab('explain')">
                 <span class="step-icon-badge" id="stepBadgeExplain">&starf;</span>
                 <div class="step-details">
@@ -1872,6 +2698,19 @@ int main() {
             </div>
             <div id="tokenSummaryPills" style="margin-bottom:14px; display:flex; gap:6px; flex-wrap:wrap;"></div>
             <div id="tokensContentContainer">
+              <div class="table-pagination-bar" id="tokensPaginationBar" style="display:none;">
+                <div class="pagination-info" id="tokensPaginationInfo">Showing 1–50 of 0 tokens</div>
+                <div class="pagination-controls">
+                  <button class="btn-page" id="btnTokensFirst" onclick="changeTokensPage('first')">&laquo;</button>
+                  <button class="btn-page" id="btnTokensPrev" onclick="changeTokensPage('prev')">&lsaquo;</button>
+                  <span class="page-indicator" id="tokensPageIndicator">Page 1 of 1</span>
+                  <button class="btn-page" id="btnTokensNext" onclick="changeTokensPage('next')">&rsaquo;</button>
+                  <button class="btn-page" id="btnTokensLast" onclick="changeTokensPage('last')">&raquo;</button>
+                </div>
+                <div class="pagination-search">
+                  <input type="text" id="tokensFilterInput" placeholder="Filter type or value..." oninput="filterTokens(this.value)" class="form-input-sm" />
+                </div>
+              </div>
               <table class="data-table" id="tokensTable">
                 <thead>
                   <tr>
@@ -1921,6 +2760,14 @@ int main() {
                 </div>
               </div>
             </div>
+            <div class="ast-pagination-bar" id="astPaginationBar" style="display:none;">
+              <span id="astPaginationInfo">Showing statements 1–30 of 0</span>
+              <div class="pagination-controls">
+                <button class="btn-page" onclick="changeAstPage(-1)">&lsaquo; Prev 30</button>
+                <span class="page-indicator" id="astPageIndicator">Page 1 of 1</span>
+                <button class="btn-page" onclick="changeAstPage(1)">Next 30 &rsaquo;</button>
+              </div>
+            </div>
             <div class="ast-viewport" id="astViewport">
               <!-- Expanded View Sticky Control Bar (Visible in Expanded/Fullscreen Mode) -->
               <div class="ast-expanded-header" id="astExpandedHeader">
@@ -1967,7 +2814,18 @@ int main() {
             </div>
             <div id="semanticStatusBox"></div>
             <div id="semanticTableSection">
-              <h3 style="font-size:0.90rem; font-weight:700; margin:18px 0 8px 0; color:var(--text-primary);">Symbol Table</h3>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin:18px 0 8px 0;">
+                <h3 style="font-size:0.90rem; font-weight:700; margin:0; color:var(--text-primary);">Symbol Table</h3>
+                <input type="text" id="symbolsFilterInput" placeholder="Search symbols..." oninput="filterSymbols(this.value)" class="form-input-sm" style="width:180px;" />
+              </div>
+              <div class="table-pagination-bar" id="symbolsPaginationBar" style="display:none;">
+                <div class="pagination-info" id="symbolsPaginationInfo">Showing symbols</div>
+                <div class="pagination-controls">
+                  <button class="btn-page" onclick="changeSymbolsPage(-1)">&lsaquo; Prev</button>
+                  <span class="page-indicator" id="symbolsPageIndicator">Page 1 of 1</span>
+                  <button class="btn-page" onclick="changeSymbolsPage(1)">Next &rsaquo;</button>
+                </div>
+              </div>
               <table class="data-table">
                 <thead>
                   <tr>
@@ -2006,7 +2864,17 @@ int main() {
                   <p style="font-size:0.80rem; color:var(--text-secondary); margin:0;">Each temporary register stores an intermediate sub-expression value, flattening recursive tree evaluation into sequential execution.</p>
                 </div>
               </div>
-              <h3 style="font-size:0.90rem; font-weight:700; margin:16px 0 8px 0; color:var(--text-primary);">Formal Quadruples Table</h3>
+              <div style="display:flex; justify-content:space-between; align-items:center; margin:16px 0 8px 0;">
+                <h3 style="font-size:0.90rem; font-weight:700; margin:0; color:var(--text-primary);">Formal Quadruples Table</h3>
+              </div>
+              <div class="table-pagination-bar" id="quadsPaginationBar" style="display:none;">
+                <div class="pagination-info" id="quadsPaginationInfo">Showing 1–50 of 0 quadruples</div>
+                <div class="pagination-controls">
+                  <button class="btn-page" onclick="changeQuadsPage(-1)">&lsaquo; Prev</button>
+                  <span class="page-indicator" id="quadsPageIndicator">Page 1 of 1</span>
+                  <button class="btn-page" onclick="changeQuadsPage(1)">Next &rsaquo;</button>
+                </div>
+              </div>
               <table class="data-table">
                 <thead>
                   <tr>
@@ -2044,7 +2912,69 @@ int main() {
             </div>
           </div>
 
-          <!-- Stage 6: Guided Explainer -->
+          <!-- Stage 6: Program Execution & Runtime Sandbox -->
+          <div class="stage-panel" id="stageExec">
+            <div class="stage-header">
+              <div class="stage-header-left">
+                <h2>Stage 6: Program Execution (Runtime Sandbox)</h2>
+                <p>Simulates or safely runs program logic in an isolated execution sandbox, capturing standard output and return codes.</p>
+              </div>
+              <div class="stage-header-right">
+                <span id="stageStatusExec" class="pill pill-neutral">Not Run</span>
+                <span id="execEngineBadge" class="pill pill-neutral" style="display:none;">Engine: None</span>
+                <span id="execTimeBadge" class="pill pill-neutral" style="display:none;">0.0 ms</span>
+              </div>
+            </div>
+
+            <!-- Pedagogical Distinction Banner -->
+            <div class="pedagogical-banner">
+              <div class="pedagogical-banner-icon">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+              </div>
+              <div class="pedagogical-banner-body">
+                <strong>Compiler Theory: Target Code Generation vs. Program Execution</strong>
+                <p>Generating assembly (Stage 5) is a <em>static translation</em> process: the compiler maps intermediate instructions into target architecture assembly without running the program. In contrast, <em>program execution</em> (Stage 6) is dynamic runtime evaluation: state registers mutate, memory is updated, and standard I/O functions emit characters to stdout.</p>
+              </div>
+            </div>
+
+            <!-- Terminal Output Console -->
+            <div class="terminal-container">
+              <div class="terminal-topbar">
+                <div class="terminal-dots">
+                  <span class="terminal-dot dot-red"></span>
+                  <span class="terminal-dot dot-yellow"></span>
+                  <span class="terminal-dot dot-green"></span>
+                </div>
+                <div class="terminal-title" id="terminalTitle">stdout / stderr console</div>
+                <div class="terminal-actions">
+                  <button type="button" class="btn-term-copy" onclick="copyTerminalOutput()">Copy Output</button>
+                </div>
+              </div>
+              <pre class="terminal-body" id="programTerminalOutput">$ Program output awaiting compilation...</pre>
+            </div>
+
+            <!-- Execution Metrics Cards -->
+            <div class="exec-metrics-grid" id="execMetricsGrid" style="display:none;">
+              <div class="metric-card">
+                <div class="metric-label">Execution Status</div>
+                <div class="metric-val" id="metricExecStatus">Success</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Exit Code</div>
+                <div class="metric-val" id="metricExitCode">0</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Execution Time</div>
+                <div class="metric-val" id="metricExecTime">0.5 ms</div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Sandbox Engine</div>
+                <div class="metric-val" id="metricExecEngine">TAC VM Sandbox</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stage 7: Guided Explainer -->
           <div class="stage-panel" id="stageExplain">
             <div class="stage-header">
               <div class="stage-header-left">
@@ -2231,6 +3161,105 @@ int main() {
 
 <script>
 let currentAssemblyData = {};
+
+// Theme Management
+function initTheme() {
+  const savedTheme = localStorage.getItem('cpv_theme');
+  const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const initialTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+  applyTheme(initialTheme);
+}
+
+function applyTheme(theme) {
+  document.documentElement.setAttribute('data-theme', theme);
+  const isDark = theme === 'dark';
+  const iconSun = document.getElementById('themeIconSun');
+  const iconMoon = document.getElementById('themeIconMoon');
+  const text = document.getElementById('themeToggleText');
+  if (iconSun) iconSun.style.display = isDark ? 'inline-block' : 'none';
+  if (iconMoon) iconMoon.style.display = isDark ? 'none' : 'inline-block';
+  if (text) text.textContent = isDark ? 'Light Theme' : 'Dark Theme';
+  localStorage.setItem('cpv_theme', theme);
+}
+
+function toggleTheme() {
+  const current = document.documentElement.getAttribute('data-theme') || 'light';
+  const next = current === 'dark' ? 'light' : 'dark';
+  applyTheme(next);
+}
+
+document.addEventListener('keydown', function(e) {
+  if (e.altKey && (e.key === 't' || e.key === 'T')) {
+    e.preventDefault();
+    toggleTheme();
+  }
+});
+
+// Language Specifications Modal
+let languageSpecsCache = null;
+async function openLanguageSpecsModal() {
+  const modal = document.getElementById('languageSpecsModal');
+  const title = document.getElementById('specsModalLanguageTitle');
+  const body = document.getElementById('specsModalContent');
+  const currentLang = document.getElementById('langSelect')?.value || 'c';
+
+  if (!modal || !body) return;
+  modal.style.display = 'flex';
+
+  if (!languageSpecsCache) {
+    try {
+      const res = await fetch('/languages');
+      languageSpecsCache = await res.json();
+    } catch(e) {
+      console.error("Specs fetch error:", e);
+    }
+  }
+
+  const spec = languageSpecsCache ? languageSpecsCache[currentLang] : null;
+  if (!spec) {
+    body.innerHTML = `<p style="color:var(--text-muted);">No specification details available for ${escapeHtml(currentLang)}.</p>`;
+    return;
+  }
+
+  if (title) title.textContent = `${spec.name} (${spec.extension})`;
+
+  body.innerHTML = `
+    <div style="margin-bottom:14px; font-size:0.86rem; color:var(--text-secondary); line-height:1.5;">
+      ${escapeHtml(spec.description)}
+    </div>
+    <div style="margin-bottom:16px;">
+      <h4 style="font-size:0.82rem; text-transform:uppercase; color:var(--success); font-weight:700; margin:0 0 6px 0;">Supported Language Features:</h4>
+      <ul style="margin:0; padding-left:20px; font-size:0.82rem; color:var(--text-primary); line-height:1.6;">
+        ${spec.features.map(f => `<li>${escapeHtml(f)}</li>`).join('')}
+      </ul>
+    </div>
+    <div>
+      <h4 style="font-size:0.82rem; text-transform:uppercase; color:var(--warning); font-weight:700; margin:0 0 6px 0;">Current Compiler Limitations &amp; Scope:</h4>
+      <ul style="margin:0; padding-left:20px; font-size:0.82rem; color:var(--text-secondary); line-height:1.6;">
+        ${spec.limitations.map(l => `<li>${escapeHtml(l)}</li>`).join('')}
+      </ul>
+    </div>
+  `;
+}
+
+function closeLanguageSpecsModal() {
+  const modal = document.getElementById('languageSpecsModal');
+  if (modal) modal.style.display = 'none';
+}
+
+function handleSpecsModalBackdrop(e) {
+  if (e.target && e.target.id === 'languageSpecsModal') {
+    closeLanguageSpecsModal();
+  }
+}
+
+function copyTerminalOutput() {
+  const term = document.getElementById('programTerminalOutput');
+  if (!term) return;
+  navigator.clipboard.writeText(term.textContent).then(() => {
+    alert("Program terminal output copied to clipboard!");
+  }).catch(() => {});
+}
 let currentAsmMode = "educational";
 
 // Diff Lifecycle State
@@ -2242,8 +3271,21 @@ let lastDiffSourceA = '';
 let lastDiffSourceB = '';
 let lastDiffStage = 'ir';
 
-// Presets data loaded from backend
-let presetsMap = {};
+// Embedded Presets Fallback & State
+const EMBEDDED_PRESETS = {"c_complete": {"name": "C: Complete Program (#include & printf)", "language": "c", "category": "hello", "source": "#include <stdio.h>\n\nint main() {\n    int total = 3 + 4 * 2;\n    printf(\"Result = %d\\n\", total);\n    return 0;\n}"}, "c_precedence": {"name": "C: Precedence Demo ((2 + 3) * 4)", "language": "c", "category": "arithmetic", "source": "#include <stdio.h>\n\nint main() {\n    int x = 2 + 3 * 4;\n    int y = (2 + 3) * 4;\n    return 0;\n}"}, "c_variables": {"name": "C: Typed Variables & Declarations", "language": "c", "category": "variables", "source": "#include <stdio.h>\n\nint main() {\n    int count = 10;\n    float rate = 2.5;\n    char letter = 'A';\n    int total = count * 2;\n    printf(\"Total = %d\\n\", total);\n    return 0;\n}"}, "c_conditional": {"name": "C: Control Flow (if / else)", "language": "c", "category": "conditional", "source": "#include <stdio.h>\n\nint main() {\n    int score = 85;\n    int bonus = 0;\n    if (score > 80) {\n        bonus = 10;\n    } else {\n        bonus = 2;\n    }\n    return 0;\n}"}, "c_unsupported_loop": {"name": "C [Unsupported]: while Loop (Educational Diagnostic)", "language": "c", "category": "loop", "source": "#include <stdio.h>\n\nint main() {\n    int i = 0;\n    while (i < 5) {\n        i = i + 1;\n    }\n    return 0;\n}"}, "c_function": {"name": "C: Functions & Parameter Passing", "language": "c", "category": "function", "source": "#include <stdio.h>\n\nint multiply(int a, int b) {\n    return a * b;\n}\n\nint main() {\n    int x = 6;\n    int y = 7;\n    int product = multiply(x, y);\n    printf(\"Product = %d\\n\", product);\n    return 0;\n}"}, "c_semantic_error": {"name": "C [Error]: Typo 'rintf' Diagnostic", "language": "c", "category": "error", "source": "#include <stdio.h>\n\nint main() {\n    int total = 3 + 4 * 2;\n    rintf(\"Result = %d\\n\", total);\n    return 0;\n}"}, "c_lexical_error": {"name": "C [Error]: Unrecognized '@' Character", "language": "c", "category": "error", "source": "#include <stdio.h>\n\nint main() {\n    int total = 3 @ 4;\n    return 0;\n}"}, "c_syntax_error": {"name": "C [Error]: Missing Operand '3 + ;'", "language": "c", "category": "error", "source": "#include <stdio.h>\n\nint main() {\n    int total = 3 + ;\n    return 0;\n}"}, "c_semantic_warning": {"name": "C [Warning]: Uninitialized Var", "language": "c", "category": "warning", "source": "#include <stdio.h>\n\nint main() {\n    int a;\n    int b = a + 5;\n    return 0;\n}"}, "c_large_benchmark": {"name": "C [Scale]: 500-Line Large Benchmark", "language": "c", "category": "scale", "source": "#include <stdio.h>\n\nint main() {\n    int acc = 0;\n    int v_1 = 1 * 2 + 1;\n    acc = acc + v_1;\n    int v_2 = 2 * 2 + 1;\n    acc = acc + v_2;\n    int v_3 = 3 * 2 + 1;\n    acc = acc + v_3;\n    int v_4 = 4 * 2 + 1;\n    acc = acc + v_4;\n    int v_5 = 5 * 2 + 1;\n    acc = acc + v_5;\n    int v_6 = 6 * 2 + 1;\n    acc = acc + v_6;\n    int v_7 = 7 * 2 + 1;\n    acc = acc + v_7;\n    int v_8 = 8 * 2 + 1;\n    acc = acc + v_8;\n    int v_9 = 9 * 2 + 1;\n    acc = acc + v_9;\n    int v_10 = 10 * 2 + 1;\n    acc = acc + v_10;\n    int v_11 = 11 * 2 + 1;\n    acc = acc + v_11;\n    int v_12 = 12 * 2 + 1;\n    acc = acc + v_12;\n    int v_13 = 13 * 2 + 1;\n    acc = acc + v_13;\n    int v_14 = 14 * 2 + 1;\n    acc = acc + v_14;\n    int v_15 = 15 * 2 + 1;\n    acc = acc + v_15;\n    int v_16 = 16 * 2 + 1;\n    acc = acc + v_16;\n    int v_17 = 17 * 2 + 1;\n    acc = acc + v_17;\n    int v_18 = 18 * 2 + 1;\n    acc = acc + v_18;\n    int v_19 = 19 * 2 + 1;\n    acc = acc + v_19;\n    int v_20 = 20 * 2 + 1;\n    acc = acc + v_20;\n    int v_21 = 21 * 2 + 1;\n    acc = acc + v_21;\n    int v_22 = 22 * 2 + 1;\n    acc = acc + v_22;\n    int v_23 = 23 * 2 + 1;\n    acc = acc + v_23;\n    int v_24 = 24 * 2 + 1;\n    acc = acc + v_24;\n    int v_25 = 25 * 2 + 1;\n    acc = acc + v_25;\n    int v_26 = 26 * 2 + 1;\n    acc = acc + v_26;\n    int v_27 = 27 * 2 + 1;\n    acc = acc + v_27;\n    int v_28 = 28 * 2 + 1;\n    acc = acc + v_28;\n    int v_29 = 29 * 2 + 1;\n    acc = acc + v_29;\n    int v_30 = 30 * 2 + 1;\n    acc = acc + v_30;\n    int v_31 = 31 * 2 + 1;\n    acc = acc + v_31;\n    int v_32 = 32 * 2 + 1;\n    acc = acc + v_32;\n    int v_33 = 33 * 2 + 1;\n    acc = acc + v_33;\n    int v_34 = 34 * 2 + 1;\n    acc = acc + v_34;\n    int v_35 = 35 * 2 + 1;\n    acc = acc + v_35;\n    int v_36 = 36 * 2 + 1;\n    acc = acc + v_36;\n    int v_37 = 37 * 2 + 1;\n    acc = acc + v_37;\n    int v_38 = 38 * 2 + 1;\n    acc = acc + v_38;\n    int v_39 = 39 * 2 + 1;\n    acc = acc + v_39;\n    int v_40 = 40 * 2 + 1;\n    acc = acc + v_40;\n    int v_41 = 41 * 2 + 1;\n    acc = acc + v_41;\n    int v_42 = 42 * 2 + 1;\n    acc = acc + v_42;\n    int v_43 = 43 * 2 + 1;\n    acc = acc + v_43;\n    int v_44 = 44 * 2 + 1;\n    acc = acc + v_44;\n    int v_45 = 45 * 2 + 1;\n    acc = acc + v_45;\n    int v_46 = 46 * 2 + 1;\n    acc = acc + v_46;\n    int v_47 = 47 * 2 + 1;\n    acc = acc + v_47;\n    int v_48 = 48 * 2 + 1;\n    acc = acc + v_48;\n    int v_49 = 49 * 2 + 1;\n    acc = acc + v_49;\n    int v_50 = 50 * 2 + 1;\n    acc = acc + v_50;\n    int v_51 = 51 * 2 + 1;\n    acc = acc + v_51;\n    int v_52 = 52 * 2 + 1;\n    acc = acc + v_52;\n    int v_53 = 53 * 2 + 1;\n    acc = acc + v_53;\n    int v_54 = 54 * 2 + 1;\n    acc = acc + v_54;\n    int v_55 = 55 * 2 + 1;\n    acc = acc + v_55;\n    int v_56 = 56 * 2 + 1;\n    acc = acc + v_56;\n    int v_57 = 57 * 2 + 1;\n    acc = acc + v_57;\n    int v_58 = 58 * 2 + 1;\n    acc = acc + v_58;\n    int v_59 = 59 * 2 + 1;\n    acc = acc + v_59;\n    int v_60 = 60 * 2 + 1;\n    acc = acc + v_60;\n    int v_61 = 61 * 2 + 1;\n    acc = acc + v_61;\n    int v_62 = 62 * 2 + 1;\n    acc = acc + v_62;\n    int v_63 = 63 * 2 + 1;\n    acc = acc + v_63;\n    int v_64 = 64 * 2 + 1;\n    acc = acc + v_64;\n    int v_65 = 65 * 2 + 1;\n    acc = acc + v_65;\n    int v_66 = 66 * 2 + 1;\n    acc = acc + v_66;\n    int v_67 = 67 * 2 + 1;\n    acc = acc + v_67;\n    int v_68 = 68 * 2 + 1;\n    acc = acc + v_68;\n    int v_69 = 69 * 2 + 1;\n    acc = acc + v_69;\n    int v_70 = 70 * 2 + 1;\n    acc = acc + v_70;\n    int v_71 = 71 * 2 + 1;\n    acc = acc + v_71;\n    int v_72 = 72 * 2 + 1;\n    acc = acc + v_72;\n    int v_73 = 73 * 2 + 1;\n    acc = acc + v_73;\n    int v_74 = 74 * 2 + 1;\n    acc = acc + v_74;\n    int v_75 = 75 * 2 + 1;\n    acc = acc + v_75;\n    int v_76 = 76 * 2 + 1;\n    acc = acc + v_76;\n    int v_77 = 77 * 2 + 1;\n    acc = acc + v_77;\n    int v_78 = 78 * 2 + 1;\n    acc = acc + v_78;\n    int v_79 = 79 * 2 + 1;\n    acc = acc + v_79;\n    int v_80 = 80 * 2 + 1;\n    acc = acc + v_80;\n    int v_81 = 81 * 2 + 1;\n    acc = acc + v_81;\n    int v_82 = 82 * 2 + 1;\n    acc = acc + v_82;\n    int v_83 = 83 * 2 + 1;\n    acc = acc + v_83;\n    int v_84 = 84 * 2 + 1;\n    acc = acc + v_84;\n    int v_85 = 85 * 2 + 1;\n    acc = acc + v_85;\n    int v_86 = 86 * 2 + 1;\n    acc = acc + v_86;\n    int v_87 = 87 * 2 + 1;\n    acc = acc + v_87;\n    int v_88 = 88 * 2 + 1;\n    acc = acc + v_88;\n    int v_89 = 89 * 2 + 1;\n    acc = acc + v_89;\n    int v_90 = 90 * 2 + 1;\n    acc = acc + v_90;\n    int v_91 = 91 * 2 + 1;\n    acc = acc + v_91;\n    int v_92 = 92 * 2 + 1;\n    acc = acc + v_92;\n    int v_93 = 93 * 2 + 1;\n    acc = acc + v_93;\n    int v_94 = 94 * 2 + 1;\n    acc = acc + v_94;\n    int v_95 = 95 * 2 + 1;\n    acc = acc + v_95;\n    int v_96 = 96 * 2 + 1;\n    acc = acc + v_96;\n    int v_97 = 97 * 2 + 1;\n    acc = acc + v_97;\n    int v_98 = 98 * 2 + 1;\n    acc = acc + v_98;\n    int v_99 = 99 * 2 + 1;\n    acc = acc + v_99;\n    int v_100 = 100 * 2 + 1;\n    acc = acc + v_100;\n    int v_101 = 101 * 2 + 1;\n    acc = acc + v_101;\n    int v_102 = 102 * 2 + 1;\n    acc = acc + v_102;\n    int v_103 = 103 * 2 + 1;\n    acc = acc + v_103;\n    int v_104 = 104 * 2 + 1;\n    acc = acc + v_104;\n    int v_105 = 105 * 2 + 1;\n    acc = acc + v_105;\n    int v_106 = 106 * 2 + 1;\n    acc = acc + v_106;\n    int v_107 = 107 * 2 + 1;\n    acc = acc + v_107;\n    int v_108 = 108 * 2 + 1;\n    acc = acc + v_108;\n    int v_109 = 109 * 2 + 1;\n    acc = acc + v_109;\n    int v_110 = 110 * 2 + 1;\n    acc = acc + v_110;\n    int v_111 = 111 * 2 + 1;\n    acc = acc + v_111;\n    int v_112 = 112 * 2 + 1;\n    acc = acc + v_112;\n    int v_113 = 113 * 2 + 1;\n    acc = acc + v_113;\n    int v_114 = 114 * 2 + 1;\n    acc = acc + v_114;\n    int v_115 = 115 * 2 + 1;\n    acc = acc + v_115;\n    int v_116 = 116 * 2 + 1;\n    acc = acc + v_116;\n    int v_117 = 117 * 2 + 1;\n    acc = acc + v_117;\n    int v_118 = 118 * 2 + 1;\n    acc = acc + v_118;\n    int v_119 = 119 * 2 + 1;\n    acc = acc + v_119;\n    int v_120 = 120 * 2 + 1;\n    acc = acc + v_120;\n    int v_121 = 121 * 2 + 1;\n    acc = acc + v_121;\n    int v_122 = 122 * 2 + 1;\n    acc = acc + v_122;\n    int v_123 = 123 * 2 + 1;\n    acc = acc + v_123;\n    int v_124 = 124 * 2 + 1;\n    acc = acc + v_124;\n    int v_125 = 125 * 2 + 1;\n    acc = acc + v_125;\n    int v_126 = 126 * 2 + 1;\n    acc = acc + v_126;\n    int v_127 = 127 * 2 + 1;\n    acc = acc + v_127;\n    int v_128 = 128 * 2 + 1;\n    acc = acc + v_128;\n    int v_129 = 129 * 2 + 1;\n    acc = acc + v_129;\n    int v_130 = 130 * 2 + 1;\n    acc = acc + v_130;\n    int v_131 = 131 * 2 + 1;\n    acc = acc + v_131;\n    int v_132 = 132 * 2 + 1;\n    acc = acc + v_132;\n    int v_133 = 133 * 2 + 1;\n    acc = acc + v_133;\n    int v_134 = 134 * 2 + 1;\n    acc = acc + v_134;\n    int v_135 = 135 * 2 + 1;\n    acc = acc + v_135;\n    int v_136 = 136 * 2 + 1;\n    acc = acc + v_136;\n    int v_137 = 137 * 2 + 1;\n    acc = acc + v_137;\n    int v_138 = 138 * 2 + 1;\n    acc = acc + v_138;\n    int v_139 = 139 * 2 + 1;\n    acc = acc + v_139;\n    int v_140 = 140 * 2 + 1;\n    acc = acc + v_140;\n    int v_141 = 141 * 2 + 1;\n    acc = acc + v_141;\n    int v_142 = 142 * 2 + 1;\n    acc = acc + v_142;\n    int v_143 = 143 * 2 + 1;\n    acc = acc + v_143;\n    int v_144 = 144 * 2 + 1;\n    acc = acc + v_144;\n    int v_145 = 145 * 2 + 1;\n    acc = acc + v_145;\n    int v_146 = 146 * 2 + 1;\n    acc = acc + v_146;\n    int v_147 = 147 * 2 + 1;\n    acc = acc + v_147;\n    int v_148 = 148 * 2 + 1;\n    acc = acc + v_148;\n    int v_149 = 149 * 2 + 1;\n    acc = acc + v_149;\n    int v_150 = 150 * 2 + 1;\n    acc = acc + v_150;\n    int v_151 = 151 * 2 + 1;\n    acc = acc + v_151;\n    int v_152 = 152 * 2 + 1;\n    acc = acc + v_152;\n    int v_153 = 153 * 2 + 1;\n    acc = acc + v_153;\n    int v_154 = 154 * 2 + 1;\n    acc = acc + v_154;\n    int v_155 = 155 * 2 + 1;\n    acc = acc + v_155;\n    int v_156 = 156 * 2 + 1;\n    acc = acc + v_156;\n    int v_157 = 157 * 2 + 1;\n    acc = acc + v_157;\n    int v_158 = 158 * 2 + 1;\n    acc = acc + v_158;\n    int v_159 = 159 * 2 + 1;\n    acc = acc + v_159;\n    int v_160 = 160 * 2 + 1;\n    acc = acc + v_160;\n    int v_161 = 161 * 2 + 1;\n    acc = acc + v_161;\n    int v_162 = 162 * 2 + 1;\n    acc = acc + v_162;\n    int v_163 = 163 * 2 + 1;\n    acc = acc + v_163;\n    int v_164 = 164 * 2 + 1;\n    acc = acc + v_164;\n    int v_165 = 165 * 2 + 1;\n    acc = acc + v_165;\n    int v_166 = 166 * 2 + 1;\n    acc = acc + v_166;\n    int v_167 = 167 * 2 + 1;\n    acc = acc + v_167;\n    int v_168 = 168 * 2 + 1;\n    acc = acc + v_168;\n    int v_169 = 169 * 2 + 1;\n    acc = acc + v_169;\n    int v_170 = 170 * 2 + 1;\n    acc = acc + v_170;\n    int v_171 = 171 * 2 + 1;\n    acc = acc + v_171;\n    int v_172 = 172 * 2 + 1;\n    acc = acc + v_172;\n    int v_173 = 173 * 2 + 1;\n    acc = acc + v_173;\n    int v_174 = 174 * 2 + 1;\n    acc = acc + v_174;\n    int v_175 = 175 * 2 + 1;\n    acc = acc + v_175;\n    int v_176 = 176 * 2 + 1;\n    acc = acc + v_176;\n    int v_177 = 177 * 2 + 1;\n    acc = acc + v_177;\n    int v_178 = 178 * 2 + 1;\n    acc = acc + v_178;\n    int v_179 = 179 * 2 + 1;\n    acc = acc + v_179;\n    int v_180 = 180 * 2 + 1;\n    acc = acc + v_180;\n    int v_181 = 181 * 2 + 1;\n    acc = acc + v_181;\n    int v_182 = 182 * 2 + 1;\n    acc = acc + v_182;\n    int v_183 = 183 * 2 + 1;\n    acc = acc + v_183;\n    int v_184 = 184 * 2 + 1;\n    acc = acc + v_184;\n    int v_185 = 185 * 2 + 1;\n    acc = acc + v_185;\n    int v_186 = 186 * 2 + 1;\n    acc = acc + v_186;\n    int v_187 = 187 * 2 + 1;\n    acc = acc + v_187;\n    int v_188 = 188 * 2 + 1;\n    acc = acc + v_188;\n    int v_189 = 189 * 2 + 1;\n    acc = acc + v_189;\n    int v_190 = 190 * 2 + 1;\n    acc = acc + v_190;\n    int v_191 = 191 * 2 + 1;\n    acc = acc + v_191;\n    int v_192 = 192 * 2 + 1;\n    acc = acc + v_192;\n    int v_193 = 193 * 2 + 1;\n    acc = acc + v_193;\n    int v_194 = 194 * 2 + 1;\n    acc = acc + v_194;\n    int v_195 = 195 * 2 + 1;\n    acc = acc + v_195;\n    int v_196 = 196 * 2 + 1;\n    acc = acc + v_196;\n    int v_197 = 197 * 2 + 1;\n    acc = acc + v_197;\n    int v_198 = 198 * 2 + 1;\n    acc = acc + v_198;\n    int v_199 = 199 * 2 + 1;\n    acc = acc + v_199;\n    int v_200 = 200 * 2 + 1;\n    acc = acc + v_200;\n    int v_201 = 201 * 2 + 1;\n    acc = acc + v_201;\n    int v_202 = 202 * 2 + 1;\n    acc = acc + v_202;\n    int v_203 = 203 * 2 + 1;\n    acc = acc + v_203;\n    int v_204 = 204 * 2 + 1;\n    acc = acc + v_204;\n    int v_205 = 205 * 2 + 1;\n    acc = acc + v_205;\n    int v_206 = 206 * 2 + 1;\n    acc = acc + v_206;\n    int v_207 = 207 * 2 + 1;\n    acc = acc + v_207;\n    int v_208 = 208 * 2 + 1;\n    acc = acc + v_208;\n    int v_209 = 209 * 2 + 1;\n    acc = acc + v_209;\n    int v_210 = 210 * 2 + 1;\n    acc = acc + v_210;\n    int v_211 = 211 * 2 + 1;\n    acc = acc + v_211;\n    int v_212 = 212 * 2 + 1;\n    acc = acc + v_212;\n    int v_213 = 213 * 2 + 1;\n    acc = acc + v_213;\n    int v_214 = 214 * 2 + 1;\n    acc = acc + v_214;\n    int v_215 = 215 * 2 + 1;\n    acc = acc + v_215;\n    int v_216 = 216 * 2 + 1;\n    acc = acc + v_216;\n    int v_217 = 217 * 2 + 1;\n    acc = acc + v_217;\n    int v_218 = 218 * 2 + 1;\n    acc = acc + v_218;\n    int v_219 = 219 * 2 + 1;\n    acc = acc + v_219;\n    int v_220 = 220 * 2 + 1;\n    acc = acc + v_220;\n    int v_221 = 221 * 2 + 1;\n    acc = acc + v_221;\n    int v_222 = 222 * 2 + 1;\n    acc = acc + v_222;\n    int v_223 = 223 * 2 + 1;\n    acc = acc + v_223;\n    int v_224 = 224 * 2 + 1;\n    acc = acc + v_224;\n    int v_225 = 225 * 2 + 1;\n    acc = acc + v_225;\n    int v_226 = 226 * 2 + 1;\n    acc = acc + v_226;\n    int v_227 = 227 * 2 + 1;\n    acc = acc + v_227;\n    int v_228 = 228 * 2 + 1;\n    acc = acc + v_228;\n    int v_229 = 229 * 2 + 1;\n    acc = acc + v_229;\n    int v_230 = 230 * 2 + 1;\n    acc = acc + v_230;\n    int v_231 = 231 * 2 + 1;\n    acc = acc + v_231;\n    int v_232 = 232 * 2 + 1;\n    acc = acc + v_232;\n    int v_233 = 233 * 2 + 1;\n    acc = acc + v_233;\n    int v_234 = 234 * 2 + 1;\n    acc = acc + v_234;\n    int v_235 = 235 * 2 + 1;\n    acc = acc + v_235;\n    int v_236 = 236 * 2 + 1;\n    acc = acc + v_236;\n    int v_237 = 237 * 2 + 1;\n    acc = acc + v_237;\n    int v_238 = 238 * 2 + 1;\n    acc = acc + v_238;\n    int v_239 = 239 * 2 + 1;\n    acc = acc + v_239;\n    int v_240 = 240 * 2 + 1;\n    acc = acc + v_240;\n    int v_241 = 241 * 2 + 1;\n    acc = acc + v_241;\n    int v_242 = 242 * 2 + 1;\n    acc = acc + v_242;\n    int v_243 = 243 * 2 + 1;\n    acc = acc + v_243;\n    int v_244 = 244 * 2 + 1;\n    acc = acc + v_244;\n    int v_245 = 245 * 2 + 1;\n    acc = acc + v_245;\n    int v_246 = 246 * 2 + 1;\n    acc = acc + v_246;\n    int v_247 = 247 * 2 + 1;\n    acc = acc + v_247;\n    printf(\"Accumulated Total = %d\\n\", acc);\n    return 0;\n}"}, "cpp_complete": {"name": "C++: Stream I/O & Class Architecture", "language": "cpp", "category": "hello", "source": "#include <iostream>\nusing namespace std;\n\nclass Calculator {\npublic:\n    int add(int a, int b) {\n        return a + b;\n    }\n};\n\nint main() {\n    Calculator calc;\n    int a = 15;\n    int b = 25;\n    int total = calc.add(a, b);\n    cout << \"Calculated Sum: \" << total << endl;\n    return 0;\n}"}, "cpp_arithmetic": {"name": "C++: Arithmetic & Operator Precedence", "language": "cpp", "category": "arithmetic", "source": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int a = 12;\n    int b = 8;\n    int c = 4;\n    int res1 = a + b * c;\n    int res2 = (a + b) * c;\n    cout << \"Arithmetic: \" << res1 << \" vs \" << res2 << endl;\n    return 0;\n}"}, "cpp_variables": {"name": "C++: Typed Variables & Declarations", "language": "cpp", "category": "variables", "source": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int count = 42;\n    double ratio = 3.14;\n    char symbol = 'Z';\n    bool isActive = true;\n    cout << \"Count: \" << count << endl;\n    return 0;\n}"}, "cpp_conditional": {"name": "C++: Conditionals (if / else)", "language": "cpp", "category": "conditional", "source": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int score = 88;\n    if (score >= 90) {\n        cout << \"Grade: A\" << endl;\n    } else {\n        cout << \"Grade: B\" << endl;\n    }\n    return 0;\n}"}, "cpp_classes": {"name": "C++: Class Methods & Instantiation", "language": "cpp", "category": "function", "source": "#include <iostream>\nusing namespace std;\n\nclass Multiplier {\npublic:\n    int compute(int x, int y) {\n        return x * y;\n    }\n};\n\nint main() {\n    Multiplier mult;\n    int result = mult.compute(6, 7);\n    cout << \"Computed: \" << result << endl;\n    return 0;\n}"}, "cpp_error": {"name": "C++ [Error]: Typo 'coutt' & 'ednl' Suggestion", "language": "cpp", "category": "error", "source": "#include <iostream>\nusing namespace std;\n\nint main() {\n    int total = 42;\n    coutt << \"Value = \" << total << ednl;\n    return 0;\n}"}, "java_complete": {"name": "Java: Standard Class & main Method", "language": "java", "category": "hello", "source": "public class Main {\n    public static void main(String[] args) {\n        int base = 10;\n        int multiplier = 4;\n        int total = base * multiplier + 2;\n        System.out.println(\"Java Computed Result: \" + total);\n    }\n}"}, "java_arithmetic": {"name": "Java: Arithmetic & Operator Precedence", "language": "java", "category": "arithmetic", "source": "public class Main {\n    public static void main(String[] args) {\n        int a = 15;\n        int b = 6;\n        int c = 3;\n        int r1 = a + b * c;\n        int r2 = (a + b) * c;\n        System.out.println(\"Arithmetic: \" + r1);\n    }\n}"}, "java_variables": {"name": "Java: Typed Variables & Declarations", "language": "java", "category": "variables", "source": "public class Main {\n    public static void main(String[] args) {\n        int count = 50;\n        double rate = 4.75;\n        boolean active = true;\n        System.out.println(\"Java Count: \" + count);\n    }\n}"}, "java_conditional": {"name": "Java: Control Flow (if / else)", "language": "java", "category": "conditional", "source": "public class Main {\n    public static void main(String[] args) {\n        int score = 85;\n        if (score >= 80) {\n            System.out.println(\"Grade: Honor\");\n        } else {\n            System.out.println(\"Grade: Standard\");\n        }\n    }\n}"}, "java_methods": {"name": "Java: Class Methods & Invocations", "language": "java", "category": "function", "source": "public class Main {\n    public int multiply(int a, int b) {\n        return a * b;\n    }\n\n    public static void main(String[] args) {\n        int x = 7;\n        int y = 9;\n        int total = x * y;\n        System.out.println(\"Java Methods Total: \" + total);\n    }\n}"}, "java_error": {"name": "Java [Error]: Typo 'prntln' Diagnostic", "language": "java", "category": "error", "source": "public class Main {\n    public static void main(String[] args) {\n        int x = 100;\n        System.out.prntln(\"Value is: \" + x);\n    }\n}"}, "java_missing_main": {"name": "Java [Error]: Missing 'main' Method", "language": "java", "category": "error", "source": "public class Main {\n    public void start() {\n        System.out.println(\"Hello\");\n    }\n}"}, "python_complete": {"name": "Python: Functions & Control Flow", "language": "python", "category": "hello", "source": "def calculate_grade(score):\n    if score >= 90:\n        return 100\n    else:\n        return score + 5\n\ndef main():\n    initial_score = 82\n    final_score = calculate_grade(initial_score)\n    print(\"Final Score:\", final_score)\n\nmain()"}, "python_arithmetic": {"name": "Python: Expressions & Precedence", "language": "python", "category": "arithmetic", "source": "def main():\n    a = 14\n    b = 6\n    c = 2\n    r1 = a + b * c\n    r2 = (a + b) * c\n    print(\"Precedence:\", r1, \"vs\", r2)\n\nmain()"}, "python_variables": {"name": "Python: Dynamic Variables & Assignments", "language": "python", "category": "variables", "source": "def main():\n    name = \"Compiler\"\n    items = 42\n    ratio = 3.14159\n    is_ready = True\n    print(\"Variables:\", name, items, ratio)\n\nmain()"}, "python_conditional": {"name": "Python: Control Flow (if / elif / else)", "language": "python", "category": "conditional", "source": "def evaluate(val):\n    if val > 50:\n        return val * 2\n    else:\n        return val + 10\n\ndef main():\n    res = evaluate(25)\n    print(\"Result:\", res)\n\nmain()"}, "python_loops": {"name": "Python: Loops (while Loop Accumulation)", "language": "python", "category": "loop", "source": "def main():\n    total = 0\n    i = 1\n    while i <= 5:\n        total = total + i\n        i = i + 1\n    print(\"Accumulated Sum:\", total)\n\nmain()"}, "python_functions": {"name": "Python: Function Definitions & Calls", "language": "python", "category": "function", "source": "def multiply(x, y):\n    return x * y\n\ndef main():\n    product = multiply(8, 7)\n    print(\"Product:\", product)\n\nmain()"}, "python_error": {"name": "Python [Error]: Typo 'pirnt' Diagnostic", "language": "python", "category": "error", "source": "def main():\n    total = 3 + 4 * 2\n    pirnt(\"Result =\", total)\n\nmain()"}, "js_complete": {"name": "JavaScript: ES6 Functions & Console", "language": "js", "category": "hello", "source": "function computeBonus(base, factor) {\n    let result = base * factor + 10;\n    return result;\n}\n\nlet baseSalary = 50;\nlet bonusFactor = 2;\nlet total = computeBonus(baseSalary, bonusFactor);\nconsole.log(\"Total Compensation:\", total);"}, "js_arithmetic": {"name": "JavaScript: Arithmetic & Strict Precedence", "language": "js", "category": "arithmetic", "source": "let a = 18;\nlet b = 6;\nlet c = 2;\nlet r1 = a + b * c;\nlet r2 = (a + b) * c;\nconsole.log(\"Arithmetic:\", r1, \"vs\", r2);"}, "js_variables": {"name": "JavaScript: let & const Declarations", "language": "js", "category": "variables", "source": "let count = 30;\nconst multiplier = 3;\nlet isActive = true;\nlet total = count * multiplier;\nconsole.log(\"JS Total:\", total);"}, "js_conditional": {"name": "JavaScript: Control Flow (if / else)", "language": "js", "category": "conditional", "source": "let score = 78;\nif (score >= 70) {\n    console.log(\"Status: Passed\");\n} else {\n    console.log(\"Status: Needs Improvement\");\n}"}, "js_functions": {"name": "JavaScript: Functions & Computations", "language": "js", "category": "function", "source": "function multiply(a, b) {\n    let result = a * b;\n    return result;\n}\n\nlet x = 8;\nlet y = 6;\nlet total = multiply(x, y);\nconsole.log(\"JS Multiplied:\", total);"}, "js_error": {"name": "JavaScript [Error]: Typo 'conosle' Diagnostic", "language": "js", "category": "error", "source": "let total = 42;\nconosle.log(\"Computed total:\", total);"}, "toy_pipeline": {"name": "Toy: Assignments & Expressions", "language": "toy", "category": "hello", "source": "x = 5\ny = x + 2\nz = (x + y) * 3"}, "toy_arithmetic": {"name": "Toy: Arithmetic & Operator Precedence", "language": "toy", "category": "arithmetic", "source": "a = 10 + 4 * 2\nb = (10 + 4) * 2\nc = a + b"}, "toy_variables": {"name": "Toy: Multi-Variable Pipeline", "language": "toy", "category": "variables", "source": "base = 20\nheight = 10\narea = (base * height) / 2"}, "toy_error": {"name": "Toy [Error]: Missing Operand in Expression", "language": "toy", "category": "error", "source": "x = 5 +\ny = 10"}};
+
+const DEFAULT_PRESETS_BY_LANG = {
+  c: 'c_complete',
+  cpp: 'cpp_complete',
+  java: 'java_complete',
+  python: 'python_complete',
+  js: 'js_complete',
+  toy: 'toy_pipeline'
+};
+
+let currentLanguage = 'c';
+let isSourceModified = false;
+let presetsMap = Object.assign({}, EMBEDDED_PRESETS);
 
 // Compilation Lifecycle State
 let hasCompiled = false;
@@ -2254,15 +3296,82 @@ let lastCompiledLanguage = '';
 let latestCompileData = null;
 let currentActiveStage = 'tokens';
 
+function getLanguageDisplayName(lang) {
+  const map = {
+    c: "C (C99 Educational Subset)",
+    cpp: "C++ (Modern C++ Educational Subset)",
+    java: "Java (Java 8+ Standard Subset)",
+    python: "Python (Python 3.x Subset)",
+    js: "JavaScript (ES6+ Subset)",
+    toy: "Toy Mini-Lang"
+  };
+  return map[lang] || String(lang).toUpperCase();
+}
+
+function updateActiveLanguageBadge(lang) {
+  const badge = document.getElementById('activeLanguageBadge');
+  if (badge) {
+    const names = {
+      c: "C Compiler Active",
+      cpp: "C++ Compiler Active",
+      java: "Java Compiler Active",
+      python: "Python Compiler Active",
+      js: "JavaScript Compiler Active",
+      toy: "Toy Compiler Active"
+    };
+    badge.textContent = names[lang] || `${lang.toUpperCase()} Active`;
+  }
+}
+
+function selectTargetLanguage(lang) {
+  const select = document.getElementById('langSelect');
+  if (select && select.value !== lang) {
+    select.value = lang;
+    onLanguageChange();
+  }
+}
+
 async function fetchPresets() {
   try {
     const res = await fetch('/presets');
-    presetsMap = await res.json();
+    const remote = await res.json();
+    presetsMap = Object.assign({}, EMBEDDED_PRESETS, remote);
+    const curLang = document.getElementById('langSelect')?.value || currentLanguage;
+    updatePresetDropdown(curLang, isSourceModified);
   } catch(e) {
     console.error("Presets load error:", e);
   }
 }
 
+function updatePresetDropdown(lang, preserveCustom = false) {
+  const select = document.getElementById('presetSelect');
+  if (!select || !presetsMap) return;
+  select.innerHTML = '';
+  const matching = Object.entries(presetsMap).filter(([k, p]) => p.language === lang);
+  matching.forEach(([k, p]) => {
+    const opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = p.name;
+    select.appendChild(opt);
+  });
+
+  if (preserveCustom && isSourceModified) {
+    const customOpt = document.createElement('option');
+    customOpt.value = '__custom__';
+    customOpt.textContent = '✎ Custom / Modified Source';
+    select.appendChild(customOpt);
+    select.value = '__custom__';
+  } else if (matching.length > 0) {
+    const defKey = DEFAULT_PRESETS_BY_LANG[lang];
+    if (defKey && matching.some(([k]) => k === defKey)) {
+      select.value = defKey;
+    } else {
+      select.value = matching[0][0];
+    }
+  }
+}
+
+let lastRenderedLineCount = 0;
 function updateLineNumbers() {
   const editor = document.getElementById('sourceEditor');
   const gutter = document.getElementById('lineNumbersGutter');
@@ -2270,14 +3379,30 @@ function updateLineNumbers() {
   if (!editor || !gutter) return;
 
   const lines = editor.value.split('\n');
-  gutter.innerHTML = Array.from({length: Math.max(lines.length, 1)}, (_, i) => `<div>${i + 1}</div>`).join('');
+  const totalLines = lines.length;
   if (countPill) {
-    countPill.textContent = `${lines.length} line${lines.length === 1 ? '' : 's'}`;
+    countPill.textContent = `${totalLines} line${totalLines === 1 ? '' : 's'}`;
+  }
+
+  // Dynamically size gutter and editor left padding for 1, 2, 3, 4, 5-digit line numbers
+  const digits = Math.max(2, String(totalLines).length);
+  const gutterWidth = Math.max(46, digits * 8.5 + 18);
+  gutter.style.width = `${gutterWidth}px`;
+  editor.style.paddingLeft = `${gutterWidth + 14}px`;
+
+  // Synchronize DOM generation for document lines
+  if (totalLines !== lastRenderedLineCount) {
+    lastRenderedLineCount = totalLines;
+    let gutterHtml = '';
+    for (let i = 1; i <= totalLines; i++) {
+      gutterHtml += `<div>${i}</div>`;
+    }
+    gutter.innerHTML = gutterHtml;
   }
   gutter.scrollTop = editor.scrollTop;
 
   const echoView = document.getElementById('sourceEchoView');
-  if (echoView) {
+  if (echoView && echoView.offsetParent !== null) {
     echoView.textContent = editor.value;
   }
 }
@@ -2285,8 +3410,11 @@ function updateLineNumbers() {
 function updateLanguageCapsules(lang) {
   const caps = {
     c: document.getElementById('capsuleC'),
-    toy: document.getElementById('capsuleToy'),
-    python: document.getElementById('capsulePython')
+    cpp: document.getElementById('capsuleCpp'),
+    java: document.getElementById('capsuleJava'),
+    python: document.getElementById('capsulePython'),
+    js: document.getElementById('capsuleJs'),
+    toy: document.getElementById('capsuleToy')
   };
   for (const [k, el] of Object.entries(caps)) {
     if (el) el.classList.toggle('capsule-active', k === lang);
@@ -2323,7 +3451,6 @@ function highlightOffendingSource(line, col, severity = 'error', message = '', s
   // Highlight line in gutter
   if (gutter && gutter.children[line - 1]) {
     gutter.children[line - 1].classList.add(isWarning ? 'gutter-warning-line' : 'gutter-error-line');
-    gutter.children[line - 1].scrollIntoView({ block: 'nearest' });
   }
 
   // Calculate char offset and select token in textarea
@@ -2347,6 +3474,14 @@ function highlightOffendingSource(line, col, severity = 'error', message = '', s
     editor.setSelectionRange(targetPos, targetPos + tokLen);
   } catch (e) {}
 
+  // Synchronize scroll position so the highlighted line is visible in both editor and gutter
+  const approxLineHeight = 20.15;
+  const targetScrollTop = Math.max(0, (line - 4) * approxLineHeight);
+  editor.scrollTop = targetScrollTop;
+  if (gutter) {
+    gutter.scrollTop = editor.scrollTop;
+  }
+
   // Display diagnostic chip in editor card
   const chip = document.getElementById('diagnosticChip');
   if (chip && message) {
@@ -2365,6 +3500,7 @@ function highlightOffendingSource(line, col, severity = 'error', message = '', s
 
 function jumpToLocation(line, col) {
   const editor = document.getElementById('sourceEditor');
+  const gutter = document.getElementById('lineNumbersGutter');
   if (!editor || typeof line !== 'number') return;
   const lines = editor.value.split('\n');
   if (line > lines.length) return;
@@ -2386,12 +3522,19 @@ function jumpToLocation(line, col) {
 
   editor.focus();
   editor.setSelectionRange(targetPos, targetPos + tokLen);
+
+  const approxLineHeight = 20.15;
+  const targetScrollTop = Math.max(0, (line - 4) * approxLineHeight);
+  editor.scrollTop = targetScrollTop;
+  if (gutter) {
+    gutter.scrollTop = editor.scrollTop;
+  }
 }
 
 function updateStepperState(statusMap) {
-  // statusMap: { tokens: 'passed'|'failed'|'blocked'|'warning'|'not-run', ast: ..., semantic: ..., ir: ..., asm: ..., explain: ... }
-  const stages = ['tokens', 'ast', 'semantic', 'ir', 'asm', 'explain'];
-  const defaultLabels = { tokens: '1', ast: '2', semantic: '3', ir: '4', asm: '5', explain: '&starf;' };
+  // statusMap: { tokens: ..., ast: ..., semantic: ..., ir: ..., asm: ..., exec: ..., explain: ... }
+  const stages = ['tokens', 'ast', 'semantic', 'ir', 'asm', 'exec', 'explain'];
+  const defaultLabels = { tokens: '1', ast: '2', semantic: '3', ir: '4', asm: '5', exec: '>_', explain: '&starf;' };
 
   stages.forEach(st => {
     const node = document.getElementById('stepNode' + st.charAt(0).toUpperCase() + st.slice(1));
@@ -2539,6 +3682,9 @@ function resetToInitialState(statusMessage = "Ready to compile. Click Run Full C
   const archBadge = document.getElementById('asmArchBadge');
   if (archBadge) archBadge.textContent = 'Select pseudo-assembly or x86-64 target to view generated instructions.';
 
+  // Clear Execution
+  renderExecution(null);
+
   // Clear Explainer
   const explainerContainer = document.getElementById('explainerCardsContainer');
   if (explainerContainer) {
@@ -2635,6 +3781,9 @@ function clearStaleResults() {
   const archBadge = document.getElementById('asmArchBadge');
   if (archBadge) archBadge.textContent = 'Target code generation awaiting compiler run.';
 
+  // Clear Execution
+  renderExecution(null);
+
   // Clear Explainer
   const explainerContainer = document.getElementById('explainerCardsContainer');
   if (explainerContainer) {
@@ -2679,10 +3828,10 @@ function clearDownstreamStages(failedStageName, msg, diag = null) {
         astContainer.innerHTML = makeBlockedHtml('Abstract Syntax Tree (AST)');
       } else {
         astContainer.innerHTML = `
-          <div class="blocked-stage-box" style="border-color:var(--error-border); background:#FEF2F2;">
+          <div class="blocked-stage-box" style="border-color:var(--error-border); background:var(--error-subtle);">
             <div class="pill pill-danger" style="margin-bottom:8px;">✕ Parser Error</div>
-            <div style="font-size:0.95rem; font-weight:700; color:#991B1B; margin-bottom:4px;">Syntax Analysis Failed</div>
-            <div style="font-size:0.84rem; color:#7F1D1D; max-width:500px; margin:0 auto 12px auto;">The recursive-descent parser encountered invalid syntax and halted. An AST could not be constructed.</div>
+            <div style="font-size:0.95rem; font-weight:700; color:var(--alert-danger-text, var(--error)); margin-bottom:4px;">Syntax Analysis Failed</div>
+            <div style="font-size:0.84rem; color:var(--text-secondary); max-width:500px; margin:0 auto 12px auto;">The recursive-descent parser encountered invalid syntax and halted. An AST could not be constructed.</div>
             <div class="ide-alert ide-alert-danger" style="max-width:520px; margin:0 auto; text-align:left;">
               <div><strong>Parser Error${locStr}:</strong> ${escapeHtml(msg)}</div>
             </div>
@@ -2728,24 +3877,162 @@ function clearDownstreamStages(failedStageName, msg, diag = null) {
 }
 
 function loadSelectedPreset() {
-  const val = document.getElementById('presetSelect').value;
-  if (presetsMap[val]) {
-    document.getElementById('sourceEditor').value = presetsMap[val].source;
-    document.getElementById('langSelect').value = presetsMap[val].language;
-    updateLanguageCapsules(presetsMap[val].language);
-    resetToInitialState("Preset loaded into editor. Click Run Full Compiler Pipeline.");
+  const select = document.getElementById('presetSelect');
+  if (!select) return;
+  const val = select.value;
+  if (val === '__custom__') {
+    return;
+  }
+  if (presetsMap && presetsMap[val]) {
+    const preset = presetsMap[val];
+    const editor = document.getElementById('sourceEditor');
+    if (editor) editor.value = preset.source;
+
+    const prevLang = currentLanguage;
+    currentLanguage = preset.language;
+    const langSelect = document.getElementById('langSelect');
+    if (langSelect) langSelect.value = preset.language;
+
+    isSourceModified = false;
+    updateLanguageCapsules(preset.language);
+    updateActiveLanguageBadge(preset.language);
+    if (prevLang !== preset.language) {
+      updatePresetDropdown(preset.language, false);
+      if (select) select.value = val;
+    }
+    updateLineNumbers();
+    resetToInitialState(`Preset loaded: "${preset.name}". Click Run Full Compiler Pipeline.`);
   }
 }
 
 function onLanguageChange() {
-  const lang = document.getElementById('langSelect').value;
-  updateLanguageCapsules(lang);
-  if (lang === 'toy') {
-    document.getElementById('presetSelect').value = 'toy_pipeline';
-  } else if (lang === 'c') {
-    document.getElementById('presetSelect').value = 'c_complete';
+  const langSelect = document.getElementById('langSelect');
+  if (!langSelect) return;
+  const newLang = langSelect.value;
+
+  if (isSourceModified && newLang !== currentLanguage) {
+    const langName = getLanguageDisplayName(newLang);
+    const confirmSwitch = (typeof window !== 'undefined' && window.confirm)
+      ? window.confirm(`Switching target language to ${langName} will load that language's default example and discard current editor modifications.\n\nProceed?`)
+      : true;
+    if (!confirmSwitch) {
+      langSelect.value = currentLanguage;
+      return;
+    }
   }
-  loadSelectedPreset();
+
+  currentLanguage = newLang;
+  isSourceModified = false;
+
+  updateLanguageCapsules(newLang);
+  updateActiveLanguageBadge(newLang);
+  updatePresetDropdown(newLang, false);
+
+  const defPresetKey = DEFAULT_PRESETS_BY_LANG[newLang] || (document.getElementById('presetSelect')?.value);
+  if (defPresetKey && presetsMap && presetsMap[defPresetKey]) {
+    const preset = presetsMap[defPresetKey];
+    const editor = document.getElementById('sourceEditor');
+    if (editor) {
+      editor.value = preset.source;
+    }
+    const presetSelect = document.getElementById('presetSelect');
+    if (presetSelect) {
+      presetSelect.value = defPresetKey;
+    }
+  }
+
+  updateLineNumbers();
+  const langName = getLanguageDisplayName(newLang);
+  resetToInitialState(`Target language switched to ${langName}. Loaded default example. Click Run Full Compiler Pipeline.`);
+}
+
+function initEditorPasteHandler() {
+  const editor = document.getElementById('sourceEditor');
+  if (!editor) return;
+
+  editor.addEventListener('paste', (e) => {
+    const clipboardData = e.clipboardData || window.clipboardData;
+    if (clipboardData) {
+      const pastedText = clipboardData.getData('text');
+      if (pastedText && pastedText.length > 0) {
+        e.preventDefault();
+        const start = editor.selectionStart !== undefined ? editor.selectionStart : 0;
+        const end = editor.selectionEnd !== undefined ? editor.selectionEnd : start;
+        const currentVal = editor.value;
+        const newVal = currentVal.substring(0, start) + pastedText + currentVal.substring(end);
+        editor.value = newVal;
+        editor.selectionStart = editor.selectionEnd = start + pastedText.length;
+        onSourceInput();
+      }
+    }
+  });
+}
+
+function handleSourceFileUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const content = e.target.result;
+    const editor = document.getElementById('sourceEditor');
+    const statusLabel = document.getElementById('fileUploadStatus');
+    if (editor) {
+      editor.value = content;
+
+      // Auto-detect language by file extension
+      const ext = file.name.split('.').pop().toLowerCase();
+      const extMap = {
+        c: 'c', h: 'c',
+        cpp: 'cpp', hpp: 'cpp', cc: 'cpp', cxx: 'cpp',
+        java: 'java',
+        py: 'python',
+        js: 'js', mjs: 'js',
+        toy: 'toy', txt: 'toy'
+      };
+      if (extMap[ext]) {
+        const detectedLang = extMap[ext];
+        const langSelect = document.getElementById('langSelect');
+        if (langSelect && langSelect.value !== detectedLang) {
+          currentLanguage = detectedLang;
+          langSelect.value = detectedLang;
+          updateLanguageCapsules(detectedLang);
+          updateActiveLanguageBadge(detectedLang);
+          updatePresetDropdown(detectedLang, false);
+        }
+      }
+
+      onSourceInput();
+      const lineCount = content.split('\n').length;
+      if (statusLabel) {
+        statusLabel.textContent = `Loaded ${file.name} (${lineCount} lines)`;
+      }
+      resetToInitialState(`Uploaded file "${file.name}" (${lineCount} lines, ${Math.round(content.length / 1024 * 10) / 10} KB). Click Run Full Compiler Pipeline.`);
+    }
+    event.target.value = '';
+  };
+  reader.readAsText(file);
+}
+
+function onSourceInput() {
+  isSourceModified = true;
+  updateLineNumbers();
+
+  const presetSelect = document.getElementById('presetSelect');
+  if (presetSelect && presetSelect.value !== '__custom__') {
+    let customOpt = presetSelect.querySelector('option[value="__custom__"]');
+    if (!customOpt) {
+      customOpt = document.createElement('option');
+      customOpt.value = '__custom__';
+      customOpt.textContent = '✎ Custom / Modified Source';
+      presetSelect.appendChild(customOpt);
+    }
+    presetSelect.value = '__custom__';
+  }
+
+  if (hasCompiled) {
+    clearStaleResults();
+  }
 }
 
 function switchMainMode(mode) {
@@ -2757,20 +4044,29 @@ function switchMainMode(mode) {
 
 function showStageTab(stageKey) {
   currentActiveStage = stageKey;
-  const stages = ['source', 'tokens', 'ast', 'semantic', 'ir', 'asm', 'explain'];
+  const stages = ['source', 'tokens', 'ast', 'semantic', 'ir', 'asm', 'exec', 'explain'];
   stages.forEach(s => {
     const panel = document.getElementById('stage' + s.charAt(0).toUpperCase() + s.slice(1));
     const stepNode = document.getElementById('stepNode' + s.charAt(0).toUpperCase() + s.slice(1));
     if (panel) panel.classList.toggle('active', s === stageKey);
     if (stepNode) stepNode.classList.toggle('active', s === stageKey);
   });
+  if (stageKey === 'source') {
+    const echoView = document.getElementById('sourceEchoView');
+    const editor = document.getElementById('sourceEditor');
+    if (echoView && editor) {
+      echoView.textContent = editor.value;
+    }
+  }
 }
 
 async function runCompile() {
   if (isCompiling) return;
 
-  const source = document.getElementById('sourceEditor').value;
-  const language = document.getElementById('langSelect').value;
+  const editorEl = document.getElementById('sourceEditor');
+  const source = editorEl ? editorEl.value : '';
+  const langEl = document.getElementById('langSelect');
+  const language = langEl ? langEl.value : (currentLanguage || 'c');
   const statusEl = document.getElementById('compileStatus');
   const statusDot = document.getElementById('statusDot');
   const errorBanner = document.getElementById('errorBanner');
@@ -2788,6 +4084,17 @@ async function runCompile() {
       errorBanner.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><div><strong>Input Error:</strong> Source code cannot be empty. Please enter code to compile.</div>';
     }
     if (statusEl) statusEl.textContent = 'Compilation halted: empty source code.';
+    if (statusDot) statusDot.className = 'status-dot dot-error';
+    return;
+  }
+
+  const rawLineCount = source.split('\n').length;
+  if (rawLineCount > 10000) {
+    if (errorBanner) {
+      errorBanner.style.display = 'flex';
+      errorBanner.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><div><strong>Input Limit Exceeded:</strong> Source document contains ${rawLineCount} lines, which exceeds the maximum limit of 10,000 lines. Please reduce the source size before compiling.</div>`;
+    }
+    if (statusEl) statusEl.textContent = `Compilation halted: line limit exceeded (${rawLineCount} lines > 10,000).`;
     if (statusDot) statusDot.className = 'status-dot dot-error';
     return;
   }
@@ -2896,6 +4203,7 @@ async function runCompile() {
     renderSemantic(data.semantic_errors || [], data.symbol_table || [], data.declared_vars || []);
     renderIr(data.ir || {});
     renderAssembly(data.assembly || {});
+    renderExecution(data.execution || null);
     renderExplainer(data.explanation || []);
 
     const tokenCount = (data.tokens || []).length;
@@ -2938,16 +4246,38 @@ async function runCompile() {
       showStageTab('tokens');
     }
   } catch (err) {
+    console.error("Compilation error details:", err);
     hasCompiled = false;
     isOutdated = false;
     latestCompileData = null;
+
+    let errorCategory = "Execution Error";
+    let errorDetail = err.message || "An unexpected error occurred.";
+    let statusText = "Compilation failed";
+
+    const isNetworkError = (err instanceof TypeError) ||
+      (err.message && (err.message.includes("fetch") || err.message.includes("NetworkError") || err.message.includes("Failed to fetch")));
+
+    if (isNetworkError) {
+      errorCategory = "Network Connection Error";
+      errorDetail = "Could not connect to the compiler backend at /compile. Please verify your connection and ensure the server is running.";
+      statusText = "Network connection failed";
+    } else if (err.message && err.message.includes("HTTP 500")) {
+      errorCategory = "Backend Exception (HTTP 500)";
+      errorDetail = "An internal server error occurred while executing the compiler pipeline. Details have been logged to the server.";
+      statusText = "Server error (HTTP 500)";
+    } else if (err.message && err.message.includes("invalid JSON")) {
+      errorCategory = "Server Response Protocol Error";
+      errorDetail = "The compiler server returned a non-JSON response. Please verify the backend service.";
+      statusText = "Invalid server response";
+    }
+
     if (errorBanner) {
       errorBanner.style.display = 'flex';
-      errorBanner.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><div>Network or server error: ${escapeHtml(err.message)}</div>`;
+      errorBanner.innerHTML = `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg><div><strong>${escapeHtml(errorCategory)}:</strong> ${escapeHtml(errorDetail)}</div>`;
     }
-    if (statusEl) statusEl.textContent = 'Error running compiler';
+    if (statusEl) statusEl.textContent = statusText;
     if (statusDot) statusDot.className = 'status-dot dot-error';
-    resetToInitialState('Error running compiler. Check network connection.');
   } finally {
     isCompiling = false;
     if (btn) btn.disabled = false;
@@ -2955,35 +4285,113 @@ async function runCompile() {
   }
 }
 
-// Stage 1: Tokens
+// Stage 1: Tokens with High-Performance Pagination (Up to 5,000 Lines)
+let allTokens = [];
+let tokenCurrentPage = 1;
+const TOKEN_PAGE_SIZE = 50;
+let tokenFilterQuery = '';
+
 function renderTokens(tokens) {
-  const tbody = document.getElementById('tokensTableBody');
-  const pillsContainer = document.getElementById('tokenSummaryPills');
-  tbody.innerHTML = '';
-  pillsContainer.innerHTML = '';
+  allTokens = tokens || [];
+  tokenCurrentPage = 1;
+  tokenFilterQuery = '';
+  const filterInput = document.getElementById('tokensFilterInput');
+  if (filterInput) filterInput.value = '';
 
   const pillCount = document.getElementById('tokenCountPill');
-  pillCount.textContent = `${tokens.length} Tokens`;
+  if (pillCount) pillCount.textContent = `${allTokens.length} Tokens`;
 
-  const counts = {};
-  tokens.forEach((t, i) => {
-    counts[t.type] = (counts[t.type] || 0) + 1;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="color:var(--text-muted); font-size:0.75rem;">${i + 1}</td>
-      <td><span class="pill ${getTokenPillClass(t.type)}">${escapeHtml(t.type)}</span></td>
-      <td><code style="font-family:var(--font-mono); font-size:0.83rem;">${escapeHtml(t.value === null ? '<EOF>' : String(t.value))}</code></td>
-      <td style="color:var(--text-secondary); font-size:0.76rem; font-family:var(--font-mono);">L${t.line} : C${t.col}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  for (const [type, count] of Object.entries(counts)) {
-    const p = document.createElement('span');
-    p.className = `pill ${getTokenPillClass(type)}`;
-    p.textContent = `${count}x ${type}`;
-    pillsContainer.appendChild(p);
+  const pillsContainer = document.getElementById('tokenSummaryPills');
+  if (pillsContainer) {
+    pillsContainer.innerHTML = '';
+    const counts = {};
+    for (let i = 0; i < allTokens.length; i++) {
+      const t = allTokens[i];
+      counts[t.type] = (counts[t.type] || 0) + 1;
+    }
+    for (const [type, count] of Object.entries(counts)) {
+      const p = document.createElement('span');
+      p.className = `pill ${getTokenPillClass(type)}`;
+      p.textContent = `${count}x ${type}`;
+      pillsContainer.appendChild(p);
+    }
   }
+
+  renderTokensCurrentPage();
+}
+
+function renderTokensCurrentPage() {
+  const tbody = document.getElementById('tokensTableBody');
+  const paginationBar = document.getElementById('tokensPaginationBar');
+  if (!tbody) return;
+
+  let filtered = allTokens;
+  if (tokenFilterQuery) {
+    const q = tokenFilterQuery.toLowerCase();
+    filtered = allTokens.filter(t => 
+      (t.type && t.type.toLowerCase().includes(q)) ||
+      (t.value && String(t.value).toLowerCase().includes(q)) ||
+      String(t.line) === q
+    );
+  }
+
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / TOKEN_PAGE_SIZE));
+  if (tokenCurrentPage > totalPages) tokenCurrentPage = totalPages;
+  if (tokenCurrentPage < 1) tokenCurrentPage = 1;
+
+  if (paginationBar) {
+    paginationBar.style.display = total > TOKEN_PAGE_SIZE ? 'flex' : 'flex';
+    const info = document.getElementById('tokensPaginationInfo');
+    const start = total === 0 ? 0 : (tokenCurrentPage - 1) * TOKEN_PAGE_SIZE + 1;
+    const end = Math.min(tokenCurrentPage * TOKEN_PAGE_SIZE, total);
+    if (info) info.textContent = `Showing ${start}–${end} of ${total} tokens${filtered.length !== allTokens.length ? ` (filtered from ${allTokens.length})` : ''}`;
+    const indicator = document.getElementById('tokensPageIndicator');
+    if (indicator) indicator.textContent = `Page ${tokenCurrentPage} of ${totalPages}`;
+  }
+
+  const startIdx = (tokenCurrentPage - 1) * TOKEN_PAGE_SIZE;
+  const pageSlice = filtered.slice(startIdx, startIdx + TOKEN_PAGE_SIZE);
+
+  if (pageSlice.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center; padding:24px; color:var(--text-muted);">No tokens found matching filter.</td></tr>`;
+    return;
+  }
+
+  let html = '';
+  for (let i = 0; i < pageSlice.length; i++) {
+    const t = pageSlice[i];
+    const absIdx = startIdx + i + 1;
+    html += `
+      <tr>
+        <td style="color:var(--text-muted); font-size:0.75rem;">${absIdx}</td>
+        <td><span class="pill ${getTokenPillClass(t.type)}">${escapeHtml(t.type)}</span></td>
+        <td><code style="font-family:var(--font-mono); font-size:0.83rem;">${escapeHtml(t.value === null ? '<EOF>' : String(t.value))}</code></td>
+        <td style="color:var(--text-secondary); font-size:0.76rem; font-family:var(--font-mono);">L${t.line} : C${t.col}</td>
+      </tr>
+    `;
+  }
+  tbody.innerHTML = html;
+}
+
+function changeTokensPage(action) {
+  let filtered = allTokens;
+  if (tokenFilterQuery) {
+    const q = tokenFilterQuery.toLowerCase();
+    filtered = allTokens.filter(t => (t.type && t.type.toLowerCase().includes(q)) || (t.value && String(t.value).toLowerCase().includes(q)));
+  }
+  const totalPages = Math.max(1, Math.ceil(filtered.length / TOKEN_PAGE_SIZE));
+  if (action === 'first') tokenCurrentPage = 1;
+  else if (action === 'prev') tokenCurrentPage = Math.max(1, tokenCurrentPage - 1);
+  else if (action === 'next') tokenCurrentPage = Math.min(totalPages, tokenCurrentPage + 1);
+  else if (action === 'last') tokenCurrentPage = totalPages;
+  renderTokensCurrentPage();
+}
+
+function filterTokens(val) {
+  tokenFilterQuery = val.trim();
+  tokenCurrentPage = 1;
+  renderTokensCurrentPage();
 }
 
 function getTokenPillClass(type) {
@@ -3040,8 +4448,12 @@ document.addEventListener('keydown', function(e) {
   }
 });
 
+let astStatementPage = 1;
+const AST_STMT_PAGE_SIZE = 30;
+
 function renderAst(ast) {
   currentAstData = ast;
+  astStatementPage = 1;
   if (astAnimTimer) {
     clearTimeout(astAnimTimer);
     astAnimTimer = null;
@@ -3061,12 +4473,303 @@ function renderAst(ast) {
         <div class="empty-state-desc">Compile valid source code to parse and render the top-down Abstract Syntax Tree.</div>
       </div>
     `;
+    const bar = document.getElementById('astPaginationBar');
+    if (bar) bar.style.display = 'none';
     return;
   }
 
   container.classList.remove('animating');
   container.innerHTML = buildAstNodeHtml(ast, 0, null);
+  updateAstPaginationControls();
   applyAstZoom();
+}
+
+function updateAstPaginationControls() {
+  const bar = document.getElementById('astPaginationBar');
+  if (!bar || !currentAstData) return;
+  const stmts = currentAstData.statements || [];
+  if (stmts.length > AST_STMT_PAGE_SIZE) {
+    bar.style.display = 'flex';
+    const totalPages = Math.ceil(stmts.length / AST_STMT_PAGE_SIZE);
+    const start = (astStatementPage - 1) * AST_STMT_PAGE_SIZE + 1;
+    const end = Math.min(astStatementPage * AST_STMT_PAGE_SIZE, stmts.length);
+    const info = document.getElementById('astPaginationInfo');
+    if (info) info.textContent = `Showing statements ${start}–${end} of ${stmts.length}`;
+    const indicator = document.getElementById('astPageIndicator');
+    if (indicator) indicator.textContent = `Page ${astStatementPage} of ${totalPages}`;
+  } else {
+    bar.style.display = 'none';
+  }
+}
+
+function changeAstPage(delta) {
+  if (!currentAstData) return;
+  const stmts = currentAstData.statements || [];
+  const totalPages = Math.ceil(stmts.length / AST_STMT_PAGE_SIZE);
+  astStatementPage = Math.max(1, Math.min(totalPages, astStatementPage + delta));
+  const container = document.getElementById('astTreeView');
+  if (container) {
+    container.innerHTML = buildAstNodeHtml(currentAstData, 0, null);
+    updateAstPaginationControls();
+    applyAstZoom();
+  }
+}
+
+function toggleAstBranch(el, event) {
+  if (event) event.stopPropagation();
+  const parentNode = el.closest('.ast-node');
+  if (!parentNode) return;
+  const childContainer = parentNode.querySelector(':scope > .ast-children');
+  if (childContainer) {
+    const isHidden = childContainer.style.display === 'none';
+    childContainer.style.display = isHidden ? 'flex' : 'none';
+    el.classList.toggle('collapsed', !isHidden);
+  }
+}
+
+function extractAstNodeChildren(node) {
+  if (!node || typeof node !== 'object') return [];
+  if (Array.isArray(node.children) && node.children.length > 0) {
+    return node.children.map(ch => (ch && ch.node ? ch : { node: ch }));
+  }
+
+  const ntype = node.type || 'Unknown';
+  const chList = [];
+
+  if (ntype === 'Program') {
+    const allStmts = node.statements || [];
+    if (allStmts.length > AST_STMT_PAGE_SIZE) {
+      const start = (astStatementPage - 1) * AST_STMT_PAGE_SIZE;
+      const end = start + AST_STMT_PAGE_SIZE;
+      return allStmts.slice(start, end).map(s => ({ node: s }));
+    }
+    return allStmts.map(s => ({ node: s }));
+  }
+
+  if (ntype === 'ClassDef') {
+    if (Array.isArray(node.bases)) {
+      node.bases.forEach(b => { if (b) chList.push({ node: b, badge: 'base' }); });
+    }
+    const mems = node.members || node.body || [];
+    mems.forEach(m => { if (m) chList.push({ node: m, badge: 'member' }); });
+    return chList;
+  }
+
+  if (ntype === 'FunctionDef' || ntype === 'AsyncFunctionDef') {
+    if (Array.isArray(node.params)) {
+      node.params.forEach(p => {
+        const pNode = (p && typeof p === 'object' && p.type) ? p : { type: 'Param', name: (p && p.name ? p.name : String(p)) };
+        chList.push({ node: pNode, badge: 'param' });
+      });
+    }
+    const bodyStmts = node.body || [];
+    bodyStmts.forEach(s => { if (s) chList.push({ node: s, badge: 'body' }); });
+    return chList;
+  }
+
+  if (ntype === 'VarDecl') {
+    if (node.value) chList.push({ node: node.value, badge: 'init' });
+    return chList;
+  }
+
+  if (ntype === 'Assign') {
+    if (Array.isArray(node.targets) && node.targets.length > 1) {
+      node.targets.forEach(t => { if (t) chList.push({ node: t, badge: 'target' }); });
+    }
+    if (node.value) chList.push({ node: node.value, badge: 'val' });
+    return chList;
+  }
+
+  if (ntype === 'AugAssign') {
+    if (node.value) chList.push({ node: node.value, badge: 'val' });
+    return chList;
+  }
+
+  if (ntype === 'BinOp' || ntype === 'Compare') {
+    if (node.left) chList.push({ node: node.left, badge: 'Left' });
+    if (node.right) chList.push({ node: node.right, badge: 'Right' });
+    return chList;
+  }
+
+  if (ntype === 'UnaryOp') {
+    if (node.operand) chList.push({ node: node.operand, badge: 'expr' });
+    return chList;
+  }
+
+  if (ntype === 'BoolOp') {
+    if (Array.isArray(node.values)) {
+      node.values.forEach((v, idx) => { if (v) chList.push({ node: v, badge: `val ${idx + 1}` }); });
+    }
+    return chList;
+  }
+
+  if (ntype === 'IfExp') {
+    if (node.test) chList.push({ node: node.test, badge: 'test' });
+    if (node.body) chList.push({ node: node.body, badge: 'true' });
+    if (node.orelse) chList.push({ node: node.orelse, badge: 'false' });
+    return chList;
+  }
+
+  if (ntype === 'Return') {
+    if (node.value) chList.push({ node: node.value, badge: 'val' });
+    return chList;
+  }
+
+  if (ntype === 'FunctionCall' || ntype === 'Call') {
+    if (node.func && typeof node.func === 'object') {
+      chList.push({ node: node.func, badge: 'caller' });
+    }
+    (node.args || []).forEach((arg, idx) => { if (arg) chList.push({ node: arg, badge: `arg ${idx + 1}` }); });
+    (node.keywords || []).forEach(kw => { if (kw) chList.push({ node: kw, badge: `kw:${kw.arg || ''}` }); });
+    return chList;
+  }
+
+  if (ntype === 'Keyword') {
+    if (node.value) chList.push({ node: node.value, badge: 'val' });
+    return chList;
+  }
+
+  if (ntype === 'If') {
+    if (node.condition) {
+      chList.push({
+        virtualNode: {
+          cardType: 'Condition',
+          cardVal: 'test',
+          catClass: 'cat-branch-cond',
+          children: [{ node: node.condition }]
+        }
+      });
+    }
+    const thenStmts = node.then_branch || [];
+    chList.push({
+      virtualNode: {
+        cardType: 'Then',
+        cardVal: `${thenStmts.length} stmt${thenStmts.length === 1 ? '' : 's'}`,
+        catClass: 'cat-branch-then',
+        children: thenStmts.map(s => ({ node: s }))
+      }
+    });
+    if (node.else_branch && node.else_branch.length > 0) {
+      const elseStmts = node.else_branch;
+      chList.push({
+        virtualNode: {
+          cardType: 'Else',
+          cardVal: `${elseStmts.length} stmt${elseStmts.length === 1 ? '' : 's'}`,
+          catClass: 'cat-branch-else',
+          children: elseStmts.map(s => ({ node: s }))
+        }
+      });
+    }
+    return chList;
+  }
+
+  if (ntype === 'While') {
+    if (node.condition) {
+      chList.push({
+        virtualNode: {
+          cardType: 'Condition',
+          cardVal: 'loop test',
+          catClass: 'cat-branch-cond',
+          children: [{ node: node.condition }]
+        }
+      });
+    }
+    const bodyStmts = node.body || node.then_branch || [];
+    chList.push({
+      virtualNode: {
+        cardType: 'Body',
+        cardVal: `${bodyStmts.length} stmt${bodyStmts.length === 1 ? '' : 's'}`,
+        catClass: 'cat-branch-then',
+        children: bodyStmts.map(s => ({ node: s }))
+      }
+    });
+    if (node.orelse && node.orelse.length > 0) {
+      chList.push({
+        virtualNode: {
+          cardType: 'Else',
+          cardVal: `${node.orelse.length} stmt${node.orelse.length === 1 ? '' : 's'}`,
+          catClass: 'cat-branch-else',
+          children: node.orelse.map(s => ({ node: s }))
+        }
+      });
+    }
+    return chList;
+  }
+
+  if (ntype === 'For') {
+    if (node.target) chList.push({ node: node.target, badge: 'target' });
+    if (node.iter) chList.push({ node: node.iter, badge: 'iter' });
+    const forStmts = node.body || [];
+    chList.push({
+      virtualNode: {
+        cardType: 'Body',
+        cardVal: `${forStmts.length} stmt${forStmts.length === 1 ? '' : 's'}`,
+        catClass: 'cat-branch-then',
+        children: forStmts.map(s => ({ node: s }))
+      }
+    });
+    if (node.orelse && node.orelse.length > 0) {
+      chList.push({
+        virtualNode: {
+          cardType: 'Else',
+          cardVal: `${node.orelse.length} stmt${node.orelse.length === 1 ? '' : 's'}`,
+          catClass: 'cat-branch-else',
+          children: node.orelse.map(s => ({ node: s }))
+        }
+      });
+    }
+    return chList;
+  }
+
+  if (ntype === 'List') {
+    return (node.elements || []).map((e, idx) => ({ node: e, badge: `[${idx}]` }));
+  }
+
+  if (ntype === 'Tuple') {
+    return (node.elements || []).map((e, idx) => ({ node: e, badge: `(${idx})` }));
+  }
+
+  if (ntype === 'Set') {
+    return (node.elements || []).map(e => ({ node: e, badge: 'item' }));
+  }
+
+  if (ntype === 'Dict') {
+    return (node.entries || []).map(e => ({ node: e, badge: 'pair' }));
+  }
+
+  if (ntype === 'DictEntry') {
+    if (node.key) chList.push({ node: node.key, badge: 'key' });
+    if (node.value) chList.push({ node: node.value, badge: 'val' });
+    return chList;
+  }
+
+  if (ntype === 'Subscript') {
+    if (node.value) chList.push({ node: node.value, badge: 'val' });
+    if (node.slice) chList.push({ node: node.slice, badge: 'slice' });
+    return chList;
+  }
+
+  if (ntype === 'Slice') {
+    if (node.lower) chList.push({ node: node.lower, badge: 'start' });
+    if (node.upper) chList.push({ node: node.upper, badge: 'stop' });
+    if (node.step) chList.push({ node: node.step, badge: 'step' });
+    return chList;
+  }
+
+  if (ntype === 'Attribute') {
+    if (node.value) chList.push({ node: node.value, badge: 'obj' });
+    return chList;
+  }
+
+  // Generic fallback if none matched:
+  if (Array.isArray(node.statements)) return node.statements.map(s => ({ node: s }));
+  if (Array.isArray(node.body)) return node.body.map(s => ({ node: s }));
+  if (Array.isArray(node.members)) return node.members.map(m => ({ node: m }));
+  if (Array.isArray(node.elements)) return node.elements.map(e => ({ node: e }));
+  if (Array.isArray(node.entries)) return node.entries.map(e => ({ node: e }));
+  if (node.value && typeof node.value === 'object' && node.value.type) return [{ node: node.value }];
+
+  return [];
 }
 
 function buildAstNodeHtml(node, level, branchBadge) {
@@ -3077,54 +4780,62 @@ function buildAstNodeHtml(node, level, branchBadge) {
   let cardVal = '';
   let cardSub = '';
   let catClass = 'cat-program';
-  let children = [];
 
   if (ntype === 'Program') {
     cardType = 'Program';
-    const stmts = node.statements || [];
-    cardVal = `${stmts.length} statement${stmts.length === 1 ? '' : 's'}`;
+    const allStmts = node.statements || [];
+    cardVal = `${allStmts.length} statement${allStmts.length === 1 ? '' : 's'}`;
     catClass = 'cat-program';
-    children = stmts.map(s => ({ node: s }));
   } else if (ntype === 'Include') {
     cardType = '#include';
     cardVal = node.header || '';
     catClass = 'cat-include';
-  } else if (ntype === 'FunctionDef') {
-    cardType = 'FunctionDef';
-    cardVal = `${node.name || 'func'}()`;
-    cardSub = `returns ${node.return_type || 'void'}`;
+  } else if (ntype === 'ClassDef') {
+    cardType = 'ClassDef';
+    cardVal = 'class ' + (node.name || 'Anonymous');
     catClass = 'cat-function';
-    children = (node.body || []).map(s => ({ node: s }));
+  } else if (ntype === 'FunctionDef' || ntype === 'AsyncFunctionDef') {
+    cardType = ntype === 'AsyncFunctionDef' ? 'AsyncFunction' : 'FunctionDef';
+    cardVal = `${node.name || 'func'}()`;
+    cardSub = node.return_type ? `returns ${node.return_type}` : '';
+    catClass = 'cat-function';
+  } else if (ntype === 'Param' || ntype === 'Argument') {
+    cardType = 'Param';
+    cardVal = node.name || '';
+    catClass = 'cat-leaf-id';
   } else if (ntype === 'VarDecl') {
     cardType = 'VarDecl';
     cardVal = node.name || '';
-    cardSub = 'type: ' + (node.datatype || 'int');
+    cardSub = 'type: ' + (node.datatype || 'auto');
     catClass = 'cat-decl';
-    if (node.value) {
-      children = [{ node: node.value, badge: 'init' }];
-    }
   } else if (ntype === 'Assign') {
     cardType = 'Assign';
     cardVal = `${node.name || ''} =`;
     catClass = 'cat-assign';
-    if (node.value) {
-      children = [{ node: node.value, badge: 'val' }];
-    }
+  } else if (ntype === 'AugAssign') {
+    cardType = 'AugAssign';
+    cardVal = `${node.name || ''} ${node.op || '+'} =`;
+    catClass = 'cat-assign';
   } else if (ntype === 'BinOp') {
     cardType = 'BinaryOp';
     cardVal = node.op || '?';
     catClass = 'cat-op';
-    children = [
-      { node: node.left, badge: 'Left' },
-      { node: node.right, badge: 'Right' }
-    ];
   } else if (ntype === 'UnaryOp') {
     cardType = 'UnaryOp';
     cardVal = node.op || '?';
     catClass = 'cat-op';
-    if (node.operand) {
-      children = [{ node: node.operand, badge: 'expr' }];
-    }
+  } else if (ntype === 'Compare') {
+    cardType = 'Compare';
+    cardVal = node.op || '==';
+    catClass = 'cat-op';
+  } else if (ntype === 'BoolOp') {
+    cardType = 'BoolOp';
+    cardVal = node.op || 'and';
+    catClass = 'cat-op';
+  } else if (ntype === 'IfExp') {
+    cardType = 'IfExp';
+    cardVal = 'if / else';
+    catClass = 'cat-control';
   } else if (ntype === 'Number') {
     cardType = 'Number';
     cardVal = String(node.value !== undefined ? node.value : '');
@@ -3133,6 +4844,10 @@ function buildAstNodeHtml(node, level, branchBadge) {
     cardType = 'String';
     cardVal = JSON.stringify(node.value || '');
     catClass = 'cat-leaf-str';
+  } else if (ntype === 'Constant') {
+    cardType = 'Constant';
+    cardVal = String(node.value !== undefined ? node.value : '');
+    catClass = 'cat-leaf-id';
   } else if (ntype === 'Identifier') {
     cardType = 'Identifier';
     cardVal = node.name || '';
@@ -3141,56 +4856,77 @@ function buildAstNodeHtml(node, level, branchBadge) {
     cardType = 'Return';
     cardVal = 'return';
     catClass = 'cat-return';
-    if (node.value) {
-      children = [{ node: node.value, badge: 'val' }];
-    }
-  } else if (ntype === 'FunctionCall') {
+  } else if (ntype === 'FunctionCall' || ntype === 'Call') {
     cardType = 'Call';
     cardVal = `${node.name || 'call'}()`;
     catClass = 'cat-call';
-    children = (node.args || []).map((arg, idx) => ({ node: arg, badge: `arg ${idx + 1}` }));
+  } else if (ntype === 'Keyword') {
+    cardType = 'Keyword';
+    cardVal = `${node.arg || ''} =`;
+    catClass = 'cat-decl';
   } else if (ntype === 'If') {
     cardType = 'If';
     cardVal = 'if / branch';
     catClass = 'cat-control';
-
-    if (node.condition) {
-      children.push({
-        virtualNode: {
-          cardType: 'Condition',
-          cardVal: 'test',
-          catClass: 'cat-branch-cond',
-          children: [{ node: node.condition }]
-        }
-      });
-    }
-
-    const thenStmts = node.then_branch || [];
-    children.push({
-      virtualNode: {
-        cardType: 'Then',
-        cardVal: `${thenStmts.length} stmt${thenStmts.length === 1 ? '' : 's'}`,
-        catClass: 'cat-branch-then',
-        children: thenStmts.map(s => ({ node: s }))
-      }
-    });
-
-    if (node.else_branch && node.else_branch.length > 0) {
-      const elseStmts = node.else_branch;
-      children.push({
-        virtualNode: {
-          cardType: 'Else',
-          cardVal: `${elseStmts.length} stmt${elseStmts.length === 1 ? '' : 's'}`,
-          catClass: 'cat-branch-else',
-          children: elseStmts.map(s => ({ node: s }))
-        }
-      });
-    }
+  } else if (ntype === 'While') {
+    cardType = 'While';
+    cardVal = 'while loop';
+    catClass = 'cat-control';
+  } else if (ntype === 'For') {
+    cardType = 'For';
+    cardVal = 'for loop';
+    catClass = 'cat-control';
+  } else if (ntype === 'List') {
+    cardType = 'List';
+    cardVal = `[${(node.elements || []).length} items]`;
+    catClass = 'cat-decl';
+  } else if (ntype === 'Tuple') {
+    cardType = 'Tuple';
+    cardVal = `(${(node.elements || []).length} items)`;
+    catClass = 'cat-decl';
+  } else if (ntype === 'Set') {
+    cardType = 'Set';
+    cardVal = `{${(node.elements || []).length} items}`;
+    catClass = 'cat-decl';
+  } else if (ntype === 'Dict') {
+    cardType = 'Dict';
+    cardVal = `{${(node.entries || []).length} entries}`;
+    catClass = 'cat-decl';
+  } else if (ntype === 'DictEntry') {
+    cardType = 'KeyVal';
+    cardVal = ':';
+    catClass = 'cat-op';
+  } else if (ntype === 'Subscript') {
+    cardType = 'Subscript';
+    cardVal = '[ ]';
+    catClass = 'cat-op';
+  } else if (ntype === 'Slice') {
+    cardType = 'Slice';
+    cardVal = ':';
+    catClass = 'cat-op';
+  } else if (ntype === 'Attribute') {
+    cardType = 'Attribute';
+    cardVal = `.${node.attr || ''}`;
+    catClass = 'cat-leaf-id';
+  } else if (ntype === 'Import') {
+    cardType = 'Import';
+    cardVal = (node.names || []).join(', ') || '';
+    catClass = 'cat-include';
+  } else if (ntype === 'ImportFrom') {
+    cardType = 'ImportFrom';
+    cardVal = `from ${node.module || ''} import ${(node.names || []).join(', ')}`;
+    catClass = 'cat-include';
+  } else if (ntype === 'Pass' || ntype === 'Break' || ntype === 'Continue') {
+    cardType = ntype;
+    cardVal = ntype.toLowerCase();
+    catClass = 'cat-control';
   } else {
     cardType = ntype;
     cardVal = node.value || node.name || '';
     catClass = 'cat-program';
   }
+
+  const children = extractAstNodeChildren(node);
 
   // Children branches HTML
   let childrenHtml = '';
@@ -3219,11 +4955,14 @@ function buildAstNodeHtml(node, level, branchBadge) {
 
   return `
     <div class="ast-node" data-level="${level}">
-      <div class="ast-card ${catClass}" title="Line ${node.line || 'N/A'}: ${escapeHtml(cardType)}">
-        <div class="ast-card-type">${escapeHtml(cardType)}</div>
+      <div class="ast-card ${catClass}" title="Line ${node.line || 'N/A'}: ${escapeHtml(cardType)} (Click to toggle)" onclick="toggleAstBranch(this, event)">
+        <span class="ast-toggle-btn" title="Expand/Collapse">▼</span>
+        <div class="ast-card-header">
+          <div class="ast-card-type">${escapeHtml(cardType)}</div>
+          ${lineHtml}
+        </div>
         <div class="ast-card-val">${escapeHtml(cardVal)}</div>
         ${subHtml}
-        ${lineHtml}
       </div>
       ${childrenHtml}
     </div>
@@ -3363,11 +5102,19 @@ function applyAstZoom() {
   }
 }
 
-// Stage 3: Semantic
+// Stage 3: Semantic with Virtualization & Search Filtering
+let allSymbols = [];
+let symbolsCurrentPage = 1;
+const SYMBOLS_PAGE_SIZE = 50;
+let symbolFilterQuery = '';
+
 function renderSemantic(errors, symbolTable, declaredVars) {
   const statusBox = document.getElementById('semanticStatusBox');
-  const tbody = document.getElementById('symbolTableBody');
-  tbody.innerHTML = '';
+  allSymbols = symbolTable || [];
+  symbolsCurrentPage = 1;
+  symbolFilterQuery = '';
+  const filterInput = document.getElementById('symbolsFilterInput');
+  if (filterInput) filterInput.value = '';
 
   if (errors.length === 0) {
     statusBox.innerHTML = `
@@ -3395,54 +5142,158 @@ function renderSemantic(errors, symbolTable, declaredVars) {
     `;
   }
 
-  if (symbolTable.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:24px; color:var(--text-muted);">No symbols in symbol table</td></tr>`;
+  renderSymbolsCurrentPage();
+}
+
+function renderSymbolsCurrentPage() {
+  const tbody = document.getElementById('symbolTableBody');
+  const paginationBar = document.getElementById('symbolsPaginationBar');
+  if (!tbody) return;
+
+  let filtered = allSymbols;
+  if (symbolFilterQuery) {
+    const q = symbolFilterQuery.toLowerCase();
+    filtered = allSymbols.filter(s =>
+      (s.name && s.name.toLowerCase().includes(q)) ||
+      (s.type && s.type.toLowerCase().includes(q)) ||
+      (s.scope && s.scope.toLowerCase().includes(q))
+    );
+  }
+
+  const total = filtered.length;
+  const totalPages = Math.max(1, Math.ceil(total / SYMBOLS_PAGE_SIZE));
+  if (symbolsCurrentPage > totalPages) symbolsCurrentPage = totalPages;
+  if (symbolsCurrentPage < 1) symbolsCurrentPage = 1;
+
+  if (paginationBar) {
+    paginationBar.style.display = total > SYMBOLS_PAGE_SIZE ? 'flex' : 'none';
+    const info = document.getElementById('symbolsPaginationInfo');
+    const start = total === 0 ? 0 : (symbolsCurrentPage - 1) * SYMBOLS_PAGE_SIZE + 1;
+    const end = Math.min(symbolsCurrentPage * SYMBOLS_PAGE_SIZE, total);
+    if (info) info.textContent = `Showing ${start}–${end} of ${total} symbols`;
+    const indicator = document.getElementById('symbolsPageIndicator');
+    if (indicator) indicator.textContent = `Page ${symbolsCurrentPage} of ${totalPages}`;
+  }
+
+  if (filtered.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:24px; color:var(--text-muted);">${symbolFilterQuery ? 'No symbols match filter.' : 'No symbols in symbol table'}</td></tr>`;
     return;
   }
 
-  symbolTable.forEach(s => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><strong style="color:var(--text-primary); font-family:var(--font-mono);">${escapeHtml(s.name)}</strong></td>
-      <td><code style="font-family:var(--font-mono); font-size:0.83rem;">${escapeHtml(s.type)}</code></td>
-      <td><span class="pill pill-type">${escapeHtml(s.scope)}</span></td>
-      <td style="color:var(--text-secondary); font-size:0.80rem;">Line ${s.line}${s.col ? ' : C' + s.col : ''}</td>
-      <td><span class="pill ${s.initialized ? 'pill-success' : 'pill-warning'}">${escapeHtml(s.status)}</span></td>
+  const startIdx = (symbolsCurrentPage - 1) * SYMBOLS_PAGE_SIZE;
+  const slice = filtered.slice(startIdx, startIdx + SYMBOLS_PAGE_SIZE);
+
+  let html = '';
+  for (let i = 0; i < slice.length; i++) {
+    const s = slice[i];
+    html += `
+      <tr>
+        <td><strong style="color:var(--text-primary); font-family:var(--font-mono);">${escapeHtml(s.name)}</strong></td>
+        <td><code style="font-family:var(--font-mono); font-size:0.83rem;">${escapeHtml(s.type)}</code></td>
+        <td><span class="pill pill-type">${escapeHtml(s.scope)}</span></td>
+        <td style="color:var(--text-secondary); font-size:0.80rem;">Line ${s.line}${s.col ? ' : C' + s.col : ''}</td>
+        <td><span class="pill ${s.initialized ? 'pill-success' : 'pill-warning'}">${escapeHtml(s.status)}</span></td>
+      </tr>
     `;
-    tbody.appendChild(tr);
-  });
+  }
+  tbody.innerHTML = html;
 }
 
-// Stage 4: IR
+function changeSymbolsPage(delta) {
+  let filtered = allSymbols;
+  if (symbolFilterQuery) {
+    const q = symbolFilterQuery.toLowerCase();
+    filtered = allSymbols.filter(s => (s.name && s.name.toLowerCase().includes(q)) || (s.type && s.type.toLowerCase().includes(q)));
+  }
+  const totalPages = Math.max(1, Math.ceil(filtered.length / SYMBOLS_PAGE_SIZE));
+  symbolsCurrentPage = Math.max(1, Math.min(totalPages, symbolsCurrentPage + delta));
+  renderSymbolsCurrentPage();
+}
+
+function filterSymbols(val) {
+  symbolFilterQuery = val.trim();
+  symbolsCurrentPage = 1;
+  renderSymbolsCurrentPage();
+}
+
+// Stage 4: IR with High-Performance Quadruples Pagination
+let allQuadruples = [];
+let quadsCurrentPage = 1;
+const QUADS_PAGE_SIZE = 50;
+
 function renderIr(ir) {
   document.getElementById('tacCodeView').textContent = ir.tac_text || "; No IR generated";
+  allQuadruples = ir.quadruples || [];
+  quadsCurrentPage = 1;
 
   const tempContainer = document.getElementById('irTemporariesPills');
-  tempContainer.innerHTML = '';
-  (ir.temporaries || []).forEach(t => {
-    const s = document.createElement('span');
-    s.className = 'pill pill-ident';
-    s.textContent = t;
-    tempContainer.appendChild(s);
-  });
-  if ((ir.temporaries || []).length === 0) {
-    tempContainer.innerHTML = '<span style="color:var(--text-muted); font-size:0.8rem;">No temporary registers required</span>';
+  if (tempContainer) {
+    tempContainer.innerHTML = '';
+    const temps = ir.stats?.temporaries || ir.temporaries || [];
+    temps.forEach(t => {
+      const s = document.createElement('span');
+      s.className = 'pill pill-ident';
+      s.textContent = t;
+      tempContainer.appendChild(s);
+    });
+    if (temps.length === 0) {
+      tempContainer.innerHTML = '<span style="color:var(--text-muted); font-size:0.8rem;">No temporary registers required</span>';
+    }
   }
 
+  renderQuadsCurrentPage();
+}
+
+function renderQuadsCurrentPage() {
   const tbody = document.getElementById('quadruplesTableBody');
-  tbody.innerHTML = '';
-  (ir.quadruples || []).forEach(q => {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td style="color:var(--text-muted); font-size:0.75rem;">${q.index}</td>
-      <td><code style="font-family:var(--font-mono); font-size:0.82rem; color:var(--primary); font-weight:600;">${escapeHtml(q.op)}</code></td>
-      <td><code style="font-family:var(--font-mono); font-size:0.82rem;">${escapeHtml(q.arg1 || '-')}</code></td>
-      <td><code style="font-family:var(--font-mono); font-size:0.82rem;">${escapeHtml(q.arg2 || '-')}</code></td>
-      <td><strong style="font-family:var(--font-mono); color:var(--secondary-accent); font-size:0.82rem;">${escapeHtml(q.result || '-')}</strong></td>
-      <td style="color:var(--text-secondary); font-size:0.80rem;">${escapeHtml(q.comment || '')}</td>
+  const paginationBar = document.getElementById('quadsPaginationBar');
+  if (!tbody) return;
+
+  const total = allQuadruples.length;
+  const totalPages = Math.max(1, Math.ceil(total / QUADS_PAGE_SIZE));
+  if (quadsCurrentPage > totalPages) quadsCurrentPage = totalPages;
+  if (quadsCurrentPage < 1) quadsCurrentPage = 1;
+
+  if (paginationBar) {
+    paginationBar.style.display = total > QUADS_PAGE_SIZE ? 'flex' : 'none';
+    const info = document.getElementById('quadsPaginationInfo');
+    const start = total === 0 ? 0 : (quadsCurrentPage - 1) * QUADS_PAGE_SIZE + 1;
+    const end = Math.min(quadsCurrentPage * QUADS_PAGE_SIZE, total);
+    if (info) info.textContent = `Showing ${start}–${end} of ${total} quadruples`;
+    const indicator = document.getElementById('quadsPageIndicator');
+    if (indicator) indicator.textContent = `Page ${quadsCurrentPage} of ${totalPages}`;
+  }
+
+  if (allQuadruples.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; padding:24px; color:var(--text-muted);">No quadruples generated</td></tr>`;
+    return;
+  }
+
+  const startIdx = (quadsCurrentPage - 1) * QUADS_PAGE_SIZE;
+  const slice = allQuadruples.slice(startIdx, startIdx + QUADS_PAGE_SIZE);
+
+  let html = '';
+  for (let i = 0; i < slice.length; i++) {
+    const q = slice[i];
+    const absIdx = startIdx + i + 1;
+    html += `
+      <tr>
+        <td style="color:var(--text-muted); font-size:0.75rem;">${absIdx}</td>
+        <td><code style="font-family:var(--font-mono); font-size:0.82rem; color:var(--primary); font-weight:600;">${escapeHtml(q.op || '')}</code></td>
+        <td><code style="font-family:var(--font-mono); font-size:0.82rem;">${escapeHtml(q.arg1 === null ? '-' : String(q.arg1))}</code></td>
+        <td><code style="font-family:var(--font-mono); font-size:0.82rem;">${escapeHtml(q.arg2 === null ? '-' : String(q.arg2))}</code></td>
+        <td><strong style="font-family:var(--font-mono); color:var(--secondary-accent); font-size:0.82rem;">${escapeHtml(q.result === null ? '-' : String(q.result))}</strong></td>
+        <td style="color:var(--text-secondary); font-size:0.80rem;">${escapeHtml(q.comment || q.annotation || '')}</td>
+      </tr>
     `;
-    tbody.appendChild(tr);
-  });
+  }
+  tbody.innerHTML = html;
+}
+
+function changeQuadsPage(delta) {
+  const totalPages = Math.max(1, Math.ceil(allQuadruples.length / QUADS_PAGE_SIZE));
+  quadsCurrentPage = Math.max(1, Math.min(totalPages, quadsCurrentPage + delta));
+  renderQuadsCurrentPage();
 }
 
 // Stage 5: Target Assembly
@@ -3469,7 +5320,49 @@ function switchAsmView(mode) {
   document.getElementById('asmCodeView').textContent = text;
 }
 
-// Stage 6: Explainer
+// Stage 6: Sandboxed Execution
+function renderExecution(execData) {
+  const terminal = document.getElementById('programTerminalOutput');
+  const metricsGrid = document.getElementById('execMetricsGrid');
+  const statusVal = document.getElementById('metricExecStatus');
+  const exitCodeVal = document.getElementById('metricExitCode');
+  const execTimeVal = document.getElementById('metricExecTime');
+  const engineVal = document.getElementById('metricExecEngine');
+
+  if (!execData) {
+    if (terminal) terminal.textContent = '$ Program output awaiting compilation...';
+    if (metricsGrid) metricsGrid.style.display = 'none';
+    return;
+  }
+
+  if (terminal) {
+    const rawOut = (execData.output !== undefined && execData.output !== null)
+      ? execData.output
+      : (execData.executed ? '[Program exited with status code 0]' : '[Execution skipped]');
+    terminal.textContent = rawOut || '[No output produced]';
+  }
+
+  if (metricsGrid) {
+    metricsGrid.style.display = 'grid';
+    if (statusVal) {
+      const isSuccess = execData.success !== false;
+      statusVal.textContent = isSuccess ? 'Success' : 'Execution Halted';
+      statusVal.style.color = isSuccess ? 'var(--success)' : 'var(--error)';
+    }
+    if (exitCodeVal) {
+      exitCodeVal.textContent = (execData.exit_code !== undefined && execData.exit_code !== null) ? String(execData.exit_code) : '0';
+    }
+    if (execTimeVal) {
+      const ms = execData.duration_ms !== undefined ? execData.duration_ms : 0.4;
+      execTimeVal.textContent = typeof ms === 'number' ? `${ms.toFixed(1)} ms` : `${ms}`;
+    }
+    if (engineVal) {
+      engineVal.textContent = execData.engine || 'TAC VM Sandbox';
+    }
+  }
+}
+
+// Stage 7: Explainer
 function renderExplainer(explanations) {
   const container = document.getElementById('explainerCardsContainer');
   container.innerHTML = '';
@@ -3689,7 +5582,7 @@ async function runDiff() {
     const res = await fetch('/diff', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ source_a: sourceA, source_b: sourceB, language: 'c' })
+      body: JSON.stringify({ source_a: sourceA, source_b: sourceB, language: currentLanguage || 'c' })
     });
     const json = await res.json().catch(() => null);
 
@@ -3812,20 +5705,26 @@ function computeSubtreeSignature(node) {
   const type = node.type || '';
   if (type === 'Number') return `Num:${node.value}`;
   if (type === 'Identifier') return `Id:${node.name}`;
+  if (type === 'Constant') return `Const:${node.value}`;
   if (type === 'String') return `Str:${JSON.stringify(node.value)}`;
   if (type === 'Include') return `Inc:${node.header}`;
   if (type === 'BinOp') return `BinOp:${node.op}(${computeSubtreeSignature(node.left)},${computeSubtreeSignature(node.right)})`;
   if (type === 'UnaryOp') return `UnaryOp:${node.op}(${computeSubtreeSignature(node.operand)})`;
   if (type === 'VarDecl') return `VarDecl:${node.datatype}:${node.name}(${computeSubtreeSignature(node.value)})`;
   if (type === 'Assign') return `Assign:${node.name}(${computeSubtreeSignature(node.value)})`;
+  if (type === 'AugAssign') return `AugAssign:${node.name}:${node.op}(${computeSubtreeSignature(node.value)})`;
   if (type === 'Return') return `Return(${computeSubtreeSignature(node.value)})`;
-  if (type === 'FunctionCall') {
+  if (type === 'ClassDef') {
+    const mems = (node.members || node.body || []).map(computeSubtreeSignature).join(';');
+    return `Class:${node.name}(${mems})`;
+  }
+  if (type === 'FunctionCall' || type === 'Call') {
     const args = (node.args || []).map(computeSubtreeSignature).join(',');
     return `Call:${node.name}(${args})`;
   }
-  if (type === 'FunctionDef') {
+  if (type === 'FunctionDef' || type === 'AsyncFunctionDef') {
     const body = (node.body || []).map(computeSubtreeSignature).join(';');
-    return `Func:${node.return_type}:${node.name}(${body})`;
+    return `Func:${node.return_type || ''}:${node.name}(${body})`;
   }
   if (type === 'If') {
     const cond = computeSubtreeSignature(node.condition);
@@ -3833,9 +5732,23 @@ function computeSubtreeSignature(node) {
     const elseB = (node.else_branch || []).map(computeSubtreeSignature).join(';');
     return `If(${cond}){${thenB}}else{${elseB}}`;
   }
+  if (type === 'While') {
+    const cond = computeSubtreeSignature(node.condition);
+    const body = (node.body || node.then_branch || []).map(computeSubtreeSignature).join(';');
+    return `While(${cond}){${body}}`;
+  }
+  if (type === 'For') {
+    const iter = computeSubtreeSignature(node.iter);
+    const body = (node.body || []).map(computeSubtreeSignature).join(';');
+    return `For(${iter}){${body}}`;
+  }
   if (type === 'Program') {
     const stmts = (node.statements || []).map(computeSubtreeSignature).join(';');
     return `Prog(${stmts})`;
+  }
+  if (Array.isArray(node.children) && node.children.length > 0) {
+    const chSigs = node.children.map(ch => computeSubtreeSignature(ch.node || ch)).join(',');
+    return `${type}:${node.name || node.value || ''}(${chSigs})`;
   }
   return `${type}:${node.name || node.value || ''}`;
 }
@@ -3843,16 +5756,26 @@ function computeSubtreeSignature(node) {
 function markSubtreeStatus(node, status) {
   if (!node || typeof node !== 'object') return;
   node._diffStatus = status;
+  if (Array.isArray(node.children)) node.children.forEach(ch => markSubtreeStatus(ch.node || ch, status));
   if (node.statements) node.statements.forEach(s => markSubtreeStatus(s, status));
+  if (node.members) node.members.forEach(m => markSubtreeStatus(m, status));
   if (node.body) node.body.forEach(s => markSubtreeStatus(s, status));
-  if (node.value) markSubtreeStatus(node.value, status);
+  if (node.params) node.params.forEach(p => markSubtreeStatus(p, status));
+  if (node.elements) node.elements.forEach(e => markSubtreeStatus(e, status));
+  if (node.entries) node.entries.forEach(e => markSubtreeStatus(e, status));
+  if (node.key) markSubtreeStatus(node.key, status);
+  if (node.value && typeof node.value === 'object') markSubtreeStatus(node.value, status);
   if (node.left) markSubtreeStatus(node.left, status);
   if (node.right) markSubtreeStatus(node.right, status);
   if (node.operand) markSubtreeStatus(node.operand, status);
+  if (node.target && typeof node.target === 'object') markSubtreeStatus(node.target, status);
+  if (node.iter && typeof node.iter === 'object') markSubtreeStatus(node.iter, status);
+  if (node.slice && typeof node.slice === 'object') markSubtreeStatus(node.slice, status);
   if (node.args) node.args.forEach(a => markSubtreeStatus(a, status));
   if (node.condition) markSubtreeStatus(node.condition, status);
   if (node.then_branch) node.then_branch.forEach(s => markSubtreeStatus(s, status));
   if (node.else_branch) node.else_branch.forEach(s => markSubtreeStatus(s, status));
+  if (node.orelse) node.orelse.forEach(s => markSubtreeStatus(s, status));
 }
 
 function markAstDiff(nodeA, nodeB) {
@@ -3888,7 +5811,16 @@ function markAstDiff(nodeA, nodeB) {
     nodeA._diffStatus = 'parent_mod';
     nodeB._diffStatus = 'parent_mod';
     diffAstStatementLists(nodeA.statements || [], nodeB.statements || []);
-  } else if (typeA === 'FunctionDef') {
+  } else if (typeA === 'ClassDef') {
+    if (nodeA.name === nodeB.name) {
+      nodeA._diffStatus = 'parent_mod';
+      nodeB._diffStatus = 'parent_mod';
+      diffAstStatementLists(nodeA.members || nodeA.body || [], nodeB.members || nodeB.body || []);
+    } else {
+      markSubtreeStatus(nodeA, 'changed_a');
+      markSubtreeStatus(nodeB, 'changed_b');
+    }
+  } else if (typeA === 'FunctionDef' || typeA === 'AsyncFunctionDef') {
     if (nodeA.name === nodeB.name && nodeA.return_type === nodeB.return_type) {
       nodeA._diffStatus = 'parent_mod';
       nodeB._diffStatus = 'parent_mod';
@@ -3906,7 +5838,7 @@ function markAstDiff(nodeA, nodeB) {
       markSubtreeStatus(nodeA, 'changed_a');
       markSubtreeStatus(nodeB, 'changed_b');
     }
-  } else if (typeA === 'Assign') {
+  } else if (typeA === 'Assign' || typeA === 'AugAssign') {
     if (nodeA.name === nodeB.name) {
       nodeA._diffStatus = 'parent_mod';
       nodeB._diffStatus = 'parent_mod';
@@ -3938,7 +5870,7 @@ function markAstDiff(nodeA, nodeB) {
     nodeA._diffStatus = 'parent_mod';
     nodeB._diffStatus = 'parent_mod';
     markAstDiff(nodeA.value, nodeB.value);
-  } else if (typeA === 'FunctionCall') {
+  } else if (typeA === 'FunctionCall' || typeA === 'Call') {
     if (nodeA.name === nodeB.name) {
       nodeA._diffStatus = 'parent_mod';
       nodeB._diffStatus = 'parent_mod';
@@ -3958,8 +5890,18 @@ function markAstDiff(nodeA, nodeB) {
     markAstDiff(nodeA.condition, nodeB.condition);
     diffAstStatementLists(nodeA.then_branch || [], nodeB.then_branch || []);
     diffAstStatementLists(nodeA.else_branch || [], nodeB.else_branch || []);
+  } else if (typeA === 'While') {
+    nodeA._diffStatus = 'parent_mod';
+    nodeB._diffStatus = 'parent_mod';
+    markAstDiff(nodeA.condition, nodeB.condition);
+    diffAstStatementLists(nodeA.body || nodeA.then_branch || [], nodeB.body || nodeB.then_branch || []);
+    diffAstStatementLists(nodeA.orelse || nodeA.else_branch || [], nodeB.orelse || nodeB.else_branch || []);
+  } else if (typeA === 'For') {
+    nodeA._diffStatus = 'parent_mod';
+    nodeB._diffStatus = 'parent_mod';
+    markAstDiff(nodeA.iter, nodeB.iter);
+    diffAstStatementLists(nodeA.body || [], nodeB.body || []);
   } else {
-    // Leaf nodes with different values
     nodeA._diffStatus = 'changed_a';
     nodeB._diffStatus = 'changed_b';
   }
@@ -3981,16 +5923,26 @@ function countAstNodesAndDiffs(node, targetDiffStatus) {
     if (n._diffStatus === targetDiffStatus) {
       changed++;
     }
+    if (Array.isArray(n.children)) n.children.forEach(ch => walk(ch.node || ch));
     if (n.statements) n.statements.forEach(walk);
+    if (n.members) n.members.forEach(walk);
     if (n.body) n.body.forEach(walk);
-    if (n.value) walk(n.value);
+    if (n.params) n.params.forEach(walk);
+    if (n.elements) n.elements.forEach(walk);
+    if (n.entries) n.entries.forEach(walk);
+    if (n.key) walk(n.key);
+    if (n.value && typeof n.value === 'object') walk(n.value);
     if (n.left) walk(n.left);
     if (n.right) walk(n.right);
     if (n.operand) walk(n.operand);
+    if (n.target && typeof n.target === 'object') walk(n.target);
+    if (n.iter && typeof n.iter === 'object') walk(n.iter);
+    if (n.slice && typeof n.slice === 'object') walk(n.slice);
     if (n.args) n.args.forEach(walk);
     if (n.condition) walk(n.condition);
     if (n.then_branch) n.then_branch.forEach(walk);
     if (n.else_branch) n.else_branch.forEach(walk);
+    if (n.orelse) n.orelse.forEach(walk);
   }
   walk(node);
   return { total, changed };
@@ -4040,54 +5992,62 @@ function buildDiffAstNodeHtml(node, level, branchBadge, versionSide) {
   let cardVal = '';
   let cardSub = '';
   let catClass = 'cat-program';
-  let children = [];
 
   if (ntype === 'Program') {
     cardType = 'Program';
-    const stmts = node.statements || [];
-    cardVal = `${stmts.length} statement${stmts.length === 1 ? '' : 's'}`;
+    const allStmts = node.statements || [];
+    cardVal = `${allStmts.length} statement${allStmts.length === 1 ? '' : 's'}`;
     catClass = 'cat-program';
-    children = stmts.map(s => ({ node: s }));
   } else if (ntype === 'Include') {
     cardType = '#include';
     cardVal = node.header || '';
     catClass = 'cat-include';
-  } else if (ntype === 'FunctionDef') {
-    cardType = 'FunctionDef';
-    cardVal = `${node.name || 'func'}()`;
-    cardSub = `returns ${node.return_type || 'void'}`;
+  } else if (ntype === 'ClassDef') {
+    cardType = 'ClassDef';
+    cardVal = 'class ' + (node.name || 'Anonymous');
     catClass = 'cat-function';
-    children = (node.body || []).map(s => ({ node: s }));
+  } else if (ntype === 'FunctionDef' || ntype === 'AsyncFunctionDef') {
+    cardType = ntype === 'AsyncFunctionDef' ? 'AsyncFunction' : 'FunctionDef';
+    cardVal = `${node.name || 'func'}()`;
+    cardSub = node.return_type ? `returns ${node.return_type}` : '';
+    catClass = 'cat-function';
+  } else if (ntype === 'Param' || ntype === 'Argument') {
+    cardType = 'Param';
+    cardVal = node.name || '';
+    catClass = 'cat-leaf-id';
   } else if (ntype === 'VarDecl') {
     cardType = 'VarDecl';
     cardVal = node.name || '';
-    cardSub = 'type: ' + (node.datatype || 'int');
+    cardSub = 'type: ' + (node.datatype || 'auto');
     catClass = 'cat-decl';
-    if (node.value) {
-      children = [{ node: node.value, badge: 'init' }];
-    }
   } else if (ntype === 'Assign') {
     cardType = 'Assign';
     cardVal = `${node.name || ''} =`;
     catClass = 'cat-assign';
-    if (node.value) {
-      children = [{ node: node.value, badge: 'val' }];
-    }
+  } else if (ntype === 'AugAssign') {
+    cardType = 'AugAssign';
+    cardVal = `${node.name || ''} ${node.op || '+'} =`;
+    catClass = 'cat-assign';
   } else if (ntype === 'BinOp') {
     cardType = 'BinaryOp';
     cardVal = node.op || '?';
     catClass = 'cat-op';
-    children = [
-      { node: node.left, badge: 'Left' },
-      { node: node.right, badge: 'Right' }
-    ];
   } else if (ntype === 'UnaryOp') {
     cardType = 'UnaryOp';
     cardVal = node.op || '?';
     catClass = 'cat-op';
-    if (node.operand) {
-      children = [{ node: node.operand, badge: 'expr' }];
-    }
+  } else if (ntype === 'Compare') {
+    cardType = 'Compare';
+    cardVal = node.op || '==';
+    catClass = 'cat-op';
+  } else if (ntype === 'BoolOp') {
+    cardType = 'BoolOp';
+    cardVal = node.op || 'and';
+    catClass = 'cat-op';
+  } else if (ntype === 'IfExp') {
+    cardType = 'IfExp';
+    cardVal = 'if / else';
+    catClass = 'cat-control';
   } else if (ntype === 'Number') {
     cardType = 'Number';
     cardVal = String(node.value !== undefined ? node.value : '');
@@ -4096,6 +6056,10 @@ function buildDiffAstNodeHtml(node, level, branchBadge, versionSide) {
     cardType = 'String';
     cardVal = JSON.stringify(node.value || '');
     catClass = 'cat-leaf-str';
+  } else if (ntype === 'Constant') {
+    cardType = 'Constant';
+    cardVal = String(node.value !== undefined ? node.value : '');
+    catClass = 'cat-leaf-id';
   } else if (ntype === 'Identifier') {
     cardType = 'Identifier';
     cardVal = node.name || '';
@@ -4104,56 +6068,77 @@ function buildDiffAstNodeHtml(node, level, branchBadge, versionSide) {
     cardType = 'Return';
     cardVal = 'return';
     catClass = 'cat-return';
-    if (node.value) {
-      children = [{ node: node.value, badge: 'val' }];
-    }
-  } else if (ntype === 'FunctionCall') {
+  } else if (ntype === 'FunctionCall' || ntype === 'Call') {
     cardType = 'Call';
     cardVal = `${node.name || 'call'}()`;
     catClass = 'cat-call';
-    children = (node.args || []).map((arg, idx) => ({ node: arg, badge: `arg ${idx + 1}` }));
+  } else if (ntype === 'Keyword') {
+    cardType = 'Keyword';
+    cardVal = `${node.arg || ''} =`;
+    catClass = 'cat-decl';
   } else if (ntype === 'If') {
     cardType = 'If';
     cardVal = 'if / branch';
     catClass = 'cat-control';
-
-    if (node.condition) {
-      children.push({
-        virtualNode: {
-          cardType: 'Condition',
-          cardVal: 'test',
-          catClass: 'cat-branch-cond',
-          children: [{ node: node.condition }]
-        }
-      });
-    }
-
-    const thenStmts = node.then_branch || [];
-    children.push({
-      virtualNode: {
-        cardType: 'Then',
-        cardVal: `${thenStmts.length} stmt${thenStmts.length === 1 ? '' : 's'}`,
-        catClass: 'cat-branch-then',
-        children: thenStmts.map(s => ({ node: s }))
-      }
-    });
-
-    if (node.else_branch && node.else_branch.length > 0) {
-      const elseStmts = node.else_branch;
-      children.push({
-        virtualNode: {
-          cardType: 'Else',
-          cardVal: `${elseStmts.length} stmt${elseStmts.length === 1 ? '' : 's'}`,
-          catClass: 'cat-branch-else',
-          children: elseStmts.map(s => ({ node: s }))
-        }
-      });
-    }
+  } else if (ntype === 'While') {
+    cardType = 'While';
+    cardVal = 'while loop';
+    catClass = 'cat-control';
+  } else if (ntype === 'For') {
+    cardType = 'For';
+    cardVal = 'for loop';
+    catClass = 'cat-control';
+  } else if (ntype === 'List') {
+    cardType = 'List';
+    cardVal = `[${(node.elements || []).length} items]`;
+    catClass = 'cat-decl';
+  } else if (ntype === 'Tuple') {
+    cardType = 'Tuple';
+    cardVal = `(${(node.elements || []).length} items)`;
+    catClass = 'cat-decl';
+  } else if (ntype === 'Set') {
+    cardType = 'Set';
+    cardVal = `{${(node.elements || []).length} items}`;
+    catClass = 'cat-decl';
+  } else if (ntype === 'Dict') {
+    cardType = 'Dict';
+    cardVal = `{${(node.entries || []).length} entries}`;
+    catClass = 'cat-decl';
+  } else if (ntype === 'DictEntry') {
+    cardType = 'KeyVal';
+    cardVal = ':';
+    catClass = 'cat-op';
+  } else if (ntype === 'Subscript') {
+    cardType = 'Subscript';
+    cardVal = '[ ]';
+    catClass = 'cat-op';
+  } else if (ntype === 'Slice') {
+    cardType = 'Slice';
+    cardVal = ':';
+    catClass = 'cat-op';
+  } else if (ntype === 'Attribute') {
+    cardType = 'Attribute';
+    cardVal = `.${node.attr || ''}`;
+    catClass = 'cat-leaf-id';
+  } else if (ntype === 'Import') {
+    cardType = 'Import';
+    cardVal = (node.names || []).join(', ') || '';
+    catClass = 'cat-include';
+  } else if (ntype === 'ImportFrom') {
+    cardType = 'ImportFrom';
+    cardVal = `from ${node.module || ''} import ${(node.names || []).join(', ')}`;
+    catClass = 'cat-include';
+  } else if (ntype === 'Pass' || ntype === 'Break' || ntype === 'Continue') {
+    cardType = ntype;
+    cardVal = ntype.toLowerCase();
+    catClass = 'cat-control';
   } else {
     cardType = ntype;
     cardVal = node.value || node.name || '';
     catClass = 'cat-program';
   }
+
+  const children = extractAstNodeChildren(node);
 
   // Diff highlighting
   let diffClass = '';
@@ -4192,13 +6177,16 @@ function buildDiffAstNodeHtml(node, level, branchBadge, versionSide) {
   const lineHtml = node.line ? `<div class="ast-card-line">L${node.line}</div>` : '';
 
   return `
-    <div class="ast-node" data-level="${level}">
+    <div class="ast-node ${diffClass}" data-level="${level}">
       <div class="ast-card ${catClass} ${diffClass}" title="Line ${node.line || 'N/A'}: ${escapeHtml(cardType)}">
-        ${diffBadge}
-        <div class="ast-card-type">${escapeHtml(cardType)}</div>
+        <span class="ast-toggle-btn" title="Expand/Collapse">▼</span>
+        <div class="ast-card-header">
+          <div class="ast-card-type">${escapeHtml(cardType)}</div>
+          ${diffBadge}
+          ${lineHtml}
+        </div>
         <div class="ast-card-val">${escapeHtml(cardVal)}</div>
         ${subHtml}
-        ${lineHtml}
       </div>
       ${childrenHtml}
     </div>
@@ -4251,21 +6239,26 @@ function escapeHtml(str) {
 
 // Initial Boot
 window.addEventListener('DOMContentLoaded', () => {
+  initTheme();
+  updatePresetDropdown('c');
   fetchPresets();
   resetToInitialState();
 
   const editor = document.getElementById('sourceEditor');
+  const gutter = document.getElementById('lineNumbersGutter');
   if (editor) {
-    editor.addEventListener('input', () => {
-      updateLineNumbers();
-      if (hasCompiled && editor.value !== lastCompiledSource) {
-        clearStaleResults();
-      }
-    });
+    editor.addEventListener('input', onSourceInput);
+    initEditorPasteHandler();
     editor.addEventListener('scroll', () => {
-      const gutter = document.getElementById('lineNumbersGutter');
-      if (gutter) gutter.scrollTop = editor.scrollTop;
+      const g = document.getElementById('lineNumbersGutter');
+      if (g) g.scrollTop = editor.scrollTop;
     });
+    if (gutter) {
+      gutter.addEventListener('wheel', (e) => {
+        editor.scrollTop += e.deltaY;
+        e.preventDefault();
+      }, { passive: false });
+    }
     updateLineNumbers();
   }
 
@@ -4277,17 +6270,24 @@ window.addEventListener('DOMContentLoaded', () => {
   if (diffSrcB) {
     diffSrcB.addEventListener('input', onDiffSourceInput);
   }
-
-  const langSelect = document.getElementById('langSelect');
-  if (langSelect) {
-    langSelect.addEventListener('change', () => {
-      if (hasCompiled && langSelect.value !== lastCompiledLanguage) {
-        clearStaleResults();
-      }
-    });
-  }
 });
 </script>
+
+  <!-- Language Specifications & Limitations Modal -->
+  <div id="languageSpecsModal" class="modal-backdrop" style="display:none;" onclick="handleSpecsModalBackdrop(event)">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div class="modal-title">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><path d="M2 17l10 5 10-5"></path><path d="M2 12l10 5 10-5"></path></svg>
+          <span id="specsModalLanguageTitle">Language Specifications &amp; Capabilities</span>
+        </div>
+        <button class="modal-close-btn" onclick="closeLanguageSpecsModal()" aria-label="Close modal">&times;</button>
+      </div>
+      <div class="modal-body" id="specsModalContent">
+        <p style="color:var(--text-secondary);">Loading specifications...</p>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>

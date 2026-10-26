@@ -102,11 +102,30 @@ class IRGenerator:
         if ntype == "Number":
             return str(node.get("value"))
 
+        if ntype == "Constant":
+            return str(node.get("value"))
+
         if ntype == "String":
             return repr(node.get("value"))
 
         if ntype == "Identifier":
             return str(node.get("name"))
+
+        if ntype == "Attribute":
+            val = self.gen_expr(node.get("value"))
+            return f"{val}.{node.get('attr')}"
+
+        if ntype == "Subscript":
+            val = self.gen_expr(node.get("value"))
+            sl = self.gen_expr(node.get("slice"))
+            return f"{val}[{sl}]"
+
+        if ntype in ("List", "Tuple"):
+            items = [self.gen_expr(e) for e in node.get("elements", [])]
+            return f"[{', '.join(items)}]"
+
+        if ntype == "Dict":
+            return "{...}"
 
         if ntype == "UnaryOp":
             op = node.get("op")
@@ -116,13 +135,27 @@ class IRGenerator:
             self.emit(tac_op, operand_val, None, temp, f"Unary {op} on {operand_val}")
             return temp
 
-        if ntype == "BinOp":
-            op = node.get("op")
+        if ntype in ("BinOp", "Compare"):
+            op = node.get("op", "+")
             left_val = self.gen_expr(node.get("left"))
             right_val = self.gen_expr(node.get("right"))
             temp = self.new_temp()
             comment = f"Compute {left_val} {op} {right_val} -> temporary {temp}"
             self.emit(op, left_val, right_val, temp, comment)
+            return temp
+
+        if ntype == "BoolOp":
+            op = node.get("op", "and")
+            vals = [self.gen_expr(v) for v in node.get("values", [])]
+            temp = self.new_temp()
+            self.emit(op.upper(), vals[0] if vals else "0", vals[1] if len(vals) > 1 else None, temp, f"BoolOp {op}")
+            return temp
+
+        if ntype == "IfExp":
+            cond_val = self.gen_expr(node.get("test"))
+            true_val = self.gen_expr(node.get("body"))
+            temp = self.new_temp()
+            self.emit("=", true_val, None, temp, f"Ternary conditional result on {cond_val}")
             return temp
 
         if ntype == "FunctionCall":
@@ -167,7 +200,14 @@ class IRGenerator:
         elif stype == "FunctionDef":
             fname = stmt.get("name")
             ret_type = stmt.get("return_type", "void")
-            self.emit("FUNC_START", fname, ret_type, None, f"Begin function definition {ret_type} {fname}()")
+            params = stmt.get("params", [])
+            param_names = [p.get("name") if isinstance(p, dict) else str(p) for p in params]
+            param_desc = ",".join(param_names) if param_names else ret_type
+            self.emit("FUNC_START", fname, param_desc, None, f"Begin function definition {ret_type} {fname}()")
+
+            for p in params:
+                pname = p.get("name") if isinstance(p, dict) else str(p)
+                self.emit("FORMAL_PARAM", pname, None, None, f"Formal parameter {pname}")
 
             for s in stmt.get("body", []):
                 self.gen_statement(s)
@@ -209,7 +249,66 @@ class IRGenerator:
             else:
                 self.emit("LABEL", None, None, else_label, f"Merge point {else_label}")
 
-        elif stype in ("BinOp", "Identifier", "Number"):
+        elif stype == "StreamOutput":
+            items = stmt.get("items", [])
+            for item in items:
+                v = self.gen_expr(item)
+                self.emit("PARAM", v, None, None, "Stream output operand")
+                self.emit("CALL", "cout_print", 1, None, "Stream insertion (cout <<)")
+
+        elif stype == "StreamInput":
+            for var in stmt.get("variables", []):
+                self.emit("CALL", "cin_read", 0, var, f"Stream extraction (cin >> {var})")
+
+        elif stype == "ClassDef":
+            cname = stmt.get("name")
+            self.emit("LABEL", None, None, f"class_{cname}", f"Class structure definition: {cname}")
+            for m in (stmt.get("members") or stmt.get("body") or []):
+                self.gen_statement(m)
+
+        elif stype == "While":
+            start_label = self.new_label()
+            end_label = self.new_label()
+            self.emit("LABEL", None, None, start_label, "While loop condition start")
+            cond_val = self.gen_expr(stmt.get("condition"))
+            self.emit("IF_FALSE", cond_val, None, end_label, f"Exit while loop if {cond_val} is false")
+            for s in (stmt.get("body") or stmt.get("then_branch") or []):
+                self.gen_statement(s)
+            self.emit("GOTO", None, None, start_label, "Loop back to start")
+            self.emit("LABEL", None, None, end_label, "While loop exit")
+
+        elif stype == "For":
+            iter_val = self.gen_expr(stmt.get("iter"))
+            target_node = stmt.get("target")
+            target_name = target_node.get("name", "i") if isinstance(target_node, dict) else "i"
+            start_label = self.new_label()
+            end_label = self.new_label()
+            self.emit("LABEL", None, None, start_label, f"For loop on {iter_val}")
+            self.emit("ITER_NEXT", iter_val, None, target_name, f"Fetch next element into {target_name}")
+            self.emit("IF_FALSE", target_name, None, end_label, "Exit for loop when iterator exhausted")
+            for s in (stmt.get("body") or []):
+                self.gen_statement(s)
+            self.emit("GOTO", None, None, start_label, "For loop next iteration")
+            self.emit("LABEL", None, None, end_label, "For loop exit")
+
+        elif stype == "AugAssign":
+            name = stmt.get("name")
+            op = stmt.get("op", "+")
+            val_node = stmt.get("value")
+            expr_val = self.gen_expr(val_node)
+            temp = self.new_temp()
+            self.emit(op, name, expr_val, temp, f"Augmented {op} on {name}")
+            self.emit("=", temp, None, name, f"Assign result back to {name}")
+
+        elif stype in ("Pass", "Break", "Continue", "Import", "ImportFrom"):
+            self.emit(stype.upper(), None, None, None, f"Python statement: {stype}")
+
+        elif stype == "NamespaceUse":
+            ns = stmt.get("namespace", "std")
+            # Namespace import recorded in IR
+            pass
+
+        elif stype in ("BinOp", "Identifier", "Number", "String"):
             self.gen_expr(stmt)
 
     def generate(self, ast):

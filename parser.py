@@ -12,7 +12,7 @@ from lexer import (
     PREPROCESSOR, TYPE, IDENTIFIER, NUMBER, STRING,
     PLUS, MINUS, MUL, DIV, MOD, ASSIGN,
     EQ, NEQ, LT, GT, LTE, GTE,
-    LPAREN, RPAREN, LBRACE, RBRACE, SEMICOLON, COMMA,
+    LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET, SEMICOLON, COMMA,
     IF, ELSE, WHILE, FOR, RETURN, EOF
 )
 
@@ -300,6 +300,11 @@ class Parser:
         token_info = f"'{self.current_token.value}' ({self.current_token.type})" if self.current_token else "EOF"
         line = self.current_token.line if self.current_token else None
         col = self.current_token.col if self.current_token else None
+        if line is None and self.tokens:
+            last_tok = self.tokens[self.pos - 1] if 0 < self.pos <= len(self.tokens) else self.tokens[-1]
+            if last_tok:
+                line = last_tok.line
+                col = last_tok.col
         if expected in self.FRIENDLY_TOKENS:
             expected_str = f"{self.FRIENDLY_TOKENS[expected]} ({expected})"
         else:
@@ -513,23 +518,43 @@ class Parser:
 
         # 2. Type declaration or Function definition
         if tok.type == TYPE:
-            dtype_tok = self.eat(TYPE)
+            dtypes = [self.eat(TYPE).value]
+            while self.current_token and self.current_token.type == TYPE:
+                dtypes.append(self.eat(TYPE).value)
+            dtype_val = " ".join(dtypes)
+
+            # Check for leading pointer e.g. int *ptr
+            while self.current_token and self.current_token.type == MUL:
+                self.eat(MUL)
+                dtype_val += "*"
+
             ident_tok = self.eat(IDENTIFIER)
 
-            # Check if this is a function definition: TYPE IDENTIFIER LPAREN
+            # Check if this is a function definition or prototype: TYPE IDENTIFIER LPAREN
             if self.current_token and self.current_token.type == LPAREN:
                 self.eat(LPAREN)
                 params = []
                 while self.current_token and self.current_token.type != RPAREN:
                     if self.current_token.type == TYPE:
-                        p_dtype = self.eat(TYPE)
+                        p_dtypes = [self.eat(TYPE).value]
+                        while self.current_token and self.current_token.type == TYPE:
+                            p_dtypes.append(self.eat(TYPE).value)
+                        p_dtype_val = " ".join(p_dtypes)
+                        while self.current_token and self.current_token.type == MUL:
+                            self.eat(MUL)
+                            p_dtype_val += "*"
                         p_name = self.eat(IDENTIFIER).value if self.current_token and self.current_token.type == IDENTIFIER else ""
-                        params.append({"type": p_dtype.value, "name": p_name})
+                        params.append({"type": p_dtype_val, "name": p_name})
                         if self.current_token and self.current_token.type == COMMA:
                             self.eat(COMMA)
                     else:
                         self.error("parameter TYPE or ')'")
                 self.eat(RPAREN)
+
+                # Function declaration (prototype) ending with semicolon
+                if self.current_token and self.current_token.type == SEMICOLON:
+                    self.eat(SEMICOLON)
+                    return FunctionDefNode(dtype_val, ident_tok.value, params=params, body=[], line=line, col=ident_tok.col)
 
                 # Function body in { ... }
                 body = []
@@ -538,22 +563,52 @@ class Parser:
                     while self.current_token and self.current_token.type != RBRACE and self.current_token.type != EOF:
                         stmt = self.statement()
                         if stmt:
-                            body.append(stmt)
+                            if isinstance(stmt, list):
+                                body.extend(stmt)
+                            else:
+                                body.append(stmt)
                     self.eat(RBRACE)
-                return FunctionDefNode(dtype_tok.value, ident_tok.value, params=params, body=body, line=line, col=ident_tok.col)
+                return FunctionDefNode(dtype_val, ident_tok.value, params=params, body=body, line=line, col=ident_tok.col)
 
-            # Otherwise, variable declaration: TYPE IDENTIFIER (= expr)? ;?
-            init_val = None
-            if self.current_token and self.current_token.type == ASSIGN:
-                self.eat(ASSIGN)
-                init_val = self.expr()
+            # Otherwise, variable declaration(s): TYPE IDENTIFIER (= expr)? (, IDENTIFIER (= expr)?)* ;?
+            decls = []
+            cur_id = ident_tok
+            while True:
+                var_dtype = dtype_val
+                # Check for array brackets e.g. arr[10]
+                if self.current_token and self.current_token.type == LBRACKET:
+                    self.eat(LBRACKET)
+                    if self.current_token and self.current_token.type != RBRACKET:
+                        self.expr()
+                    self.eat(RBRACKET)
+                    var_dtype += "[]"
+
+                init_val = None
+                if self.current_token and self.current_token.type == ASSIGN:
+                    self.eat(ASSIGN)
+                    init_val = self.expr()
+
+                decls.append(VarDeclNode(var_dtype, cur_id.value, init_val, line=cur_id.line, col=cur_id.col))
+
+                if self.current_token and self.current_token.type == COMMA:
+                    self.eat(COMMA)
+                    while self.current_token and self.current_token.type == MUL:
+                        self.eat(MUL)
+                    if self.current_token and self.current_token.type == IDENTIFIER:
+                        cur_id = self.eat(IDENTIFIER)
+                    else:
+                        self.error("IDENTIFIER after ',' in variable declaration")
+                else:
+                    break
 
             if self.language == "c":
                 self.eat(SEMICOLON)
             elif self.current_token and self.current_token.type == SEMICOLON:
                 self.eat(SEMICOLON)
 
-            return VarDeclNode(dtype_tok.value, ident_tok.value, init_val, line=line, col=ident_tok.col)
+            if len(decls) == 1:
+                return decls[0]
+            return decls
 
         # 3. Return statement: return expr?;
         if tok.type == RETURN:
@@ -582,11 +637,15 @@ class Parser:
                 self.eat(LBRACE)
                 while self.current_token and self.current_token.type != RBRACE and self.current_token.type != EOF:
                     s = self.statement()
-                    if s: then_body.append(s)
+                    if s:
+                        if isinstance(s, list): then_body.extend(s)
+                        else: then_body.append(s)
                 self.eat(RBRACE)
             else:
                 s = self.statement()
-                if s: then_body.append(s)
+                if s:
+                    if isinstance(s, list): then_body.extend(s)
+                    else: then_body.append(s)
 
             else_body = []
             if self.current_token and self.current_token.type == ELSE:
@@ -595,11 +654,15 @@ class Parser:
                     self.eat(LBRACE)
                     while self.current_token and self.current_token.type != RBRACE and self.current_token.type != EOF:
                         s = self.statement()
-                        if s: else_body.append(s)
+                        if s:
+                            if isinstance(s, list): else_body.extend(s)
+                            else: else_body.append(s)
                     self.eat(RBRACE)
                 else:
                     s = self.statement()
-                    if s: else_body.append(s)
+                    if s:
+                        if isinstance(s, list): else_body.extend(s)
+                        else: else_body.append(s)
 
             return IfNode(cond, then_body, else_body, line=line, col=col)
 
@@ -631,7 +694,10 @@ class Parser:
         while self.current_token and self.current_token.type != EOF:
             stmt = self.statement()
             if stmt:
-                statements.append(stmt)
+                if isinstance(stmt, list):
+                    statements.extend(stmt)
+                else:
+                    statements.append(stmt)
             else:
                 self.error("valid statement")
         return ProgramNode(statements, language=self.language)
